@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Research Hub</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f0;
+      color: #1a1a1a;
+      min-height: 100vh;
+      padding: 48px 24px;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+    header { margin-bottom: 40px; }
+    header h1 { font-size: 22px; font-weight: 700; color: #0C1C34; }
+    header p { margin-top: 6px; font-size: 13px; color: #888; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    .card:hover {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+    .card-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .tag-strategy { background: #FFF0E8; color: #D4845A; }
+    .tag-user     { background: #E8F0FF; color: #3B6FCF; }
+    .tag-market   { background: #E8F5EC; color: #2E7D4F; }
+    .card h2 { font-size: 16px; font-weight: 700; margin-bottom: 8px; line-height: 1.4; }
+    .card p  { font-size: 13px; color: #666; line-height: 1.6; }
+    footer { margin-top: 48px; font-size: 12px; color: #bbb; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Research Hub</h1>
+      <p>山寿株式会社 — 家づくり伴走支援 リサーチドキュメント</p>
+    </header>
+
+    <div class="grid">
+
+      <a class="card" href="user-painpoints-by-phase.html">
+        <span class="card-tag tag-user">ユーザー調査</span>
+        <h2>ユーザー困り事マップ（フェーズ別）</h2>
+        <p>家づくり8STEPごとの悩み・ペインポイントを網羅。ペルソナA/B・需要度スコア付き。</p>
+      </a>
+
+      <a class="card" href="customer-journey-v2.html">
+        <span class="card-tag tag-strategy">戦略</span>
+        <h2>カスタマージャーニー v2</h2>
+        <p>9フェーズのジャーニーマップ＋5軸パーセプションフロー。データ根拠・離脱パターン付き。</p>
+      </a>
+
+      <a class="card" href="persona-research-report.html">
+        <span class="card-tag tag-user">ペルソナ</span>
+        <h2>ペルソナリサーチレポート</h2>
+        <p>ペルソナA/Bの詳細プロファイル。行動・心理・情報収集パターン。</p>
+      </a>
+
+      <a class="card" href="persona-research-report-kanto.html">
+        <span class="card-tag tag-user">ペルソナ（首都圏版）</span>
+        <h2>ペルソナリサーチレポート 首都圏版</h2>
+        <p>首都圏特有の土地価格・住宅事情を反映したペルソナ分析。</p>
+      </a>
+
+      <a class="card" href="land-price-report.html">
+        <span class="card-tag tag-market">市場データ</span>
+        <h2>土地価格レポート</h2>
+        <p>国交省R6データをもとにしたエリア別土地価格分析。予算設計の根拠資料。</p>
+      </a>
+
+    </div>
+
+    <footer>内部資料 — 外部共有禁止</footer>
+  </div>
+</body>
+</html>

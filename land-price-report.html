@@ -1,0 +1,2101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>土地価格・住宅面積リサーチレポート 2024–2026</title>
+<style>
+  :root {
+    --primary: #1a3a5c;
+    --accent: #e8622a;
+    --accent2: #2196b0;
+    --bg: #f5f7fa;
+    --white: #ffffff;
+    --text: #1e2a38;
+    --muted: #6b7a8d;
+    --border: #dde3ec;
+    --green: #27ae60;
+    --red: #e74c3c;
+    --yellow: #f39c12;
+    --up: #e74c3c;
+    --down: #27ae60;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0d2137 0%, #1a3a5c 50%, #1e5680 100%);
+    color: white;
+    padding: 48px 40px 40px;
+  }
+  .header-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.9);
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+  .header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+  .header p { color: rgba(255,255,255,0.7); font-size: 13px; margin-top: 6px; }
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .header-meta-item {
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+  }
+  .header-meta-item strong { display: block; font-size: 16px; color: white; }
+
+  /* NAV */
+  .nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .nav ul {
+    display: flex;
+    gap: 0;
+    list-style: none;
+    overflow-x: auto;
+  }
+  .nav a {
+    display: block;
+    padding: 14px 16px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav a:hover { color: var(--primary); border-bottom-color: var(--accent); }
+
+  /* MAIN */
+  .main { max-width: 1400px; margin: 0 auto; padding: 32px 40px 64px; }
+
+  /* SECTION */
+  .section { margin-bottom: 48px; }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title .num {
+    background: var(--accent);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* KPI CARDS */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .kpi-card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 18px 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border-left: 3px solid var(--accent2);
+  }
+  .kpi-card.red { border-left-color: var(--up); }
+  .kpi-card.green { border-left-color: var(--green); }
+  .kpi-card.orange { border-left-color: var(--accent); }
+  .kpi-card .label { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .kpi-card .value { font-size: 22px; font-weight: 700; color: var(--primary); }
+  .kpi-card .sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* ALERT */
+  .alert {
+    background: #fff8e1;
+    border-left: 3px solid var(--yellow);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #795548;
+    margin-bottom: 16px;
+  }
+  .alert.blue {
+    background: #e3f2fd;
+    border-left-color: var(--accent2);
+    color: #1565c0;
+  }
+  .alert.red {
+    background: #fdecea;
+    border-left-color: var(--up);
+    color: #b71c1c;
+  }
+
+  /* TABLE */
+  .table-wrap {
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead th {
+    background: var(--primary);
+    color: white;
+    padding: 10px 12px;
+    text-align: right;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  thead th:first-child { text-align: left; }
+  tbody tr:nth-child(even) { background: #f8f9fb; }
+  tbody tr:hover { background: #eef3fa; }
+  tbody td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  tbody td:first-child { text-align: left; font-weight: 500; }
+  .highlight-row td { background: #fff3e0 !important; font-weight: 700; }
+  .avg-row td { background: #e8f4fd !important; font-style: italic; }
+
+  /* CHANGE BADGES */
+  .up { color: var(--up); font-weight: 600; }
+  .down { color: var(--down); font-weight: 600; }
+  .flat { color: var(--muted); }
+
+  /* RANK BADGE */
+  .rank {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 22px;
+    text-align: center;
+    margin-right: 4px;
+  }
+  .rank-1 { background: #FFD700; color: #333; }
+  .rank-2 { background: #C0C0C0; color: #333; }
+  .rank-3 { background: #CD7F32; color: white; }
+
+  /* PRICE TIERS */
+  .tier-ultra { color: #7b1fa2; font-weight: 600; }
+  .tier-high { color: #c62828; font-weight: 600; }
+  .tier-mid { color: #e65100; }
+  .tier-low { color: #1565c0; }
+  .tier-budget { color: #2e7d32; }
+  .note { color: var(--muted); font-style: italic; }
+
+  /* COMPARE BARS */
+  .bar-wrap { margin: 4px 0; }
+  .bar {
+    height: 8px;
+    border-radius: 4px;
+    background: var(--accent2);
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .bar.red { background: var(--up); }
+
+  /* TWO-COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* COMPARISON CARD */
+  .compare-card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .compare-card h3 { font-size: 14px; color: var(--primary); margin-bottom: 14px; }
+  .compare-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    font-size: 12px;
+  }
+  .compare-row .label { width: 100px; flex-shrink: 0; color: var(--muted); }
+  .compare-row .bar-container { flex: 1; background: #eee; border-radius: 4px; height: 18px; overflow: hidden; }
+  .compare-row .bar-fill { height: 100%; background: var(--accent2); border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; color: white; font-size: 10px; font-weight: 600; }
+  .compare-row .bar-fill.accent { background: var(--accent); }
+
+  /* GAP TABLE */
+  .gap-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .gap-ok { background: #e8f5e9; color: #2e7d32; }
+  .gap-ng { background: #ffebee; color: #c62828; }
+
+  /* TREND CHART */
+  .trend-visual {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .trend-points {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    height: 120px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .trend-col { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+  .trend-bar-wrap { flex: 1; display: flex; align-items: flex-end; width: 100%; }
+  .trend-bar-inner { width: 100%; border-radius: 4px 4px 0 0; background: var(--accent2); transition: all 0.3s; min-height: 4px; }
+  .trend-label { font-size: 10px; color: var(--muted); text-align: center; }
+  .trend-val { font-size: 11px; font-weight: 700; color: var(--primary); text-align: center; }
+
+  /* BUILDING COST */
+  .grade-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 8px;
+    align-items: center;
+    background: var(--white);
+    border-radius: 8px;
+    padding: 10px 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .grade-label { width: 160px; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+  .grade-range { width: 130px; font-size: 12px; color: var(--muted); }
+  .grade-bar-wrap { flex: 1; }
+  .grade-total { font-size: 12px; color: var(--primary); font-weight: 600; text-align: right; width: 180px; }
+
+  /* LOAN TABLE */
+  .loan-table-wrap table td,
+  .loan-table-wrap table th { font-size: 12px; }
+  .loan-row-best { background: #e8f5e9; }
+  .loan-row-stretch { background: #fff8e1; }
+
+  /* SCENARIO CARDS */
+  .scenario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 16px; }
+  .scenario-card { background: var(--white); border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); padding: 18px; border-top: 3px solid var(--accent2); }
+  .scenario-card.orange { border-top-color: var(--accent); }
+  .scenario-card h4 { font-size: 13px; color: var(--primary); margin-bottom: 10px; }
+  .scenario-row { display: flex; justify-content: space-between; font-size: 12px; padding: 4px 0; border-bottom: 1px solid var(--border); }
+  .scenario-row:last-child { border-bottom: none; }
+  .scenario-row .s-label { color: var(--muted); }
+  .scenario-row .s-val { font-weight: 600; color: var(--text); }
+
+  /* MARKET SHARE BAR */
+  .share-bar { display: flex; height: 36px; border-radius: 8px; overflow: hidden; margin: 16px 0; }
+  .share-seg { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: white; transition: all 0.3s; }
+  .share-seg:hover { opacity: 0.85; }
+  .share-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+  .share-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+  .share-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+  /* OPTION MATRIX TABLE */
+  .matrix-tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; margin: 1px; }
+  .tag-green { background: #e8f5e9; color: #2e7d32; }
+  .tag-orange { background: #fff3e0; color: #e65100; }
+  .tag-red { background: #fdecea; color: #c62828; }
+  .tag-blue { background: #e3f2fd; color: #1565c0; }
+
+  /* SIMULATION BOX */
+  .sim-box {
+    background: linear-gradient(135deg, #0d2137, #1a3a5c);
+    color: white;
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .sim-box h3 { font-size: 16px; margin-bottom: 16px; }
+  .sim-flow { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+  .sim-step {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+  .sim-arrow { color: rgba(255,255,255,0.5); font-size: 16px; }
+  .sim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .sim-item { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 12px 14px; font-size: 12px; }
+  .sim-item .sim-item-title { color: rgba(255,255,255,0.6); font-size: 10px; margin-bottom: 4px; letter-spacing: 0.5px; }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 11px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  /* ============================================================
+     PDF出力最適化（A4横向き）
+     Chrome headless --print-to-pdf 用
+  ============================================================ */
+  @page {
+    size: A4 landscape;
+    margin: 13mm 17mm;
+  }
+
+  /* ナビゲーションバー非表示 */
+  .nav { display: none !important; }
+
+  /* ページ背景を白に */
+  body {
+    background: white;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  /* ヘッダーをコンパクトに */
+  .header {
+    padding: 18px 28px 16px;
+    border-radius: 0;
+  }
+  .header h1 { font-size: 20px; margin-bottom: 6px; }
+  .header p  { font-size: 12px; }
+  .header-badge { font-size: 10px; margin-bottom: 10px; }
+  .header-meta { gap: 14px; margin-top: 14px; }
+  .header-meta-item { padding: 8px 12px; font-size: 11px; }
+  .header-meta-item strong { font-size: 14px; }
+
+  /* メインコンテナを100%幅に */
+  .main {
+    max-width: 100%;
+    padding: 14px 0 24px;
+  }
+
+  /* セクション間の余白を詰める */
+  .section { margin-bottom: 22px; }
+  .section-title { font-size: 15px; margin-bottom: 14px; padding-bottom: 8px; }
+  .section-title .num { width: 24px; height: 24px; font-size: 12px; }
+
+  /* KPIカード */
+  .kpi-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .kpi-card { padding: 12px 14px; }
+  .kpi-card .value { font-size: 18px; }
+  .kpi-card .label { font-size: 10px; }
+  .kpi-card .sub   { font-size: 10px; }
+
+  /* アラート */
+  .alert { font-size: 11px; padding: 8px 12px; margin-bottom: 12px; }
+
+  /* テーブル全体を小さく */
+  table          { font-size: 11px; }
+  thead th       { font-size: 10px; padding: 7px 9px; letter-spacing: 0; }
+  tbody td       { padding: 6px 9px; font-size: 11px; }
+  .table-wrap    { border-radius: 8px; }
+
+  /* 2カラムレイアウト */
+  .two-col       { gap: 16px; }
+  .compare-card  { padding: 14px 16px; border-radius: 8px; }
+  .compare-card h3 { font-size: 12px; margin-bottom: 10px; }
+  .compare-row   { font-size: 11px; margin-bottom: 8px; }
+  .compare-row .label { width: 85px; }
+
+  /* スコアカード */
+  .scenario-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
+  .scenario-card { padding: 14px; border-radius: 8px; }
+  .scenario-card h4 { font-size: 12px; margin-bottom: 8px; }
+  .scenario-row  { font-size: 11px; padding: 3px 0; }
+
+  /* グレード行 */
+  .grade-row { padding: 8px 12px; margin-bottom: 6px; }
+  .grade-label { width: 140px; font-size: 11px; }
+  .grade-range { width: 110px; font-size: 11px; }
+  .grade-total { font-size: 11px; }
+
+  /* トレンドビジュアル */
+  .trend-visual { padding: 16px 20px; border-radius: 8px; }
+  .trend-points { height: 90px; gap: 10px; }
+  .trend-val   { font-size: 10px; }
+  .trend-label { font-size: 9px; }
+
+  /* シミュレーションボックス */
+  .sim-box { padding: 20px 24px; border-radius: 10px; }
+  .sim-box h3 { font-size: 14px; margin-bottom: 12px; }
+  .sim-step { font-size: 11px; padding: 6px 10px; }
+  .sim-grid { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .sim-item { padding: 10px 12px; font-size: 11px; }
+  .sim-item .sim-item-title { font-size: 9px; }
+
+  /* ローンテーブル */
+  .loan-table-wrap table td,
+  .loan-table-wrap table th { font-size: 11px; }
+
+  /* シェアバー */
+  .share-bar { height: 30px; }
+  .share-seg { font-size: 10px; }
+  .share-legend { gap: 10px; }
+  .share-legend-item { font-size: 11px; }
+
+  /* ランクバッジ */
+  .rank { width: 18px; height: 18px; font-size: 10px; line-height: 18px; }
+
+  /* ギャップバッジ */
+  .gap-badge { font-size: 10px; padding: 1px 6px; }
+
+  /* フッター */
+  .footer {
+    padding: 14px 16px;
+    margin-top: 16px;
+    font-size: 10px;
+    page-break-inside: avoid;
+  }
+
+  /* ページ分割ヒント（重要なカード類は分割しない） */
+  .kpi-card,
+  .compare-card,
+  .scenario-card,
+  .grade-row,
+  .trend-visual,
+  .sim-box,
+  .alert,
+  .header,
+  thead { page-break-inside: avoid; }
+
+  /* セクション間でのページ改ページ許可 */
+  .section { page-break-inside: auto; }
+  #ward, #floorarea, #building, #loan, #budget, #market {
+    page-break-before: auto;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-badge">YAMAJU Inc. リサーチ部 / 2026-06-05 作成</div>
+  <h1>土地価格・住宅面積 総合リサーチレポート</h1>
+  <p>令和6〜8年（2024〜2026年）公示地価 ＋ 注文住宅の平均床面積 ＋ シミュレーションツール構想</p>
+  <div class="header-meta">
+    <div class="header-meta-item">
+      <strong>565,100円/㎡</strong>
+      R8 東京都全域 住宅地平均（財務局）
+    </div>
+    <div class="header-meta-item">
+      <strong>856,400円/㎡</strong>
+      R8 東京23区 住宅地平均（財務局）
+    </div>
+    <div class="header-meta-item">
+      <strong>113〜118㎡</strong>
+      全国 注文住宅 平均延床面積
+    </div>
+    <div class="header-meta-item">
+      <strong>39.4%</strong>
+      「広さを妥協」した取得世帯の割合
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <ul>
+    <li><a href="#pref">都道府県別地価</a></li>
+    <li><a href="#ward">東京23区</a></li>
+    <li><a href="#tama">多摩地区</a></li>
+    <li><a href="#ranking">全国ランキング</a></li>
+    <li><a href="#floorarea">平均床面積</a></li>
+    <li><a href="#gap">理想vs実際</a></li>
+    <li><a href="#building">建物坪単価</a></li>
+    <li><a href="#loan">ローン上限目安</a></li>
+    <li><a href="#budget">予算別選択肢</a></li>
+    <li><a href="#market">住宅種別シェア</a></li>
+    <li><a href="#sim">シミュレーション構想</a></li>
+    <li><a href="#shindan" style="color:var(--accent);font-weight:700;">★ 住まい診断</a></li>
+  </ul>
+</nav>
+
+<div class="main">
+
+<!-- ============================
+     SECTION 1: 都道府県別地価
+============================ -->
+<div class="section" id="pref">
+  <div class="section-title">
+    <span class="num">1</span>都道府県別 住宅地 平均地価（令和6〜8年）
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card red">
+      <div class="label">全国平均（R8）</div>
+      <div class="value">144,740<small style="font-size:14px">円/㎡</small></div>
+      <div class="sub">坪単価 478,500円</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="label">東京都（R8）</div>
+      <div class="value">565,060<small style="font-size:14px">円/㎡</small></div>
+      <div class="sub">坪単価 186.8万円 ▲+9.66%</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="label">最高値（R8）</div>
+      <div class="value">東京都</div>
+      <div class="sub">全国平均の約3.9倍</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="label">最安値（R8）</div>
+      <div class="value">秋田県</div>
+      <div class="sub">23,054円/㎡（7.6万円/坪）</div>
+    </div>
+  </div>
+
+  <div class="alert">
+    ⚠️ <strong>住宅地のみ</strong>の平均値（商業地・工業地は含まない）。R7は都道府県地価調査（基準地価）混在の場合あり。出典：国土交通省地価公示 / chika.m47.jp
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="min-width:100px">都道府県</th>
+          <th>R6 ㎡単価</th>
+          <th>R6 坪単価</th>
+          <th>R7 ㎡単価</th>
+          <th>R7 坪単価</th>
+          <th>R8 ㎡単価</th>
+          <th>R8 坪単価</th>
+          <th>R7→R8</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>北海道</td><td>50,305</td><td>166,280</td><td>52,402</td><td>173,213</td><td>53,240</td><td>175,980</td><td class="up">+1.60%</td></tr>
+        <tr><td>青森県</td><td>24,436</td><td>80,776</td><td>24,512</td><td>81,027</td><td>24,714</td><td>81,695</td><td class="up">+0.82%</td></tr>
+        <tr><td>岩手県</td><td>34,676</td><td>114,593</td><td>35,024</td><td>115,744</td><td>35,448</td><td>117,145</td><td class="up">+1.21%</td></tr>
+        <tr><td>宮城県</td><td>81,980</td><td>270,962</td><td>87,397</td><td>288,869</td><td>91,095</td><td>301,090</td><td class="up">+4.23%</td></tr>
+        <tr><td>秋田県</td><td>21,981</td><td>72,647</td><td>22,555</td><td>74,544</td><td>23,054</td><td>76,194</td><td class="up">+2.21%</td></tr>
+        <tr><td>山形県</td><td>27,659</td><td>91,413</td><td>27,832</td><td>91,984</td><td>27,159</td><td>89,760</td><td class="down">▲2.42%</td></tr>
+        <tr><td>福島県</td><td>36,974</td><td>122,212</td><td>37,796</td><td>124,929</td><td>38,027</td><td>125,692</td><td class="up">+0.61%</td></tr>
+        <tr><td>茨城県</td><td>32,771</td><td>108,300</td><td>33,630</td><td>111,139</td><td>34,760</td><td>114,873</td><td class="up">+3.36%</td></tr>
+        <tr><td>栃木県</td><td>34,987</td><td>115,647</td><td>35,229</td><td>116,447</td><td>35,524</td><td>117,422</td><td class="up">+0.84%</td></tr>
+        <tr><td>群馬県</td><td>37,240</td><td>123,091</td><td>37,247</td><td>123,114</td><td>37,643</td><td>124,423</td><td class="up">+1.06%</td></tr>
+        <tr><td>埼玉県</td><td>139,803</td><td>462,141</td><td>145,122</td><td>479,723</td><td>149,548</td><td>494,352</td><td class="up">+3.05%</td></tr>
+        <tr><td>千葉県</td><td>114,835</td><td>379,558</td><td>122,904</td><td>406,225</td><td>129,996</td><td>429,665</td><td class="up">+5.77%</td></tr>
+        <tr class="highlight-row"><td>🔴 東京都<br><small style="color:rgba(255,255,255,0.7);font-weight:normal;">住宅地のみ</small></td><td>476,100</td><td>1,574,116</td><td>515,300</td><td>1,703,064</td><td>565,100</td><td>1,867,422</td><td class="up">+9.66%</td></tr>
+        <tr><td>神奈川県</td><td>202,927</td><td>670,709</td><td>212,438</td><td>702,149</td><td>221,082</td><td>730,703</td><td class="up">+4.07%</td></tr>
+        <tr><td>新潟県</td><td>37,073</td><td>122,540</td><td>37,575</td><td>124,199</td><td>37,685</td><td>124,563</td><td class="up">+0.29%</td></tr>
+        <tr><td>富山県</td><td>36,184</td><td>119,601</td><td>36,564</td><td>120,858</td><td>36,661</td><td>121,179</td><td class="up">+0.27%</td></tr>
+        <tr><td>石川県</td><td>58,001</td><td>191,739</td><td>58,915</td><td>194,760</td><td>59,436</td><td>196,483</td><td class="up">+0.88%</td></tr>
+        <tr><td>福井県</td><td>38,871</td><td>128,481</td><td>39,232</td><td>129,673</td><td>39,648</td><td>131,048</td><td class="up">+1.06%</td></tr>
+        <tr><td>山梨県</td><td>34,746</td><td>114,844</td><td>34,313</td><td>113,415</td><td>34,499</td><td>114,030</td><td class="up">+0.54%</td></tr>
+        <tr><td>長野県</td><td>36,448</td><td>120,471</td><td>37,270</td><td>123,188</td><td>37,191</td><td>122,927</td><td class="down">▲0.21%</td></tr>
+        <tr><td>岐阜県</td><td>46,542</td><td>153,867</td><td>46,427</td><td>153,487</td><td>46,640</td><td>154,190</td><td class="up">+0.46%</td></tr>
+        <tr><td>静岡県</td><td>71,816</td><td>237,364</td><td>72,003</td><td>237,982</td><td>72,268</td><td>238,858</td><td class="up">+0.37%</td></tr>
+        <tr><td>愛知県</td><td>124,200</td><td>410,559</td><td>128,827</td><td>425,855</td><td>132,131</td><td>436,787</td><td class="up">+2.57%</td></tr>
+        <tr><td>三重県</td><td>38,452</td><td>127,096</td><td>38,865</td><td>128,462</td><td>39,124</td><td>129,317</td><td class="up">+0.67%</td></tr>
+        <tr><td>滋賀県</td><td>52,569</td><td>173,754</td><td>54,595</td><td>180,449</td><td>55,473</td><td>183,352</td><td class="up">+1.61%</td></tr>
+        <tr><td>京都府</td><td>153,568</td><td>507,551</td><td>158,829</td><td>524,938</td><td>164,084</td><td>542,309</td><td class="up">+3.31%</td></tr>
+        <tr><td>大阪府</td><td>153,389</td><td>506,959</td><td>159,546</td><td>527,306</td><td>165,632</td><td>547,429</td><td class="up">+3.81%</td></tr>
+        <tr><td>兵庫県</td><td>136,486</td><td>451,077</td><td>141,357</td><td>467,176</td><td>146,885</td><td>485,442</td><td class="up">+3.91%</td></tr>
+        <tr><td>奈良県</td><td>68,165</td><td>225,270</td><td>68,385</td><td>225,997</td><td>69,542</td><td>229,822</td><td class="up">+1.69%</td></tr>
+        <tr><td>和歌山県</td><td>41,616</td><td>137,553</td><td>42,153</td><td>139,328</td><td>41,522</td><td>137,241</td><td class="down">▲1.50%</td></tr>
+        <tr><td>鳥取県</td><td>29,462</td><td>97,381</td><td>29,335</td><td>96,961</td><td>29,595</td><td>97,820</td><td class="up">+0.88%</td></tr>
+        <tr><td>島根県</td><td>33,996</td><td>112,388</td><td>34,228</td><td>113,155</td><td>34,596</td><td>114,372</td><td class="up">+1.07%</td></tr>
+        <tr><td>岡山県</td><td>45,887</td><td>151,703</td><td>46,614</td><td>154,107</td><td>47,784</td><td>157,975</td><td class="up">+2.51%</td></tr>
+        <tr><td>広島県</td><td>90,683</td><td>299,744</td><td>94,045</td><td>310,847</td><td>96,897</td><td>320,278</td><td class="up">+3.03%</td></tr>
+        <tr><td>山口県</td><td>34,944</td><td>115,505</td><td>35,699</td><td>117,999</td><td>35,987</td><td>118,951</td><td class="up">+0.81%</td></tr>
+        <tr><td>徳島県</td><td>48,572</td><td>160,540</td><td>47,948</td><td>158,478</td><td>48,319</td><td>159,704</td><td class="up">+0.77%</td></tr>
+        <tr><td>香川県</td><td>44,771</td><td>147,964</td><td>45,831</td><td>151,471</td><td>45,761</td><td>151,240</td><td class="down">▲0.15%</td></tr>
+        <tr><td>愛媛県</td><td>52,407</td><td>173,219</td><td>52,648</td><td>174,015</td><td>52,816</td><td>174,570</td><td class="up">+0.32%</td></tr>
+        <tr><td>高知県</td><td>52,287</td><td>172,823</td><td>52,030</td><td>171,973</td><td>52,211</td><td>172,571</td><td class="up">+0.35%</td></tr>
+        <tr><td>福岡県</td><td>105,399</td><td>348,374</td><td>114,933</td><td>379,886</td><td>121,792</td><td>402,564</td><td class="up">+5.97%</td></tr>
+        <tr><td>佐賀県</td><td>33,565</td><td>110,944</td><td>35,041</td><td>115,823</td><td>36,813</td><td>121,682</td><td class="up">+5.06%</td></tr>
+        <tr><td>長崎県</td><td>43,914</td><td>145,137</td><td>45,540</td><td>150,508</td><td>46,296</td><td>153,008</td><td class="up">+1.66%</td></tr>
+        <tr><td>熊本県</td><td>57,250</td><td>189,207</td><td>60,148</td><td>198,784</td><td>62,773</td><td>207,460</td><td class="up">+4.36%</td></tr>
+        <tr><td>大分県</td><td>46,446</td><td>153,513</td><td>49,284</td><td>162,891</td><td>50,414</td><td>166,627</td><td class="up">+2.29%</td></tr>
+        <tr><td>宮崎県</td><td>32,455</td><td>107,257</td><td>33,012</td><td>109,097</td><td>33,362</td><td>110,253</td><td class="up">+1.06%</td></tr>
+        <tr><td>鹿児島県</td><td>43,531</td><td>143,872</td><td>44,702</td><td>147,742</td><td>45,068</td><td>148,951</td><td class="up">+0.82%</td></tr>
+        <tr><td>沖縄県 ※</td><td>122,567</td><td>405,157</td><td>122,617</td><td>405,322</td><td>130,498</td><td>431,238</td><td class="up">+6.43%</td></tr>
+        <tr class="avg-row"><td>◼ 全国平均</td><td>133,000 ※</td><td>439,669</td><td>137,061</td><td>453,093</td><td>144,740</td><td>478,486</td><td class="up">+5.60%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:11px;color:var(--muted);margin-top:8px">※ 沖縄R6・R7は推計値。全国平均R6も推計。単位：円/㎡（坪単価は×3.30579換算）</p>
+</div>
+
+<!-- ============================
+     SECTION 2: 東京23区
+============================ -->
+<div class="section" id="ward">
+  <div class="section-title">
+    <span class="num">2</span>東京23区 <strong>住宅地のみ</strong> 平均地価（令和6〜8年）
+  </div>
+
+  <div class="alert blue">
+    📋 出典：<strong>東京都財務局 地価公示 区市町村別用途別平均価格表（住宅地のみ）令和6〜8年</strong>。全データ一次資料確認済み。商業地・工業地は含まない。
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card red">
+      <div class="label">23区住宅地平均（R8）</div>
+      <div class="value">856,400<small style="font-size:13px">円/㎡</small></div>
+      <div class="sub">坪284万円 / R7→R8 +9.0%</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="label">最高値（千代田区 R8）</div>
+      <div class="value">3,631,400<small style="font-size:12px">円/㎡</small></div>
+      <div class="sub">住宅地でも坪1,200万円</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="label">最安値（葛飾区 R8）</div>
+      <div class="value">387,500<small style="font-size:13px">円/㎡</small></div>
+      <div class="sub">坪128万円</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="label">最高÷最安（住宅地）</div>
+      <div class="value">約9.4倍</div>
+      <div class="sub">同じ「23区」でも千代田 vs 葛飾でこれだけ差がある</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="min-width:80px">区名</th>
+          <th>R6 ㎡単価<br><small>（住宅地）</small></th>
+          <th>R6 坪単価</th>
+          <th>R7 ㎡単価<br><small>（住宅地）</small></th>
+          <th>R7 坪単価</th>
+          <th>R8 ㎡単価<br><small>（住宅地）</small></th>
+          <th>R8 坪単価</th>
+          <th>R7→R8<br>変動率</th>
+          <th>価格帯</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row"><td>千代田区</td><td>297万</td><td>981万</td><td>328万</td><td>1,084万</td><td class="tier-ultra">363万</td><td class="tier-ultra">1,200万</td><td class="up">+10.7%</td><td><span style="background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:4px;font-size:11px">超高額</span></td></tr>
+        <tr class="highlight-row"><td>港区</td><td>230万</td><td>760万</td><td>258万</td><td>853万</td><td class="tier-ultra">301万</td><td class="tier-ultra">995万</td><td class="up">+16.6%</td><td><span style="background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:4px;font-size:11px">超高額</span></td></tr>
+        <tr><td>中央区</td><td>149万</td><td>493万</td><td>170万</td><td>562万</td><td class="tier-ultra">193万</td><td class="tier-ultra">638万</td><td class="up">+13.8%</td><td><span style="background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:4px;font-size:11px">超高額</span></td></tr>
+        <tr><td>渋谷区</td><td>148万</td><td>490万</td><td>165万</td><td>546万</td><td class="tier-ultra">187万</td><td class="tier-ultra">618万</td><td class="up">+11.0%</td><td><span style="background:#f3e5f5;color:#6a1b9a;padding:2px 6px;border-radius:4px;font-size:11px">超高額</span></td></tr>
+        <tr><td>文京区</td><td>114万</td><td>377万</td><td>128万</td><td>423万</td><td class="tier-high">145万</td><td class="tier-high">479万</td><td class="up">+13.8%</td><td><span style="background:#ffebee;color:#c62828;padding:2px 6px;border-radius:4px;font-size:11px">高額</span></td></tr>
+        <tr><td>目黒区</td><td>109万</td><td>361万</td><td>123万</td><td>407万</td><td class="tier-high">140万</td><td class="tier-high">463万</td><td class="up">+13.7%</td><td><span style="background:#ffebee;color:#c62828;padding:2px 6px;border-radius:4px;font-size:11px">高額</span></td></tr>
+        <tr><td>台東区</td><td>104万</td><td>344万</td><td>115万</td><td>380万</td><td class="tier-high">132万</td><td class="tier-high">436万</td><td class="up">+14.2%</td><td><span style="background:#ffebee;color:#c62828;padding:2px 6px;border-radius:4px;font-size:11px">高額</span></td></tr>
+        <tr><td>品川区</td><td>97万</td><td>321万</td><td>109万</td><td>360万</td><td class="tier-high">124万</td><td class="tier-high">411万</td><td class="up">+13.9%</td><td><span style="background:#ffebee;color:#c62828;padding:2px 6px;border-radius:4px;font-size:11px">高額</span></td></tr>
+        <tr><td>新宿区</td><td>91万</td><td>301万</td><td>102万</td><td>337万</td><td class="tier-high">113万</td><td class="tier-high">374万</td><td class="up">+11.2%</td><td><span style="background:#ffebee;color:#c62828;padding:2px 6px;border-radius:4px;font-size:11px">高額</span></td></tr>
+        <tr><td>豊島区</td><td>73万</td><td>241万</td><td>81万</td><td>268万</td><td class="tier-mid">91万</td><td class="tier-mid">301万</td><td class="up">+12.9%</td><td><span style="background:#fff3e0;color:#e65100;padding:2px 6px;border-radius:4px;font-size:11px">中高額</span></td></tr>
+        <tr><td>中野区</td><td>68万</td><td>225万</td><td>72万</td><td>238万</td><td class="tier-mid">78万</td><td class="tier-mid">258万</td><td class="up">+9.0%</td><td><span style="background:#fff3e0;color:#e65100;padding:2px 6px;border-radius:4px;font-size:11px">中高額</span></td></tr>
+        <tr><td>世田谷区</td><td>68万</td><td>225万</td><td>72万</td><td>238万</td><td class="tier-mid">78万</td><td class="tier-mid">258万</td><td class="up">+7.0%</td><td><span style="background:#fff3e0;color:#e65100;padding:2px 6px;border-radius:4px;font-size:11px">中高額</span></td></tr>
+        <tr><td>北区</td><td>60万</td><td>198万</td><td>66万</td><td>218万</td><td class="tier-mid">74万</td><td class="tier-mid">245万</td><td class="up">+11.6%</td><td><span style="background:#fff3e0;color:#e65100;padding:2px 6px;border-radius:4px;font-size:11px">中高額</span></td></tr>
+        <tr><td>荒川区</td><td>58万</td><td>192万</td><td>63万</td><td>208万</td><td class="tier-mid">72万</td><td class="tier-mid">238万</td><td class="up">+11.8%</td><td><span style="background:#fff3e0;color:#e65100;padding:2px 6px;border-radius:4px;font-size:11px">中高額</span></td></tr>
+        <tr><td>杉並区</td><td>60万</td><td>198万</td><td>65万</td><td>215万</td><td class="tier-mid">70万</td><td class="tier-mid">232万</td><td class="up">+8.2%</td><td><span style="background:#fff3e0;color:#e65100;padding:2px 6px;border-radius:4px;font-size:11px">中高額</span></td></tr>
+        <tr><td>江東区</td><td>54万</td><td>179万</td><td>59万</td><td>195万</td><td class="tier-mid">66万</td><td class="tier-mid">218万</td><td class="up">+11.9%</td><td><span style="background:#fff3e0;color:#e65100;padding:2px 6px;border-radius:4px;font-size:11px">中高額</span></td></tr>
+        <tr><td>大田区</td><td>58万</td><td>192万</td><td>60万</td><td>198万</td><td class="tier-mid">65万</td><td class="tier-mid">215万</td><td class="up">+7.9%</td><td><span style="background:#fff3e0;color:#e65100;padding:2px 6px;border-radius:4px;font-size:11px">中高額</span></td></tr>
+        <tr><td>墨田区</td><td>49万</td><td>162万</td><td>54万</td><td>179万</td><td class="tier-low">61万</td><td class="tier-low">202万</td><td class="up">+13.2%</td><td><span style="background:#e3f2fd;color:#1565c0;padding:2px 6px;border-radius:4px;font-size:11px">中額</span></td></tr>
+        <tr><td>板橋区</td><td>47万</td><td>156万</td><td>51万</td><td>169万</td><td class="tier-low">55万</td><td class="tier-low">182万</td><td class="up">+8.5%</td><td><span style="background:#e3f2fd;color:#1565c0;padding:2px 6px;border-radius:4px;font-size:11px">中額</span></td></tr>
+        <tr><td>練馬区</td><td>43万</td><td>142万</td><td>45万</td><td>149万</td><td class="tier-budget">48万</td><td class="tier-budget">159万</td><td class="up">+6.2%</td><td><span style="background:#e8f5e9;color:#2e7d32;padding:2px 6px;border-radius:4px;font-size:11px">比較的安価</span></td></tr>
+        <tr><td>江戸川区</td><td>39万</td><td>129万</td><td>41万</td><td>136万</td><td class="tier-budget">44万</td><td class="tier-budget">145万</td><td class="up">+5.7%</td><td><span style="background:#e8f5e9;color:#2e7d32;padding:2px 6px;border-radius:4px;font-size:11px">比較的安価</span></td></tr>
+        <tr><td>足立区</td><td>35万</td><td>116万</td><td>38万</td><td>126万</td><td class="tier-budget">41万</td><td class="tier-budget">136万</td><td class="up">+6.3%</td><td><span style="background:#e8f5e9;color:#2e7d32;padding:2px 6px;border-radius:4px;font-size:11px">比較的安価</span></td></tr>
+        <tr><td>葛飾区</td><td>35万</td><td>116万</td><td>37万</td><td>122万</td><td class="tier-budget">39万</td><td class="tier-budget">129万</td><td class="up">+5.6%</td><td><span style="background:#e8f5e9;color:#2e7d32;padding:2px 6px;border-radius:4px;font-size:11px">比較的安価</span></td></tr>
+        <tr class="avg-row"><td>◼ 23区全域平均</td><td>70万</td><td>231万</td><td>77万</td><td>255万</td><td>86万</td><td>284万</td><td class="up">+9.0%</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:11px;color:var(--muted);margin-top:8px">単位：万円/㎡（100円/㎡以下を四捨五入）。<strong>住宅地のみ。商業地・工業地は含まない。</strong>出典：東京都財務局 令和6〜8年地価公示 区市町村別用途別平均価格表・変動率表</p>
+</div>
+
+<!-- ============================
+     SECTION 3: 多摩地区
+============================ -->
+<div class="section" id="tama">
+  <div class="section-title">
+    <span class="num">3</span>東京多摩地区 主要市 住宅地 平均地価
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>市名</th>
+          <th>R6 ㎡単価</th>
+          <th>R6 坪単価</th>
+          <th>R7 ㎡単価</th>
+          <th>R7 坪単価</th>
+          <th>R8 ㎡単価</th>
+          <th>R8 坪単価</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>武蔵野市</td><td class="note">—</td><td class="note">—</td><td>596,125</td><td>1,971,000</td><td>692,200</td><td>2,288,000</td></tr>
+        <tr><td>三鷹市</td><td class="note">426,000 ※</td><td class="note">1,408,000</td><td>447,153</td><td>1,478,000</td><td>492,433</td><td>1,628,000</td></tr>
+        <tr><td>調布市</td><td>428,893</td><td>1,418,000</td><td>443,978</td><td>1,468,000</td><td class="note">425,102 ※</td><td class="note">1,405,000</td></tr>
+        <tr><td>西東京市</td><td>332,615</td><td>1,100,000</td><td>349,657</td><td>1,156,000</td><td>368,517</td><td>1,219,000</td></tr>
+        <tr><td>立川市</td><td class="note">280,000 ※</td><td class="note">925,000</td><td>294,466</td><td>973,000</td><td>308,433</td><td>1,019,000</td></tr>
+        <tr><td>町田市</td><td class="note">154,000 ※</td><td class="note">509,000</td><td>158,584</td><td>524,000</td><td>172,625</td><td>570,000</td></tr>
+        <tr><td>八王子市</td><td class="note">—</td><td class="note">—</td><td>136,583</td><td>451,000</td><td>131,316</td><td>434,000</td></tr>
+        <tr><td>府中市</td><td class="note">—</td><td class="note">—</td><td class="note">補完予定</td><td class="note">—</td><td class="note">補完予定</td><td class="note">—</td></tr>
+        <tr><td>国分寺市</td><td class="note">—</td><td class="note">—</td><td class="note">補完予定</td><td class="note">—</td><td class="note">補完予定</td><td class="note">—</td></tr>
+        <tr><td>小金井市</td><td class="note">—</td><td class="note">—</td><td class="note">補完予定</td><td class="note">—</td><td class="note">補完予定</td><td class="note">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============================
+     SECTION 4: 全国ランキング
+============================ -->
+<div class="section" id="ranking">
+  <div class="section-title">
+    <span class="num">4</span>全国地価ランキング（R8 住宅地 都道府県別）
+  </div>
+
+  <div class="two-col">
+    <div class="compare-card">
+      <h3>🔴 上位10都道府県（R8 ㎡単価）</h3>
+      <div class="compare-row">
+        <div class="label"><span class="rank rank-1">1</span>東京都</div>
+        <div class="bar-container"><div class="bar-fill accent" style="width:100%">565,060</div></div>
+      </div>
+      <div class="compare-row">
+        <div class="label"><span class="rank rank-2">2</span>神奈川県</div>
+        <div class="bar-container"><div class="bar-fill accent" style="width:39%">221,082</div></div>
+      </div>
+      <div class="compare-row">
+        <div class="label"><span class="rank rank-3">3</span>大阪府</div>
+        <div class="bar-container"><div class="bar-fill" style="width:29%">165,632</div></div>
+      </div>
+      <div class="compare-row">
+        <div class="label">4 京都府</div>
+        <div class="bar-container"><div class="bar-fill" style="width:29%">164,084</div></div>
+      </div>
+      <div class="compare-row">
+        <div class="label">5 埼玉県</div>
+        <div class="bar-container"><div class="bar-fill" style="width:26%">149,548</div></div>
+      </div>
+      <div class="compare-row">
+        <div class="label">6 兵庫県</div>
+        <div class="bar-container"><div class="bar-fill" style="width:26%">146,885</div></div>
+      </div>
+      <div class="compare-row">
+        <div class="label">7 愛知県</div>
+        <div class="bar-container"><div class="bar-fill" style="width:23%">132,131</div></div>
+      </div>
+      <div class="compare-row">
+        <div class="label">8 沖縄県</div>
+        <div class="bar-container"><div class="bar-fill" style="width:23%">130,498</div></div>
+      </div>
+      <div class="compare-row">
+        <div class="label">9 千葉県</div>
+        <div class="bar-container"><div class="bar-fill" style="width:23%">129,996</div></div>
+      </div>
+      <div class="compare-row">
+        <div class="label">10 福岡県</div>
+        <div class="bar-container"><div class="bar-fill" style="width:22%">121,792</div></div>
+      </div>
+    </div>
+
+    <div class="compare-card">
+      <h3>🟢 下位5都道府県 ＋ 全国平均（R8）</h3>
+      <div style="padding:16px 0">
+        <table style="font-size:12px;width:100%">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:6px;background:none;color:var(--muted);font-weight:600">都道府県</th>
+              <th style="padding:6px;background:none;color:var(--muted);font-weight:600">㎡単価</th>
+              <th style="padding:6px;background:none;color:var(--muted);font-weight:600">坪単価</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:7px 6px;border-bottom:1px solid var(--border)">43位 宮崎県</td><td style="padding:7px 6px;text-align:right;border-bottom:1px solid var(--border)">33,362</td><td style="padding:7px 6px;text-align:right;border-bottom:1px solid var(--border)">110,253</td></tr>
+            <tr><td style="padding:7px 6px;border-bottom:1px solid var(--border)">44位 長野県</td><td style="padding:7px 6px;text-align:right;border-bottom:1px solid var(--border)">37,191</td><td style="padding:7px 6px;text-align:right;border-bottom:1px solid var(--border)">122,927</td></tr>
+            <tr><td style="padding:7px 6px;border-bottom:1px solid var(--border)">45位 鳥取県</td><td style="padding:7px 6px;text-align:right;border-bottom:1px solid var(--border)">29,595</td><td style="padding:7px 6px;text-align:right;border-bottom:1px solid var(--border)">97,820</td></tr>
+            <tr><td style="padding:7px 6px;border-bottom:1px solid var(--border)">46位 青森県</td><td style="padding:7px 6px;text-align:right;border-bottom:1px solid var(--border)">24,714</td><td style="padding:7px 6px;text-align:right;border-bottom:1px solid var(--border)">81,695</td></tr>
+            <tr><td style="padding:7px 6px;border-bottom:1px solid var(--border)">47位 秋田県</td><td style="padding:7px 6px;text-align:right;border-bottom:1px solid var(--border)">23,054</td><td style="padding:7px 6px;text-align:right;border-bottom:1px solid var(--border)">76,194</td></tr>
+            <tr style="background:#e8f4fd;font-weight:600"><td style="padding:7px 6px">◼ 全国平均</td><td style="padding:7px 6px;text-align:right">144,740</td><td style="padding:7px 6px;text-align:right">478,486</td></tr>
+            <tr style="background:#fff3e0;font-weight:600"><td style="padding:7px 6px">🔴 東京都</td><td style="padding:7px 6px;text-align:right">565,060</td><td style="padding:7px 6px;text-align:right">1,867,821</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:12px;padding:12px;background:#fafafa;border-radius:8px;font-size:12px;color:var(--muted)">
+        東京都（565,060円/㎡）は秋田県（23,054円/㎡）の<strong style="color:var(--up)">約24.5倍</strong><br>
+        全国最安値と最高値で坪単価に20倍以上の差がある
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     SECTION 5: 平均床面積
+============================ -->
+<div class="section" id="floorarea">
+  <div class="section-title">
+    <span class="num">5</span>注文住宅の平均床面積（延床面積）
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card orange">
+      <div class="label">全国平均（現実的）</div>
+      <div class="value">113〜118㎡</div>
+      <div class="sub">34〜36坪</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="label">首都圏（フラット35 2024）</div>
+      <div class="value">108.8㎡</div>
+      <div class="sub">32.9坪（全国より▲2.9坪）</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">東京都内 推計</div>
+      <div class="value">85〜104㎡</div>
+      <div class="sub">26〜31坪</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="label">ピーク時（1996年）</div>
+      <div class="value">141.0㎡</div>
+      <div class="sub">42.7坪（現在より▲8坪）</div>
+    </div>
+  </div>
+
+  <div class="alert red">
+    ⚠️ 「東京都 64.48㎡（19.5坪）」という数字は<strong>全住宅種別平均</strong>（マンション・アパート含む）。注文住宅単体の数値ではない。注文住宅の東京は実態として85〜104㎡程度。
+  </div>
+
+  <div class="two-col" style="margin-bottom:24px">
+    <div class="compare-card">
+      <h3>出典別 全国平均延床面積</h3>
+      <table style="font-size:12px;width:100%">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:7px 8px;background:var(--primary);color:white;font-size:11px">出典</th>
+            <th style="padding:7px 8px;background:var(--primary);color:white;font-size:11px">対象</th>
+            <th style="padding:7px 8px;background:var(--primary);color:white;font-size:11px">㎡</th>
+            <th style="padding:7px 8px;background:var(--primary);color:white;font-size:11px">坪</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:7px 8px;border-bottom:1px solid var(--border)">フラット35 2024</td><td style="padding:7px 8px;text-align:center;border-bottom:1px solid var(--border);font-size:11px">建物のみ</td><td style="padding:7px 8px;text-align:right;border-bottom:1px solid var(--border);font-weight:700">118.5</td><td style="padding:7px 8px;text-align:right;border-bottom:1px solid var(--border);font-weight:700">35.9</td></tr>
+          <tr style="background:#f8f9fb"><td style="padding:7px 8px;border-bottom:1px solid var(--border)">フラット35 2024</td><td style="padding:7px 8px;text-align:center;border-bottom:1px solid var(--border);font-size:11px">土地付き</td><td style="padding:7px 8px;text-align:right;border-bottom:1px solid var(--border);font-weight:700">111.1</td><td style="padding:7px 8px;text-align:right;border-bottom:1px solid var(--border);font-weight:700">33.6</td></tr>
+          <tr><td style="padding:7px 8px;border-bottom:1px solid var(--border)">着工統計 2023</td><td style="padding:7px 8px;text-align:center;border-bottom:1px solid var(--border);font-size:11px">持家</td><td style="padding:7px 8px;text-align:right;border-bottom:1px solid var(--border);font-weight:700">113.95</td><td style="padding:7px 8px;text-align:right;border-bottom:1px solid var(--border);font-weight:700">34.5</td></tr>
+          <tr style="background:#f8f9fb"><td style="padding:7px 8px;border-bottom:1px solid var(--border)">住宅市場動向R5</td><td style="padding:7px 8px;text-align:center;border-bottom:1px solid var(--border);font-size:11px">土地取得</td><td style="padding:7px 8px;text-align:right;border-bottom:1px solid var(--border);font-weight:700">116.2</td><td style="padding:7px 8px;text-align:right;border-bottom:1px solid var(--border);font-weight:700">35.2</td></tr>
+          <tr><td style="padding:7px 8px">住宅市場動向R5</td><td style="padding:7px 8px;text-align:center;font-size:11px">建て替え</td><td style="padding:7px 8px;text-align:right;font-weight:700">136.3</td><td style="padding:7px 8px;text-align:right;font-weight:700">41.2</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="compare-card">
+      <h3>地域別 延床面積比較（フラット35 2024年度）</h3>
+      <div class="compare-row">
+        <div class="label">全国平均</div>
+        <div class="bar-container"><div class="bar-fill" style="width:100%">118.5㎡ / 35.9坪</div></div>
+      </div>
+      <div class="compare-row">
+        <div class="label">首都圏</div>
+        <div class="bar-container"><div class="bar-fill accent" style="width:91.8%">108.8㎡ / 32.9坪</div></div>
+      </div>
+      <div class="compare-row">
+        <div class="label">近畿圏</div>
+        <div class="bar-container"><div class="bar-fill" style="width:93.8%;background:#7b8d9e">111.2㎡ / 33.7坪</div></div>
+      </div>
+      <div class="compare-row">
+        <div class="label">東海圏</div>
+        <div class="bar-container"><div class="bar-fill" style="width:94.8%;background:#7b8d9e">112.4㎡ / 34.0坪</div></div>
+      </div>
+      <div class="compare-row">
+        <div class="label">地方圏</div>
+        <div class="bar-container"><div class="bar-fill" style="width:100%;background:#27ae60">≈123㎡ / ≈37.2坪</div></div>
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:var(--muted);padding:10px;background:#fafafa;border-radius:6px">
+        首都圏は全国平均より<strong style="color:var(--accent)">▲9.7㎡（▲2.9坪）</strong>狭い<br>
+        東京都内に限るとさらに▲5〜10㎡程度と推計
+      </div>
+    </div>
+  </div>
+
+  <!-- 縮小トレンド -->
+  <div class="trend-visual">
+    <h3 style="font-size:14px;color:var(--primary);margin-bottom:20px">面積縮小トレンド（全国 持家・注文住宅）</h3>
+    <div class="trend-points">
+      <div class="trend-col">
+        <div class="trend-val">141㎡<br><small>42.7坪</small></div>
+        <div class="trend-bar-wrap">
+          <div class="trend-bar-inner" style="height:100%;background:#27ae60"></div>
+        </div>
+        <div class="trend-label">1996年<br>ピーク</div>
+      </div>
+      <div class="trend-col">
+        <div class="trend-val">130㎡<br><small>39.3坪</small></div>
+        <div class="trend-bar-wrap">
+          <div class="trend-bar-inner" style="height:87%;background:#7cb88a"></div>
+        </div>
+        <div class="trend-label">2010年</div>
+      </div>
+      <div class="trend-col">
+        <div class="trend-val">124㎡<br><small>37.6坪</small></div>
+        <div class="trend-bar-wrap">
+          <div class="trend-bar-inner" style="height:80%;background:#f39c12"></div>
+        </div>
+        <div class="trend-label">2020年</div>
+      </div>
+      <div class="trend-col">
+        <div class="trend-val">114㎡<br><small>34.5坪</small></div>
+        <div class="trend-bar-wrap">
+          <div class="trend-bar-inner" style="height:74%;background:#e67e22"></div>
+        </div>
+        <div class="trend-label">2023年<br>着工統計</div>
+      </div>
+      <div class="trend-col">
+        <div class="trend-val">118.5㎡<br><small>35.9坪</small></div>
+        <div class="trend-bar-wrap">
+          <div class="trend-bar-inner" style="height:77%;background:#e74c3c"></div>
+        </div>
+        <div class="trend-label">2024年<br>フラット35</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:12px;color:var(--muted);padding:12px;background:#f8f9fb;border-radius:6px">
+      <strong style="color:var(--up)">27年間で約27㎡（8坪）縮小</strong>。年平均1㎡のペース。主因：核家族化の進行 ＋ 建築費高騰による面積圧縮
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     SECTION 6: 理想vs実際
+============================ -->
+<div class="section" id="gap">
+  <div class="section-title">
+    <span class="num">6</span>理想 vs 実際のギャップ
+  </div>
+
+  <div class="two-col">
+    <div class="compare-card">
+      <h3>国交省「豊かな居住面積水準」との比較</h3>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:14px">住生活基本計画が定める「豊かさを実感できる居住面積」</p>
+      <div class="table-wrap" style="box-shadow:none">
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align:left">世帯人数</th>
+              <th>理想の目標</th>
+              <th>実際の平均</th>
+              <th>判定</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2人家族</td>
+              <td>75㎡（22.7坪）</td>
+              <td>≈111㎡</td>
+              <td><span class="gap-badge gap-ok">✓ 達成</span></td>
+            </tr>
+            <tr>
+              <td>3人家族</td>
+              <td>100㎡（30.3坪）</td>
+              <td>≈111㎡</td>
+              <td><span class="gap-badge gap-ok">✓ 達成</span></td>
+            </tr>
+            <tr class="highlight-row">
+              <td><strong>4人家族</strong></td>
+              <td><strong>125㎡（37.8坪）</strong></td>
+              <td><strong>111㎡（33.6坪）</strong></td>
+              <td><span class="gap-badge gap-ng">✗ ▲4.2坪</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:12px;font-size:12px;padding:12px;background:#ffebee;border-radius:6px;color:#c62828">
+        4人家族が「豊かな水準」を満たすためには 125㎡ が必要。<br>
+        実際の平均は 111㎡ → <strong>約14㎡（約4.2坪）不足</strong><br>
+        首都圏は土地制約でさらに厳しく、東京23区ではほぼ達成困難
+      </div>
+    </div>
+
+    <div class="compare-card">
+      <h3>妥協した内容（住宅市場動向調査 R5 注文住宅取得世帯）</h3>
+      <div style="margin-top:8px">
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+            <span>価格が予定より高くなった</span>
+            <strong>69.3%</strong>
+          </div>
+          <div style="background:#eee;border-radius:4px;height:14px;overflow:hidden">
+            <div style="width:69.3%;height:100%;background:#e74c3c;border-radius:4px"></div>
+          </div>
+        </div>
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+            <strong style="color:var(--accent)">🏠 住宅の広さ</strong>
+            <strong style="color:var(--accent)">39.4%</strong>
+          </div>
+          <div style="background:#eee;border-radius:4px;height:14px;overflow:hidden">
+            <div style="width:39.4%;height:100%;background:var(--accent);border-radius:4px"></div>
+          </div>
+        </div>
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+            <span>間取り・部屋数</span>
+            <strong>31.8%</strong>
+          </div>
+          <div style="background:#eee;border-radius:4px;height:14px;overflow:hidden">
+            <div style="width:31.8%;height:100%;background:#f39c12;border-radius:4px"></div>
+          </div>
+        </div>
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+            <span>職場からの距離</span>
+            <strong>17.6%</strong>
+          </div>
+          <div style="background:#eee;border-radius:4px;height:14px;overflow:hidden">
+            <div style="width:17.6%;height:100%;background:#95a5a6;border-radius:4px"></div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:12px;padding:12px;background:#fff8e1;border-radius:6px">
+        <strong>約4割が「住宅の広さ」を妥協して建てている</strong><br>
+        「狭くても今の予算で建てるか」vs「広い家のために延期するか」は家づくりの核心的ジレンマ
+      </div>
+    </div>
+  </div>
+
+  <!-- シミュレーションデフォルト値 -->
+  <div style="margin-top:20px">
+    <div class="compare-card">
+      <h3>📐 シミュレーションツール推奨デフォルト値</h3>
+      <div class="table-wrap" style="box-shadow:none;margin-top:12px">
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align:left">地域</th>
+              <th>推奨延床面積</th>
+              <th>推奨坪数</th>
+              <th>根拠</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>全国（地方圏）</td><td>115〜120㎡</td><td>35〜36坪</td><td>フラット35・着工統計平均</td></tr>
+            <tr><td>首都圏（東京近郊）</td><td>100〜110㎡</td><td>30〜33坪</td><td>首都圏フラット35平均</td></tr>
+            <tr><td><strong>東京23区</strong></td><td><strong>80〜95㎡</strong></td><td><strong>24〜29坪</strong></td><td>土地制約・建築費から推計</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     SECTION 7: 建物坪単価
+============================ -->
+<div class="section" id="building">
+  <div class="section-title">
+    <span class="num">7</span>建物坪単価 クイックリファレンス（令和6〜8年）
+  </div>
+
+  <div class="alert">
+    2024〜2026年の建築費高騰を反映。1〜2年前のデータより10〜20%高い場合あり。
+  </div>
+
+  <div class="grade-row" style="border-left:3px solid #27ae60">
+    <div class="grade-label" style="color:#27ae60">ローコスト住宅</div>
+    <div class="grade-range">50〜70万円/坪</div>
+    <div class="grade-bar-wrap">
+      <div style="background:#eee;border-radius:4px;height:10px;overflow:hidden"><div style="width:38%;height:100%;background:#27ae60;border-radius:4px"></div></div>
+    </div>
+    <div class="grade-total">総額目安（35坪）<br>1,750〜2,450万円</div>
+  </div>
+
+  <div class="grade-row" style="border-left:3px solid #2196b0">
+    <div class="grade-label" style="color:#2196b0">一般的な工務店</div>
+    <div class="grade-range">70〜90万円/坪</div>
+    <div class="grade-bar-wrap">
+      <div style="background:#eee;border-radius:4px;height:10px;overflow:hidden"><div style="width:54%;height:100%;background:#2196b0;border-radius:4px"></div></div>
+    </div>
+    <div class="grade-total">総額目安（35坪）<br>2,450〜3,150万円</div>
+  </div>
+
+  <div class="grade-row" style="border-left:3px solid var(--accent)">
+    <div class="grade-label" style="color:var(--accent)">大手HM（ミドル）</div>
+    <div class="grade-range">80〜110万円/坪</div>
+    <div class="grade-bar-wrap">
+      <div style="background:#eee;border-radius:4px;height:10px;overflow:hidden"><div style="width:66%;height:100%;background:var(--accent);border-radius:4px"></div></div>
+    </div>
+    <div class="grade-total">総額目安（35坪）<br>2,800〜3,850万円</div>
+  </div>
+
+  <div class="grade-row" style="border-left:3px solid #e74c3c">
+    <div class="grade-label" style="color:#e74c3c">大手HM（ハイグレード）</div>
+    <div class="grade-range">100〜130万円/坪</div>
+    <div class="grade-bar-wrap">
+      <div style="background:#eee;border-radius:4px;height:10px;overflow:hidden"><div style="width:80%;height:100%;background:#e74c3c;border-radius:4px"></div></div>
+    </div>
+    <div class="grade-total">総額目安（35坪）<br>3,500〜4,550万円</div>
+  </div>
+
+  <div class="grade-row" style="border-left:3px solid #7b1fa2">
+    <div class="grade-label" style="color:#7b1fa2">高級注文住宅</div>
+    <div class="grade-range">120万円〜/坪</div>
+    <div class="grade-bar-wrap">
+      <div style="background:#eee;border-radius:4px;height:10px;overflow:hidden"><div style="width:100%;height:100%;background:#7b1fa2;border-radius:4px"></div></div>
+    </div>
+    <div class="grade-total">総額目安（35坪）<br>4,200万円〜</div>
+  </div>
+</div>
+
+<!-- ============================
+     SECTION 8: シミュレーション構想
+============================ -->
+<div class="section" id="sim">
+  <div class="section-title">
+    <span class="num">8</span>シミュレーションツール構想
+  </div>
+
+  <div class="sim-box">
+    <h3>🏠 住宅購入コストシミュレーター 設計イメージ</h3>
+
+    <div style="margin-bottom:20px">
+      <p style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:12px">計算フロー</p>
+      <div class="sim-flow">
+        <div class="sim-step">エリア選択<br><small style="opacity:0.6">都道府県→市区町村</small></div>
+        <span class="sim-arrow">→</span>
+        <div class="sim-step">土地代 自動入力<br><small style="opacity:0.6">地価単価×面積</small></div>
+        <span class="sim-arrow">→</span>
+        <div class="sim-step">建物代<br><small style="opacity:0.6">坪単価×延床面積</small></div>
+        <span class="sim-arrow">→</span>
+        <div class="sim-step">諸費用<br><small style="opacity:0.6">総額×諸費用率</small></div>
+        <span class="sim-arrow">→</span>
+        <div class="sim-step">住宅ローン計算<br><small style="opacity:0.6">月々返済額</small></div>
+      </div>
+    </div>
+
+    <div class="sim-grid">
+      <div class="sim-item">
+        <div class="sim-item-title">INPUT（入力項目）</div>
+        ・土地面積（㎡ or 坪）<br>
+        ・年度（R6/R7/R8切り替え）<br>
+        ・建物延床面積（坪）<br>
+        ・建物坪単価（スライダー）<br>
+        ・諸費用率（%）<br>
+        ・頭金（%）<br>
+        ・金利・返済期間
+      </div>
+      <div class="sim-item">
+        <div class="sim-item-title">OUTPUT（出力項目）</div>
+        ・土地代（自動計算）<br>
+        ・建物代<br>
+        ・諸費用概算<br>
+        ・総額<br>
+        ・借入額<br>
+        ・月々返済額
+      </div>
+      <div class="sim-item">
+        <div class="sim-item-title">FILTER（絞り込み）</div>
+        ・予算上限設定<br>
+        ・エリア絞り込み<br>
+        ・年度切り替え<br>
+        ・建物グレード選択<br>
+        ・ローン条件設定
+      </div>
+      <div class="sim-item">
+        <div class="sim-item-title">DATA（ベースデータ）</div>
+        ✓ 47都道府県 R6〜R8<br>
+        ✓ 東京23区 R7〜R8<br>
+        △ 東京多摩地区（補完中）<br>
+        ◻ 首都圏主要市（予定）<br>
+        ◻ 主要地方都市（予定）
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     SECTION 9: 世帯年収別ローン上限目安
+============================ -->
+<div class="section" id="loan">
+  <div class="section-title">
+    <span class="num">9</span>世帯年収別 住宅ローン借入上限目安
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card red">
+      <div class="label">変動金利 最優遇（2026年4月）</div>
+      <div class="value">0.95〜1.1%</div>
+      <div class="sub">みずほ1.025%・三井住友信託1.08%・りそな0.95%<br>店頭基準金利は3.125%</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="label">銀行固定10年 最優遇（2026年4月）</div>
+      <div class="value">2.85〜2.95%</div>
+      <div class="sub">三菱UFJ2.92%・三井住友2.95%・みずほ2.85%</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="label">フラット35（20年超・2025年目安）</div>
+      <div class="value">1.8〜2.0%</div>
+      <div class="sub">長期国債利回り連動。銀行固定とは別系統</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">銀行が審査で使う「審査金利」</div>
+      <div class="value">3.0〜4.0%</div>
+      <div class="sub">変動で借りても審査は高い金利で計算される</div>
+    </div>
+  </div>
+
+  <!-- 計算方法の説明ボックス -->
+  <div style="background:var(--white); border-radius:10px; padding:20px; box-shadow:0 1px 4px rgba(0,0,0,0.06); margin-bottom:20px; border-left:4px solid var(--accent2);">
+    <div style="font-size:13px; font-weight:700; color:var(--primary); margin-bottom:12px;">📐 借入上限の計算方法（銀行・フラット35の実際の審査ロジック）</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; font-size:12px;">
+      <div>
+        <div style="font-weight:600; color:var(--accent); margin-bottom:6px;">STEP 1：月返済上限を計算</div>
+        <div style="background:#f5f7fa; padding:10px; border-radius:6px; font-family:monospace; font-size:11px;">
+          月返済上限 = 年収 × 返済比率 ÷ 12<br><br>
+          例）年収700万・返済比率35%<br>
+          = 7,000,000 × 0.35 ÷ 12<br>
+          = <strong>204,166円/月</strong>
+        </div>
+        <div style="margin-top:8px; color:var(--muted); font-size:11px;">
+          ・返済比率上限：年収400万未満→30%、400万以上→35%（フラット35基準）<br>
+          ・「無理なく」は25%が目安（手取り・生活費考慮）<br>
+          ・他のローン（車・カード等）は合算
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:600; color:var(--accent); margin-bottom:6px;">STEP 2：借入上限を逆算（元利均等返済公式）</div>
+        <div style="background:#f5f7fa; padding:10px; border-radius:6px; font-family:monospace; font-size:11px;">
+          月返済係数 = r(1+r)ⁿ / ((1+r)ⁿ-1)<br>
+          r = 月利（年率÷12）、n = 返済回数<br><br>
+          借入上限 = 月返済上限 ÷ 月返済係数<br><br>
+          【2026年4月 各金利の係数/100万円】<br>
+          変動1.0% 35年 → <strong>2,822円/月</strong><br>
+          固定2.0% 35年 → <strong>3,313円/月</strong><br>
+          審査3.5% 35年 → <strong>4,133円/月</strong>
+        </div>
+        <div style="margin-top:8px; color:var(--muted); font-size:11px;">
+          ※審査金利は各行が設定。一般に3〜4%。変動で借りても審査はこの金利で行われる。
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:12px; background:#fff3e0; border-radius:6px; padding:10px; font-size:12px; color:#e65100;">
+      ⚠️ <strong>重要：「審査通る金額」≠「変動1%で計算した金額」</strong>　変動ローンであっても、銀行は審査金利（3〜4%）で計算した月返済額が返済比率内に収まるかを確認する。実際の月返済は適用金利（1%前後）で計算される。よって「借りられる金額（審査金利ベース）」は「変動1%計算」より少なくなる。
+    </div>
+  </div>
+
+  <div class="alert blue">
+    📌 <strong>表の読み方：</strong>「審査通る上限（変動1.0%）」は適用金利1.0%で月返済が返済比率35%以内に収まる金額。「審査上限（審査金利3.5%）」が実際に銀行審査で通りやすい上限の目安。「適正目安」は返済比率25%・変動1.0%で生活に無理がない水準。出典：フラット35返済比率基準 / 三井住友銀行・みずほ銀行 審査基準公開情報
+  </div>
+
+  <div class="table-wrap loan-table-wrap">
+    <table>
+      <thead>
+        <tr style="background:#1a3a5c;color:white;">
+          <th>世帯年収</th>
+          <th>月返済上限<br><small>（35%・額面）</small></th>
+          <th>借入上限<br>変動1.0%<br><small style="font-weight:normal;">（実際の月返済）</small></th>
+          <th>借入上限<br>固定2.0%<br><small style="font-weight:normal;">（フラット35目安）</small></th>
+          <th style="background:#b71c1c;">審査上限<br>審査金利3.5%<br><small style="font-weight:normal;">（銀行変動審査の実態）</small></th>
+          <th>適正借入<br>返済比率25%<br><small style="font-weight:normal;">（変動1.0%・無理なし）</small></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>400万円</td><td>11.7万円</td><td>4,130万円</td><td>3,520万円</td><td style="background:#fdecea; font-weight:600;">2,820万円</td><td>2,950万円</td></tr>
+        <tr><td>500万円</td><td>14.6万円</td><td>5,170万円</td><td>4,400万円</td><td style="background:#fdecea; font-weight:600;">3,530万円</td><td>3,690万円</td></tr>
+        <tr><td>600万円</td><td>17.5万円</td><td>6,200万円</td><td>5,280万円</td><td style="background:#fdecea; font-weight:600;">4,230万円</td><td>4,430万円</td></tr>
+        <tr class="loan-row-best"><td>700万円</td><td>20.4万円</td><td>7,230万円</td><td>6,160万円</td><td style="background:#fdecea; font-weight:600;">4,940万円</td><td>5,170万円</td></tr>
+        <tr class="loan-row-best"><td>800万円</td><td>23.3万円</td><td>8,260万円</td><td>7,040万円</td><td style="background:#fdecea; font-weight:600;">5,640万円</td><td>5,900万円</td></tr>
+        <tr class="loan-row-best"><td>900万円</td><td>26.3万円</td><td>9,300万円</td><td>7,920万円</td><td style="background:#fdecea; font-weight:600;">6,350万円</td><td>6,640万円</td></tr>
+        <tr class="loan-row-stretch"><td>1,000万円</td><td>29.2万円</td><td>10,330万円</td><td>8,800万円</td><td style="background:#fdecea; font-weight:600;">7,060万円</td><td>7,380万円</td></tr>
+        <tr class="loan-row-stretch"><td>1,100万円</td><td>32.1万円</td><td>11,370万円</td><td>9,680万円</td><td style="background:#fdecea; font-weight:600;">7,760万円</td><td>8,120万円</td></tr>
+        <tr class="loan-row-stretch"><td>1,200万円</td><td>35.0万円</td><td>12,400万円</td><td>10,560万円</td><td style="background:#fdecea; font-weight:600;">8,470万円</td><td>8,860万円</td></tr>
+        <tr><td>1,300万円</td><td>37.9万円</td><td>13,430万円</td><td>11,440万円</td><td style="background:#fdecea; font-weight:600;">9,170万円</td><td>9,590万円</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 審査金利と適用金利の差の可視化 -->
+  <div style="background:var(--white); border-radius:10px; padding:16px 20px; box-shadow:0 1px 4px rgba(0,0,0,0.06); margin-top:16px;">
+    <div style="font-size:13px; font-weight:600; color:var(--primary); margin-bottom:10px;">年収700万・変動ローン：「審査金額」と「実際の月返済」の差</div>
+    <div style="display:flex; gap:20px; flex-wrap:wrap; font-size:12px;">
+      <div style="flex:1; min-width:200px; background:#fdecea; border-radius:8px; padding:12px;">
+        <div style="color:#c62828; font-weight:700; margin-bottom:4px;">銀行の審査（審査金利3.5%）</div>
+        <div>借入可能上限：<strong>4,940万円</strong></div>
+        <div style="color:var(--muted); margin-top:4px; font-size:11px;">= 月返済20.4万 ÷ 4,133円/100万</div>
+      </div>
+      <div style="flex:1; min-width:200px; background:#e8f5e9; border-radius:8px; padding:12px;">
+        <div style="color:#2e7d32; font-weight:700; margin-bottom:4px;">実際の月返済（適用金利1.0%）</div>
+        <div>4,940万を借りた場合：<strong>月13.9万円</strong></div>
+        <div style="color:var(--muted); margin-top:4px; font-size:11px;">= 4,940万 × 2,822円/100万 ÷ 100</div>
+        <div style="color:#2e7d32; font-size:11px;">→ 返済比率23.9%（余裕あり）</div>
+      </div>
+      <div style="flex:1; min-width:200px; background:#e3f2fd; border-radius:8px; padding:12px;">
+        <div style="color:#1565c0; font-weight:700; margin-bottom:4px;">ポイント</div>
+        <div style="font-size:11px; line-height:1.7;">審査基準で弾かれなければ、実際の月返済は少ない。ただし金利が3%超に上昇すれば月返済は審査時の想定水準に近づく。</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;">
+    <div class="section-title" style="font-size:15px; border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:12px;">
+      ペアローン・単独ローン の違い（2026年4月 変動1.0%基準）
+    </div>
+    <div class="scenario-grid">
+      <div class="scenario-card">
+        <h4>単独ローン（夫のみ・年収900万円）</h4>
+        <div class="scenario-row"><span class="s-label">審査上限（3.5%）</span><span class="s-val">6,350万円</span></div>
+        <div class="scenario-row"><span class="s-label">適正借入（25%・変動1.0%）</span><span class="s-val">6,640万円</span></div>
+        <div class="scenario-row"><span class="s-label">+ 頭金300万</span><span class="s-val">= 総予算 6,940万円</span></div>
+        <div class="scenario-row"><span class="s-label">月返済（変動1.0%/35年）</span><span class="s-val">約18.7万円</span></div>
+        <div class="scenario-row"><span class="s-label">向いている住宅</span><span class="s-val">多摩・神奈川 建売 or 中古マンション（23区近郊）</span></div>
+      </div>
+      <div class="scenario-card orange">
+        <h4>ペアローン（夫900万+妻400万=1,300万円）</h4>
+        <div class="scenario-row"><span class="s-label">審査上限（3.5%）</span><span class="s-val">9,170万円</span></div>
+        <div class="scenario-row"><span class="s-label">適正借入（25%・変動1.0%）</span><span class="s-val">9,590万円</span></div>
+        <div class="scenario-row"><span class="s-label">+ 頭金500万</span><span class="s-val">= 総予算 約9,670万円</span></div>
+        <div class="scenario-row"><span class="s-label">月返済（変動1.0%/35年）</span><span class="s-val">夫+妻 合計 約27.1万円</span></div>
+        <div class="scenario-row"><span class="s-label">⚠️ リスク</span><span class="s-val">育休中は妻収入ダウン → 審査は復職後収入で計算推奨</span></div>
+        <div class="scenario-row"><span class="s-label">向いている住宅</span><span class="s-val">23区内・城南・城西 マンション / 土地+注文住宅</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     SECTION 10: 予算別住宅選択肢
+============================ -->
+<div class="section" id="budget">
+  <div class="section-title">
+    <span class="num">10</span>予算別 住宅選択肢マトリクス（首都圏）
+  </div>
+
+  <div class="alert">
+    ⚠️ 首都圏（東京・埼玉・千葉・神奈川）基準。土地なし（0から取得）前提。「総予算」= 借入 + 頭金。
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr style="background:#1a3a5c;color:white;">
+          <th>総予算帯</th>
+          <th>選択肢（複数）</th>
+          <th>メリット</th>
+          <th>デメリット・注意点</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>〜3,000万円</strong></td>
+          <td>
+            <span class="matrix-tag tag-blue">郊外建売（50km圏）</span>
+            <span class="matrix-tag tag-blue">中古戸建（多摩）</span>
+            <span class="matrix-tag tag-blue">中古マンション（郊外）</span>
+          </td>
+          <td>取得しやすい</td>
+          <td>通勤1時間超。家族が増えると手狭</td>
+        </tr>
+        <tr>
+          <td><strong>3,000〜4,500万円</strong></td>
+          <td>
+            <span class="matrix-tag tag-green">建売（30〜40km圏）</span>
+            <span class="matrix-tag tag-green">中古マンション（23区）</span>
+            <span class="matrix-tag tag-green">中古戸建（多摩・神奈川）</span>
+          </td>
+          <td>立地・広さのバランス</td>
+          <td>新築にはほぼ届かない帯域</td>
+        </tr>
+        <tr style="background:#f9f9ff;">
+          <td><strong>4,500〜6,000万円</strong></td>
+          <td>
+            <span class="matrix-tag tag-green">建売（25〜35km圏）</span>
+            <span class="matrix-tag tag-orange">新築マンション（郊外）</span>
+            <span class="matrix-tag tag-green">中古マンション（城南・城西）</span>
+            <span class="matrix-tag tag-blue">土地+注文住宅（50km圏）</span>
+          </td>
+          <td>選択肢が広がる</td>
+          <td>23区内は依然厳しい</td>
+        </tr>
+        <tr style="background:#fff9f5;">
+          <td><strong>6,000〜7,500万円</strong><br><small style="color:#e8622a">ペルソナA下限</small></td>
+          <td>
+            <span class="matrix-tag tag-orange">新築マンション（23区近郊）</span>
+            <span class="matrix-tag tag-orange">土地+注文住宅（多摩・埼玉・神奈川）</span>
+            <span class="matrix-tag tag-green">中古マンション（城南・城西）</span>
+          </td>
+          <td>郊外注文住宅が現実解</td>
+          <td>23区内の一戸建ては苦しい</td>
+        </tr>
+        <tr style="background:#fff3e0;">
+          <td><strong>7,500〜10,000万円</strong><br><small style="color:#e8622a">ペルソナA〜B</small></td>
+          <td>
+            <span class="matrix-tag tag-orange">新築マンション（城南・城西）</span>
+            <span class="matrix-tag tag-orange">土地+注文住宅（城南・城西・多摩）</span>
+            <span class="matrix-tag tag-orange">23区内中古戸建 +リノベ</span>
+          </td>
+          <td>23区内の一戸建てが視野に入る</td>
+          <td>土地25〜35坪で間取り制約あり</td>
+        </tr>
+        <tr style="background:#fdecea;">
+          <td><strong>1億円以上</strong><br><small style="color:#c62828">ペルソナB上位</small></td>
+          <td>
+            <span class="matrix-tag tag-red">23区一等地マンション</span>
+            <span class="matrix-tag tag-red">港区・渋谷区・世田谷区 戸建て</span>
+          </td>
+          <td>立地・資産性ともに◎</td>
+          <td>維持費・管理費・固定資産税が高水準</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:24px;">
+    <div class="section-title" style="font-size:15px; border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:12px;">
+      土地あり（相続・所有）の場合
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr style="background:#2e7d32;color:white;">
+            <th>建物予算</th>
+            <th>選択肢</th>
+            <th>坪数目安</th>
+            <th>向いている人</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>〜1,500万円</td><td>中古購入+小規模リノベ</td><td>30坪前後</td><td>コスト最優先</td></tr>
+          <tr><td>1,500〜2,500万円</td><td>フルリノベ / ローコスト建て替え</td><td>25〜35坪</td><td>デザインより機能重視</td></tr>
+          <tr style="background:#e8f5e9;"><td>2,500〜3,500万円</td><td>ハウスメーカー標準建て替え</td><td>30〜40坪</td><td>バランス型（最多数）</td></tr>
+          <tr><td>3,500〜5,000万円</td><td>こだわり注文住宅 / ZEH対応</td><td>35〜45坪</td><td>高断熱・設備重視</td></tr>
+          <tr><td>5,000万円超</td><td>フルオーダー / 設計事務所</td><td>40坪+</td><td>個性・資産性重視</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;">
+    <div class="section-title" style="font-size:15px; border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:12px;">
+      賃貸 vs 購入 35年間 総コスト比較（首都圏）
+    </div>
+    <div class="scenario-grid">
+      <div class="scenario-card">
+        <h4 style="color:#1565c0;">賃貸：2LDK 郊外（月10万円）</h4>
+        <div class="scenario-row"><span class="s-label">月額</span><span class="s-val">9〜12万円</span></div>
+        <div class="scenario-row"><span class="s-label">35年総支払</span><span class="s-val" style="color:#e74c3c;">3,780〜5,040万円</span></div>
+        <div class="scenario-row"><span class="s-label">資産残高</span><span class="s-val">¥0（資産化なし）</span></div>
+        <div class="scenario-row"><span class="s-label">特徴</span><span class="s-val">引っ越し自由・修繕不要</span></div>
+      </div>
+      <div class="scenario-card">
+        <h4 style="color:#1565c0;">賃貸：2LDK 23区内（月20万円）</h4>
+        <div class="scenario-row"><span class="s-label">月額</span><span class="s-val">15〜25万円</span></div>
+        <div class="scenario-row"><span class="s-label">35年総支払</span><span class="s-val" style="color:#e74c3c;">6,300〜10,500万円</span></div>
+        <div class="scenario-row"><span class="s-label">資産残高</span><span class="s-val">¥0（資産化なし）</span></div>
+        <div class="scenario-row"><span class="s-label">特徴</span><span class="s-val">ファミリー賃貸は割高</span></div>
+      </div>
+      <div class="scenario-card orange">
+        <h4 style="color:#e65100;">購入：借入5,000万・変動0.4%・35年</h4>
+        <div class="scenario-row"><span class="s-label">月返済</span><span class="s-val">約12.8万円</span></div>
+        <div class="scenario-row"><span class="s-label">35年総返済</span><span class="s-val">約5,376万円</span></div>
+        <div class="scenario-row"><span class="s-label">+諸費用・税・修繕</span><span class="s-val">+500〜800万円</span></div>
+        <div class="scenario-row"><span class="s-label">資産残高</span><span class="s-val">土地+建物（残存価値あり）</span></div>
+      </div>
+      <div class="scenario-card orange">
+        <h4 style="color:#e65100;">購入：借入5,000万・固定2.0%・35年</h4>
+        <div class="scenario-row"><span class="s-label">月返済</span><span class="s-val">約16.6万円</span></div>
+        <div class="scenario-row"><span class="s-label">35年総返済</span><span class="s-val">約6,972万円</span></div>
+        <div class="scenario-row"><span class="s-label">+諸費用・税・修繕</span><span class="s-val">+500〜800万円</span></div>
+        <div class="scenario-row"><span class="s-label">金利上昇リスク</span><span class="s-val">なし（金利確定）</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     SECTION 11: 住宅種別市場シェア
+============================ -->
+<div class="section" id="market">
+  <div class="section-title">
+    <span class="num">11</span>住宅種別 市場シェア（全国・2023年度）
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card green">
+      <div class="label">全国 持ち家率（令和5年）</div>
+      <div class="value">61.2%</div>
+      <div class="sub">東京都は約44%（全国最低水準）</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="label">新設住宅着工（2023年度）</div>
+      <div class="value">約79.7万戸</div>
+      <div class="sub">うち持ち家（注文住宅）28.2%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">購入者の注文住宅選択率</div>
+      <div class="value">50.5%</div>
+      <div class="sub">フラット35利用者（建物のみ23.7%+土地付26.8%）</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="label">賃貸（民営）比率</div>
+      <div class="value">26.8%</div>
+      <div class="sub">東京都は約50%超が賃貸</div>
+    </div>
+  </div>
+
+  <!-- 着工統計シェアバー -->
+  <div style="background:var(--white); border-radius:10px; padding:20px; box-shadow:0 1px 4px rgba(0,0,0,0.06); margin-bottom:20px;">
+    <div style="font-size:13px; font-weight:600; color:var(--primary); margin-bottom:12px;">新設住宅 着工種別シェア（2023年度・国土交通省）</div>
+    <div class="share-bar">
+      <div class="share-seg" style="width:28.2%;background:#1a3a5c;">持ち家<br>28.2%</div>
+      <div class="share-seg" style="width:17.8%;background:#2196b0;">建売<br>17.8%</div>
+      <div class="share-seg" style="width:10.4%;background:#e8622a;">マンション<br>10.4%</div>
+      <div class="share-seg" style="width:43.0%;background:#6b7a8d;">貸家<br>43.0%</div>
+      <div class="share-seg" style="width:0.6%;background:#aaa;"></div>
+    </div>
+    <div class="share-legend">
+      <div class="share-legend-item"><div class="share-dot" style="background:#1a3a5c;"></div>持ち家（注文住宅）22.5万戸</div>
+      <div class="share-legend-item"><div class="share-dot" style="background:#2196b0;"></div>分譲戸建（建売）14.2万戸</div>
+      <div class="share-legend-item"><div class="share-dot" style="background:#e8622a;"></div>分譲マンション 8.3万戸</div>
+      <div class="share-legend-item"><div class="share-dot" style="background:#6b7a8d;"></div>貸家 34.3万戸</div>
+    </div>
+  </div>
+
+  <!-- フラット35利用者の種別比率 -->
+  <div style="background:var(--white); border-radius:10px; padding:20px; box-shadow:0 1px 4px rgba(0,0,0,0.06); margin-bottom:20px;">
+    <div style="font-size:13px; font-weight:600; color:var(--primary); margin-bottom:12px;">購入者の住宅種別選択（フラット35利用者 2023年度）</div>
+    <div class="share-bar">
+      <div class="share-seg" style="width:23.7%;background:#1a3a5c;font-size:10px;">注文<br>（建物のみ）<br>23.7%</div>
+      <div class="share-seg" style="width:26.8%;background:#27ae60;font-size:10px;">注文<br>（土地付き）<br>26.8%</div>
+      <div class="share-seg" style="width:25.1%;background:#2196b0;font-size:10px;">建売<br>25.1%</div>
+      <div class="share-seg" style="width:12.5%;background:#e8622a;font-size:10px;">新築<br>マンション<br>12.5%</div>
+      <div class="share-seg" style="width:5.9%;background:#f39c12;font-size:10px;">中古<br>戸建<br>5.9%</div>
+      <div class="share-seg" style="width:6.0%;background:#9c27b0;font-size:10px;">中古<br>マンション<br>6.0%</div>
+    </div>
+    <div class="share-legend">
+      <div class="share-legend-item"><div class="share-dot" style="background:#1a3a5c;"></div>注文住宅（建物のみ）23.7%</div>
+      <div class="share-legend-item"><div class="share-dot" style="background:#27ae60;"></div>注文住宅（土地付き）26.8%</div>
+      <div class="share-legend-item"><div class="share-dot" style="background:#2196b0;"></div>建売住宅 25.1%</div>
+      <div class="share-legend-item"><div class="share-dot" style="background:#e8622a;"></div>新築マンション 12.5%</div>
+      <div class="share-legend-item"><div class="share-dot" style="background:#f39c12;"></div>中古戸建て 5.9%</div>
+      <div class="share-legend-item"><div class="share-dot" style="background:#9c27b0;"></div>中古マンション 6.0%</div>
+    </div>
+    <div class="alert blue" style="margin-top:12px;">
+      💡 注文住宅（建物のみ+土地付き）の合計は <strong>50.5%</strong>。つまり新築購入者の2人に1人が注文住宅を選んでいる。ただしフラット35利用者は賃貸・相続を含まない。
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr style="background:#1a3a5c;color:white;">
+          <th>住宅種別</th>
+          <th>全国シェア（2023）</th>
+          <th>首都圏特徴</th>
+          <th>賃貸含む全世帯での位置づけ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>注文住宅（持ち家）</td><td>28.2%（着工）/ 50.5%（新築購入者）</td><td>土地代が高く比率やや低め</td><td>持ち家層の主力。年々着工数は減少傾向</td></tr>
+        <tr><td>建売住宅</td><td>17.8%（着工）/ 25.1%（購入者）</td><td>首都圏で根強い需要</td><td>注文住宅より安価・即入居で人気</td></tr>
+        <tr><td>新築マンション</td><td>10.4%（着工）/ 12.5%（購入者）</td><td>首都圏・大阪圏に集中</td><td>都心立地・利便性重視層に支持</td></tr>
+        <tr><td>中古戸建て</td><td>（着工なし）/ 5.9%（購入者）</td><td>都内の手頃な選択肢</td><td>リノベーション需要と連動して増加中</td></tr>
+        <tr><td>中古マンション</td><td>（着工なし）/ 6.0%（購入者）</td><td>23区内で増加中</td><td>新築高騰の受け皿として存在感が増している</td></tr>
+        <tr><td>賃貸（民営）</td><td>着工43.0%（貸家）</td><td>東京は50%超が賃貸</td><td>全国26.8%の世帯が賃貸。都心は過半数</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION: 住まい診断ツール -->
+<div class="section" id="shindan">
+  <div class="section-title">
+    <span class="num">診</span>
+    住まいの選択肢 診断ツール
+  </div>
+  <p style="color:var(--muted);font-size:13px;margin-bottom:20px;">エリア・予算・土地・家族・時期の5つの質問に答えるだけで、あなたに向いている住まいの選択肢を中立的な視点で診断します。HMへの誘導ではなく、選択肢の広がりを提示することを目的としています。</p>
+  <div id="sd-container"></div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  作成: 山寿株式会社（YAMAJU Inc.）CEO室 / 2026-06-05<br>
+  出典: 国土交通省 地価公示 / chika.m47.jp / tochidai.info / 住宅金融支援機構 フラット35利用者調査 / 国土交通省 住宅市場動向調査 / 総務省 住宅・土地統計調査 令和5年 / 国土交通省 建築着工統計2023年度<br>
+  ※ 本資料はシミュレーションツール開発のための内部リサーチ資料です
+</div>
+
+</div><!-- /main -->
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---- STEP DEFINITIONS ---- */
+  var STEPS = [
+    {
+      id: 'area',
+      q: '住みたいエリアはどこですか？',
+      note: '現在の検討エリア、またはイメージに近い方を選んでください',
+      choices: [
+        { v: 'tokyo23',     label: '東京23区内',             sub: '城南・城東・城北・城西など' },
+        { v: 'tokyo_other', label: '東京23区外（多摩地区）', sub: '多摩・町田・府中・八王子など' },
+        { v: 'shutoken',    label: '首都圏（神奈川・埼玉・千葉）', sub: '横浜・川崎・さいたま・千葉市など' },
+        { v: 'chiho',       label: 'その他地方',             sub: '関西・東海・北海道・九州など' }
+      ]
+    },
+    {
+      id: 'budget',
+      q: '住宅取得に使える総予算は？',
+      note: '自己資金（頭金）＋ 住宅ローン借入額の合計',
+      choices: [
+        { v: 'under2500', label: '〜 2,500万円',      sub: '例：頭金200万 ＋ ローン2,300万円' },
+        { v: 'b2500',     label: '2,500〜4,000万円', sub: '例：頭金500万 ＋ ローン3,200万円' },
+        { v: 'b4000',     label: '4,000〜6,000万円', sub: '例：頭金800万 ＋ ローン4,700万円' },
+        { v: 'over6000',  label: '6,000万円以上',    sub: '例：頭金1,500万 ＋ ローン6,500万円' }
+      ]
+    },
+    {
+      id: 'land',
+      q: '土地の状況を教えてください',
+      note: '',
+      choices: [
+        { v: 'have_land',    label: 'すでに土地を持っている',       sub: '購入済み・相続済みの土地がある' },
+        { v: 'inherit_land', label: '親から土地を譲り受ける予定',   sub: '親名義の土地を将来的に使える' },
+        { v: 'buy_decided',  label: '土地も購入したい（エリア決定）', sub: '住みたい地域・沿線はほぼ決まっている' },
+        { v: 'buy_undecided',label: '土地も購入したい（エリア未定）', sub: 'どこに住むかもこれから決める段階' }
+      ]
+    },
+    {
+      id: 'family',
+      q: '家族構成を教えてください',
+      note: '',
+      choices: [
+        { v: 'single', label: '単身 または 夫婦のみ',       sub: '子どもの予定は当面なし' },
+        { v: 'kids1',  label: '子ども1人（または近く予定）', sub: 'これから子育て環境も重要' },
+        { v: 'kids2',  label: '子ども2人以上',              sub: '部屋数・広さが重要' },
+        { v: 'parent', label: '親との同居も視野に入れている', sub: '2世帯・将来の介護も考慮したい' }
+      ]
+    },
+    {
+      id: 'timing',
+      q: 'いつ頃、住み始めたいですか？',
+      note: '',
+      choices: [
+        { v: 'within1y', label: '1年以内',          sub: '転勤・進学・家族の変化など事情がある' },
+        { v: 'y1to3',    label: '1〜3年以内',       sub: '計画的にじっくり進めたい' },
+        { v: 'y3to5',    label: '3〜5年で検討中',   sub: '資金を貯めながら準備中' },
+        { v: 'undecided',label: 'まだ決めていない', sub: 'まずは選択肢を知りたい段階' }
+      ]
+    }
+  ];
+
+  /* ---- SCORING CONSTANTS ---- */
+  var BUDGET_VAL = { under2500: 2000, b2500: 3200, b4000: 5000, over6000: 8000 };
+
+  // 予算レンジ（万円）: type × area
+  var RANGES = {
+    chukomon:     { min: 1500, ideal: 2800 },
+    orderwland:   { tokyo23: {min:8000,ideal:13000}, tokyo_other: {min:5500,ideal:8500}, shutoken: {min:4500,ideal:7000},  chiho: {min:2500,ideal:4500} },
+    tateuri:      { tokyo23: {min:6000,ideal:9000},  tokyo_other: {min:4000,ideal:6500}, shutoken: {min:3000,ideal:5500},  chiho: {min:1800,ideal:4000} },
+    newmansion:   { tokyo23: {min:7500,ideal:12000}, tokyo_other: {min:5000,ideal:8000}, shutoken: {min:4000,ideal:7000},  chiho: {min:2000,ideal:4500} },
+    chukomansion: { tokyo23: {min:3500,ideal:6000},  tokyo_other: {min:2200,ideal:4500}, shutoken: {min:1800,ideal:4000},  chiho: {min:1000,ideal:2800} },
+    chukokodate:  { tokyo23: {min:4500,ideal:7500},  tokyo_other: {min:2800,ideal:5500}, shutoken: {min:2200,ideal:5000},  chiho: {min:1200,ideal:3500} }
+  };
+
+  // 土地スコア（0-30）
+  var LAND_SC = {
+    chukomon:     { have_land:30, inherit_land:28, buy_decided:0,  buy_undecided:0  },
+    orderwland:   { have_land:5,  inherit_land:8,  buy_decided:30, buy_undecided:20 },
+    tateuri:      { have_land:8,  inherit_land:8,  buy_decided:28, buy_undecided:25 },
+    newmansion:   { have_land:8,  inherit_land:8,  buy_decided:20, buy_undecided:30 },
+    chukomansion: { have_land:8,  inherit_land:8,  buy_decided:20, buy_undecided:30 },
+    chukokodate:  { have_land:20, inherit_land:18, buy_decided:28, buy_undecided:20 }
+  };
+
+  // 時期スコア（0-20）
+  var TIMING_SC = {
+    chukomon:     { within1y:5,  y1to3:15, y3to5:20, undecided:14 },
+    orderwland:   { within1y:0,  y1to3:12, y3to5:20, undecided:14 },
+    tateuri:      { within1y:20, y1to3:20, y3to5:10, undecided:14 },
+    newmansion:   { within1y:5,  y1to3:14, y3to5:20, undecided:14 },
+    chukomansion: { within1y:14, y1to3:20, y3to5:14, undecided:14 },
+    chukokodate:  { within1y:12, y1to3:20, y3to5:14, undecided:14 }
+  };
+
+  // 家族スコア（0-10）
+  var FAMILY_SC = {
+    chukomon:     { single:7, kids1:10, kids2:10, parent:9  },
+    orderwland:   { single:7, kids1:10, kids2:10, parent:10 },
+    tateuri:      { single:8, kids1:10, kids2:9,  parent:7  },
+    newmansion:   { single:10,kids1:8,  kids2:5,  parent:4  },
+    chukomansion: { single:10,kids1:8,  kids2:5,  parent:3  },
+    chukokodate:  { single:6, kids1:9,  kids2:10, parent:9  }
+  };
+
+  function getBudgetScore(type, area, bv) {
+    var range = (type === 'chukomon') ? RANGES.chukomon : RANGES[type][area];
+    if (!range) return 20;
+    var mn = range.min, id = range.ideal;
+    if (bv >= id) return 40;
+    if (bv >= mn) return Math.round(20 + 20 * (bv - mn) / (id - mn));
+    if (bv >= mn * 0.6) return Math.round(20 * (bv - mn * 0.6) / (mn * 0.4));
+    return 0;
+  }
+
+  function calcScore(type, area, budget, land, timing, family) {
+    // 土地なしでは注文（建物のみ）は選べない
+    if (type === 'chukomon' && land !== 'have_land' && land !== 'inherit_land') return 0;
+    var bv = BUDGET_VAL[budget] || 3000;
+    var bs = getBudgetScore(type, area, bv);
+    var ls = LAND_SC[type][land]   || 0;
+    var ts = TIMING_SC[type][timing] || 0;
+    var fs = FAMILY_SC[type][family] || 0;
+    // 予算が明らかに届かない場合はフィットスコアを大きく抑える
+    if (bs === 0) return Math.min(Math.round((ls + ts + fs) * 0.4), 35);
+    return Math.min(100, bs + ls + ts + fs);
+  }
+
+  function rankAll(ans) {
+    var types = ['chukomon','orderwland','tateuri','newmansion','chukomansion','chukokodate'];
+    return types
+      .map(function(t) { return { type: t, score: calcScore(t, ans.area, ans.budget, ans.land, ans.timing, ans.family) }; })
+      .sort(function(a, b) { return b.score - a.score; });
+  }
+
+  /* ---- TYPE INFO ---- */
+  var INFO = {
+    chukomon: {
+      name: '注文住宅（建物のみ）', icon: '🏗️', tag: '土地持ちの最適解',
+      desc: '自分の土地に、設計から自由に建てる方法。土地代が不要なため建物に予算を集中でき、こだわりを最も反映しやすい。',
+      budget: { all: '建物代のみ：1,500〜4,000万円' },
+      period: '設計〜完成まで約1〜2年',
+      pros: ['間取り・仕様を一から自由に設計できる', '土地代不要、建物への投資に集中できる', 'HM・工務店を幅広く比較検討できる'],
+      cons: ['土地を持っていないと選べない', '設計〜完成まで1年以上かかる'],
+      next: ['複数の建築会社に相見積もりを依頼する', '住宅性能（断熱・耐震等級）の希望水準を先に決める']
+    },
+    orderwland: {
+      name: '注文住宅（土地込み）', icon: '🏠', tag: '立地もデザインも自分で選ぶ',
+      desc: '土地を購入してから設計・建築まで行う方法。費用は高いが、立地・間取りの両方を自分で決められる。',
+      budget: { tokyo23:'目安：1億〜1.5億円以上（土地＋建物）', tokyo_other:'目安：6,000〜9,500万円（土地＋建物）', shutoken:'目安：5,000〜8,000万円（土地＋建物）', chiho:'目安：2,500〜5,000万円（土地＋建物）' },
+      period: '土地探し〜完成まで約2〜3年',
+      pros: ['立地・間取り・仕様の全てを自分で選べる', '長期的な資産価値が比較的高い', '家族のライフスタイルに合わせた設計が可能'],
+      cons: ['総費用が最も高額になりやすい', '土地探しから完成まで期間が長い'],
+      next: ['このレポートの「都道府県別地価」で希望エリア相場を確認する', '土地：建物の予算配分（目安5:5〜6:4）を先に設定する']
+    },
+    tateuri: {
+      name: '建売住宅', icon: '🏘️', tag: 'コスパ×スピード',
+      desc: 'すでに建っている一戸建てを購入する方法。注文住宅より割安で、完成物件なら即入居できる。',
+      budget: { tokyo23:'目安：6,500〜9,500万円', tokyo_other:'目安：4,000〜6,500万円', shutoken:'目安：3,000〜5,500万円', chiho:'目安：1,800〜4,000万円' },
+      period: '完成物件なら最短1〜3ヶ月で入居可能',
+      pros: ['注文住宅より1〜2割程度安い傾向', '完成物件なら即入居可能', '学区・周辺環境を確認してから購入できる'],
+      cons: ['間取り・仕様の変更は原則できない', '建築中は内部構造の確認が難しい'],
+      next: ['SUUMO・HOMESで希望エリアの相場を確認する', '購入前にホームインスペクション（建物診断）を検討する']
+    },
+    newmansion: {
+      name: '新築マンション', icon: '🏢', tag: '都市アクセス×管理が充実',
+      desc: '分譲マンションの新築物件を購入する方法。駅近・都市部の立地を確保しやすく、管理組合による維持管理が受けられる。',
+      budget: { tokyo23:'目安：8,000万〜1億5,000万円', tokyo_other:'目安：5,500〜8,500万円', shutoken:'目安：4,500〜7,000万円', chiho:'目安：2,500〜4,500万円' },
+      period: '契約〜入居まで6ヶ月〜2年（竣工待ちあり）',
+      pros: ['駅近・都市部の立地を確保しやすい', '管理組合による建物・共用部の維持管理', '設備が最新・防犯性が高い'],
+      cons: ['23区・首都圏では高額化が著しい', '管理費・修繕積立金が毎月発生する'],
+      next: ['竣工・入居スケジュールを確認する（遅延リスクあり）', '管理費・修繕積立金込みの月額コストで比較する']
+    },
+    chukomansion: {
+      name: '中古マンション＋リノベ', icon: '🔨', tag: '都市立地×コスト削減',
+      desc: '中古マンションを購入し内装・設備をリノベーションする方法。新築より安く、実物を確認してから購入できる。',
+      budget: { tokyo23:'目安：4,000〜7,000万円（物件＋リノベ込み）', tokyo_other:'目安：2,500〜5,000万円（物件＋リノベ込み）', shutoken:'目安：2,000〜4,500万円（物件＋リノベ込み）', chiho:'目安：1,200〜3,000万円（物件＋リノベ込み）' },
+      period: '物件探し〜リノベ完成まで約6ヶ月〜1年',
+      pros: ['新築より20〜40%安く都市部のアクセスを確保できる', '内装を自分好みに一新できる', '実物を確認してから購入できる'],
+      cons: ['管理状態（修繕積立金の積立状況）の確認が必須', '築年数によっては耐震性の確認が必要'],
+      next: ['リノベ費用の目安：スケルトン改修で500〜1,200万円程度', '管理組合の議事録・修繕積立金残高を必ず確認する']
+    },
+    chukokodate: {
+      name: '中古戸建て＋リノベ', icon: '🛠️', tag: '庭・広さ×コスト抑制',
+      desc: '中古一戸建てを購入し必要箇所をリフォーム・リノベーションする方法。土地付き戸建てを比較的低価格で取得できる。',
+      budget: { tokyo23:'目安：5,000〜8,500万円（物件＋改修込み）', tokyo_other:'目安：3,000〜6,000万円（物件＋改修込み）', shutoken:'目安：2,500〜5,500万円（物件＋改修込み）', chiho:'目安：1,200〜3,500万円（物件＋改修込み）' },
+      period: '物件探し〜工事完了まで約6ヶ月〜1.5年',
+      pros: ['土地付き戸建てを新築より大幅に安く取得できる', '庭・駐車場など広い敷地を確保しやすい', '延床面積を広く取りやすい'],
+      cons: ['1981年以前の物件は耐震改修が必要な場合あり', '配管・基礎など見えない部分の状態確認が難しい'],
+      next: ['旧耐震（1981年以前）物件は耐震診断・改修費を予算に含める', 'ホームインスペクション（建物調査）は必須として予算化する']
+    }
+  };
+
+  var AREA_NAMES   = { tokyo23:'東京23区', tokyo_other:'東京23区外（多摩）', shutoken:'首都圏', chiho:'その他地方' };
+  var BUDGET_NAMES = { under2500:'〜2,500万円', b2500:'2,500〜4,000万円', b4000:'4,000〜6,000万円', over6000:'6,000万円以上' };
+  var LAND_NAMES   = { have_land:'土地持ち', inherit_land:'土地譲受け予定', buy_decided:'土地購入（エリア決定）', buy_undecided:'土地購入（エリア未定）' };
+  var TIMING_NAMES = { within1y:'1年以内', y1to3:'1〜3年', y3to5:'3〜5年', undecided:'未定' };
+  var FAMILY_NAMES = { single:'単身・夫婦', kids1:'子ども1人', kids2:'子ども2人以上', parent:'親同居あり' };
+
+  function badge(s) {
+    if (s >= 65) return { text:'向いています',    color:'#27ae60', bg:'#e8f8ef' };
+    if (s >= 45) return { text:'検討の余地あり',  color:'#f39c12', bg:'#fef9e7' };
+    return             { text:'難しいかも',        color:'#e74c3c', bg:'#fdecea' };
+  }
+
+  function dynamicReasons(type, ans) {
+    var r = [];
+    var area = ans.area, budget = ans.budget, land = ans.land, family = ans.family, timing = ans.timing;
+    if (type === 'chukomon') {
+      if (land === 'have_land')    r.push('土地が確保済み。建物代だけに予算を集中できる');
+      if (land === 'inherit_land') r.push('親の土地を活用でき、土地取得コストを節約できる');
+      if (timing === 'y3to5' || timing === 'undecided') r.push('時間に余裕があり、設計〜施工をじっくり進められる');
+      if (family === 'kids2' || family === 'parent') r.push('家族構成に合わせた間取りを一から設計できる');
+    }
+    if (type === 'orderwland') {
+      if (land === 'buy_decided')  r.push('エリアが決まっており、土地探しをすぐ始められる');
+      if (budget === 'over6000')   r.push('予算に余裕があり、立地・間取りの両方に投資できる');
+      if (family === 'kids2' || family === 'parent') r.push('家族の将来構成に合わせた間取りを最初から設計できる');
+      if (timing === 'y3to5' || timing === 'undecided') r.push('時間の余裕が、土地探し〜設計〜建築の全工程に活きる');
+    }
+    if (type === 'tateuri') {
+      if (timing === 'within1y')   r.push('完成済み物件を選べば1年以内の入居も現実的');
+      if (budget === 'b2500' || budget === 'b4000') r.push('注文住宅より割安で、この予算帯で戸建てを取得しやすい');
+      if (family === 'kids1' || family === 'kids2') r.push('学区・周辺の子育て環境を確認してから購入できる');
+      if (area === 'shutoken' || area === 'chiho')  r.push('このエリアでは建売の供給が多く比較しやすい');
+    }
+    if (type === 'newmansion') {
+      if (area === 'tokyo23')      r.push('23区内で利便性の高い立地を確保できる現実的な選択肢');
+      if (family === 'single')     r.push('2人以下の世帯なら広さより利便性を優先できる');
+      if (timing === 'y1to3' || timing === 'y3to5') r.push('竣工スケジュールに余裕があれば選択肢が広がる');
+    }
+    if (type === 'chukomansion') {
+      if (budget === 'under2500' || budget === 'b2500') r.push('新築より20〜40%安く、この予算帯で都市部のアクセスを確保できる可能性がある');
+      if (area === 'tokyo23')      r.push('23区内で戸建てより現実的な価格帯で取得できる');
+      if (land === 'buy_undecided') r.push('土地を別途探す必要がなく、物件探しに集中できる');
+      if (family === 'single')     r.push('コンパクトな空間を好みにリノベしやすい');
+    }
+    if (type === 'chukokodate') {
+      if (family === 'kids2' || family === 'parent') r.push('庭・駐車場など、広い敷地を必要とする家族構成に向いている');
+      if (budget === 'under2500' || budget === 'b2500') r.push('土地付き戸建てを比較的低コストで取得できる可能性がある');
+      if (land === 'buy_decided')  r.push('エリアが決まっており、中古物件探しをすぐ始められる');
+      if (area === 'chiho')        r.push('地方では格安物件も多く、改修後も良質な住環境を確保しやすい');
+    }
+    if (r.length === 0) r.push('あなたの条件に対して一定の可能性がある選択肢です');
+    if (r.length < 2)   r.push('詳細な条件整理でさらに可能性が見えてきます');
+    return r.slice(0, 3);
+  }
+
+  /* ---- RENDER STEP ---- */
+  function renderStep(el, stepIdx, answers) {
+    var s = STEPS[stepIdx];
+    var total = STEPS.length;
+    var pct = Math.round(stepIdx / total * 100);
+    var sel = answers[s.id];
+
+    var choicesHtml = s.choices.map(function (c) {
+      var active = sel === c.v;
+      return '<button onclick="window.__sd.sel(\'' + s.id + '\',\'' + c.v + '\')" style="text-align:left;padding:14px 16px;border-radius:8px;border:2px solid ' + (active ? 'var(--accent)' : 'var(--border)') + ';background:' + (active ? '#fff8f5' : 'var(--white)') + ';cursor:pointer;transition:all .15s;width:100%;">' +
+        '<div style="font-size:13px;font-weight:600;color:' + (active ? 'var(--accent)' : 'var(--text)') + ';">' + c.label + '</div>' +
+        (c.sub ? '<div style="font-size:11px;color:var(--muted);margin-top:3px;">' + c.sub + '</div>' : '') +
+        '</button>';
+    }).join('');
+
+    el.innerHTML =
+      '<div style="margin-bottom:14px;">' +
+        '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px;">' +
+          '<span>STEP ' + (stepIdx + 1) + ' / ' + total + '</span><span>' + pct + '% 完了</span>' +
+        '</div>' +
+        '<div style="height:4px;background:var(--border);border-radius:2px;">' +
+          '<div style="height:100%;width:' + pct + '%;background:var(--accent);border-radius:2px;transition:width .3s;"></div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="background:var(--white);border-radius:12px;padding:28px;box-shadow:0 2px 8px rgba(0,0,0,.07);">' +
+        '<div style="font-size:17px;font-weight:700;color:var(--primary);margin-bottom:' + (s.note ? '6px' : '20px') + ';">' + s.q + '</div>' +
+        (s.note ? '<div style="font-size:12px;color:var(--muted);margin-bottom:18px;">' + s.note + '</div>' : '') +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px;">' + choicesHtml + '</div>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">' +
+          (stepIdx > 0 ? '<button onclick="window.__sd.back()" style="padding:10px 20px;border:1px solid var(--border);background:white;color:var(--muted);border-radius:6px;cursor:pointer;font-size:13px;">← 戻る</button>' : '<div></div>') +
+          '<button onclick="window.__sd.next()" style="padding:10px 24px;background:' + (sel ? 'var(--accent)' : '#ccc') + ';color:white;border:none;border-radius:6px;cursor:' + (sel ? 'pointer' : 'default') + ';font-size:13px;font-weight:600;">' +
+            (stepIdx < total - 1 ? '次へ →' : '診断結果を見る →') +
+          '</button>' +
+        '</div>' +
+      '</div>';
+  }
+
+  /* ---- RENDER RESULT ---- */
+  function renderResult(el, answers) {
+    var ranked = rankAll(answers);
+    var top3 = ranked.slice(0, 3);
+    var rest  = ranked.slice(3);
+    var area  = answers.area;
+    var medals = ['🥇', '🥈', '🥉'];
+
+    var pills = [
+      '📍 ' + AREA_NAMES[answers.area],
+      '💰 ' + BUDGET_NAMES[answers.budget],
+      '🏗 '  + LAND_NAMES[answers.land],
+      '👨‍👩‍👧 ' + FAMILY_NAMES[answers.family],
+      '⏱ '  + TIMING_NAMES[answers.timing]
+    ].map(function (t) {
+      return '<span style="background:rgba(255,255,255,.15);border-radius:20px;padding:4px 12px;font-size:11px;">' + t + '</span>';
+    }).join('');
+
+    var html =
+      '<div style="background:linear-gradient(135deg,#0d2137,#1a3a5c);color:white;border-radius:12px;padding:24px;margin-bottom:20px;">' +
+        '<div style="font-size:11px;opacity:.7;margin-bottom:8px;letter-spacing:.5px;">診断結果</div>' +
+        '<div style="font-size:20px;font-weight:700;margin-bottom:12px;">あなたに向いている住まいの選択肢</div>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:8px;">' + pills + '</div>' +
+      '</div>';
+
+    top3.forEach(function (item, i) {
+      var info = INFO[item.type];
+      var b    = badge(item.score);
+      var reasons = dynamicReasons(item.type, answers);
+      var budgetKey = info.budget[area] ? area : 'all';
+      var budgetStr = info.budget[budgetKey] || '';
+
+      var reasonsHtml = reasons.map(function (r) {
+        return '<div style="font-size:12px;color:var(--text);margin-bottom:4px;padding-left:14px;position:relative;"><span style="position:absolute;left:0;">•</span>' + r + '</div>';
+      }).join('');
+      var consHtml = info.cons.slice(0, 2).map(function (c) {
+        return '<div style="font-size:12px;color:var(--text);margin-bottom:4px;padding-left:14px;position:relative;"><span style="position:absolute;left:0;">•</span>' + c + '</div>';
+      }).join('');
+      var nextHtml = info.next.map(function (n) {
+        return '<div style="font-size:12px;color:var(--text);margin-bottom:4px;padding-left:14px;position:relative;"><span style="position:absolute;left:0;">•</span>' + n + '</div>';
+      }).join('');
+
+      html +=
+        '<div style="background:var(--white);border-radius:12px;padding:24px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.07);border-left:4px solid ' + (i === 0 ? 'var(--accent)' : 'var(--border)') + ';">' +
+          '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:10px;">' +
+            '<div style="display:flex;align-items:center;gap:10px;">' +
+              '<span style="font-size:26px;">' + medals[i] + '</span>' +
+              '<div>' +
+                '<div style="font-size:16px;font-weight:700;color:var(--primary);">' + info.name + '</div>' +
+                '<div style="font-size:11px;color:var(--muted);margin-top:2px;">' + info.tag + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="text-align:center;">' +
+              '<div style="width:58px;height:58px;border-radius:50%;border:3px solid ' + b.color + ';background:' + b.bg + ';display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;">' +
+                '<span style="font-size:17px;font-weight:700;color:' + b.color + ';line-height:1;">' + item.score + '</span>' +
+                '<span style="font-size:9px;color:' + b.color + ';">点</span>' +
+              '</div>' +
+              '<div style="font-size:10px;color:' + b.color + ';margin-top:4px;">' + b.text + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;">' + info.desc + '</p>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">' +
+            '<div style="background:var(--bg);border-radius:8px;padding:12px;">' +
+              '<div style="font-size:10px;color:var(--muted);margin-bottom:4px;">📊 目安予算（' + AREA_NAMES[area] + '）</div>' +
+              '<div style="font-size:12px;font-weight:600;color:var(--primary);">' + budgetStr + '</div>' +
+            '</div>' +
+            '<div style="background:var(--bg);border-radius:8px;padding:12px;">' +
+              '<div style="font-size:10px;color:var(--muted);margin-bottom:4px;">⏱ 入居までの期間</div>' +
+              '<div style="font-size:12px;font-weight:600;color:var(--primary);">' + info.period + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="margin-bottom:12px;">' +
+            '<div style="font-size:12px;font-weight:600;color:#27ae60;margin-bottom:6px;">✅ あなたの状況に合う理由</div>' +
+            reasonsHtml +
+          '</div>' +
+          '<div style="margin-bottom:12px;">' +
+            '<div style="font-size:12px;font-weight:600;color:#e74c3c;margin-bottom:6px;">⚠️ 注意点</div>' +
+            consHtml +
+          '</div>' +
+          '<div style="background:#f0f7ff;border-radius:8px;padding:12px;">' +
+            '<div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:6px;">👉 次のステップ</div>' +
+            nextHtml +
+          '</div>' +
+        '</div>';
+    });
+
+    var restHtml = rest.map(function (item) {
+      var info = INFO[item.type];
+      var b = badge(item.score);
+      return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">' +
+        '<div><span style="font-size:16px;margin-right:8px;">' + info.icon + '</span>' +
+          '<span style="font-size:13px;font-weight:600;">' + info.name + '</span>' +
+          '<span style="font-size:11px;color:var(--muted);margin-left:8px;">' + info.tag + '</span></div>' +
+        '<div style="display:flex;align-items:center;gap:8px;">' +
+          '<span style="font-size:13px;font-weight:700;color:' + b.color + ';">' + item.score + '点</span>' +
+          '<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:' + b.bg + ';color:' + b.color + ';">' + b.text + '</span>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    html +=
+      '<div style="background:var(--white);border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px;">' +
+        '<div style="font-size:13px;font-weight:600;color:var(--primary);margin-bottom:12px;">その他の選択肢</div>' +
+        restHtml +
+      '</div>' +
+      '<div class="alert blue" style="margin-bottom:16px;">💡 診断はエリア・予算・土地・家族・時期の5軸を総合判定しています。各住宅種別の詳細な価格データはこのページの「ローン上限目安」「予算別選択肢」「住宅種別シェア」セクションをご参照ください。</div>' +
+      '<button onclick="window.__sd.reset()" style="width:100%;padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted);">↺ もう一度診断する</button>';
+
+    el.innerHTML = html;
+  }
+
+  /* ---- APP INIT ---- */
+  function init() {
+    var el = document.getElementById('sd-container');
+    if (!el) return;
+    var state = { step: 0, answers: {} };
+
+    window.__sd = {
+      sel: function (field, val) {
+        state.answers[field] = val;
+        render();
+      },
+      next: function () {
+        var s = STEPS[state.step];
+        if (!state.answers[s.id]) return;
+        if (state.step < STEPS.length - 1) {
+          state.step++;
+          render();
+        } else {
+          renderResult(el, state.answers);
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      },
+      back: function () {
+        if (state.step > 0) { state.step--; render(); }
+      },
+      reset: function () {
+        state.step = 0;
+        state.answers = {};
+        render();
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    };
+
+    function render() { renderStep(el, state.step, state.answers); }
+    render();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

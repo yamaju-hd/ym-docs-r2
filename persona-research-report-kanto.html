@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ペルソナリサーチレポート（関東・都心版）｜家づくりロードマップPDF</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    background: #f4f3ef;
+    color: #2c2c2c;
+    line-height: 1.7;
+  }
+
+  /* ─── カバー ─── */
+  .cover {
+    background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
+    color: white;
+    padding: 80px 60px;
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::after {
+    content: '関東・都心版';
+    position: absolute;
+    top: 32px;
+    right: 48px;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+  .cover .label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #a8c5da;
+    margin-bottom: 20px;
+  }
+  .cover h1 { font-size: 34px; font-weight: 700; line-height: 1.35; margin-bottom: 14px; }
+  .cover h1 span { color: #78b4d4; }
+  .cover .subtitle { font-size: 15px; color: #b0bec5; margin-bottom: 40px; }
+  .cover .meta { display: flex; gap: 32px; font-size: 13px; color: #78909c; flex-wrap: wrap; }
+  .cover .meta strong { color: #a8c5da; }
+
+  /* ─── 全国比較バナー ─── */
+  .comparison-banner {
+    background: #1b263b;
+    color: white;
+    padding: 20px 60px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+  }
+  .comparison-banner .badge {
+    background: #78b4d4;
+    color: #0d1b2a;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .comparison-banner .text { color: #b0bec5; }
+  .comparison-banner .text strong { color: white; }
+
+  /* ─── レイアウト ─── */
+  .container { max-width: 980px; margin: 0 auto; padding: 60px 40px; }
+
+  .section { margin-bottom: 64px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+  .section-num {
+    width: 36px; height: 36px; background: #1b263b; color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; flex-shrink: 0;
+  }
+  .section-title { font-size: 22px; font-weight: 700; color: #1b263b; }
+
+  /* ─── 全国vs首都圏比較カード ─── */
+  .vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+  .vs-card {
+    background: white; border-radius: 12px; padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .vs-card.kanto { border-top: 4px solid #1b263b; }
+  .vs-card.national { border-top: 4px solid #b0bec5; }
+  .vs-card h4 { font-size: 12px; font-weight: 700; letter-spacing: 2px; margin-bottom: 16px; }
+  .vs-card.kanto h4 { color: #1b263b; }
+  .vs-card.national h4 { color: #90a4ae; }
+  .vs-item { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; }
+  .vs-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .vs-item .key { font-size: 13px; color: #666; }
+  .vs-item .val { font-size: 20px; font-weight: 800; color: #1b263b; }
+  .vs-card.national .vs-item .val { color: #90a4ae; }
+  .vs-item .unit { font-size: 12px; font-weight: 400; }
+  .diff-badge {
+    display: inline-block; background: #e8f4f8; color: #1b263b;
+    font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px;
+    margin-left: 8px;
+  }
+
+  /* ─── 統計グリッド ─── */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .stat-card {
+    background: white; border-radius: 12px; padding: 22px 18px; text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-top: 3px solid #1b263b;
+  }
+  .stat-card .num { font-size: 32px; font-weight: 800; color: #1b263b; line-height: 1; margin-bottom: 6px; }
+  .stat-card .num small { font-size: 16px; }
+  .stat-card .label { font-size: 12px; color: #666; line-height: 1.4; }
+  .stat-card .source { font-size: 10px; color: #aaa; margin-top: 6px; }
+  .stat-card.highlight { background: #1b263b; border-top-color: #78b4d4; }
+  .stat-card.highlight .num { color: white; }
+  .stat-card.highlight .label { color: #a8c5da; }
+  .stat-card.highlight .source { color: #546e7a; }
+
+  /* ─── 棒グラフ ─── */
+  .bar-chart { background: white; border-radius: 12px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .bar-chart h3 { font-size: 15px; font-weight: 700; margin-bottom: 20px; color: #1b263b; }
+  .bar-row { display: flex; align-items: center; margin-bottom: 14px; gap: 12px; }
+  .bar-label { width: 130px; font-size: 13px; color: #444; flex-shrink: 0; text-align: right; }
+  .bar-track { flex: 1; background: #f0f0f0; border-radius: 4px; height: 28px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding: 0 10px; font-size: 12px; font-weight: 700; color: white; }
+  .bar-fill.kanto { background: #1b263b; }
+  .bar-fill.national { background: #90a4ae; }
+  .bar-val { width: 60px; font-size: 13px; font-weight: 700; color: #333; text-align: right; flex-shrink: 0; }
+
+  /* ─── ペルソナカード ─── */
+  .persona-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .persona-card {
+    background: white; border-radius: 16px; padding: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); position: relative; overflow: hidden;
+  }
+  .persona-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+  .persona-card.main::before { background: #1b263b; }
+  .persona-card.sub::before { background: #415a77; }
+  .persona-badge {
+    display: inline-block; padding: 4px 12px; border-radius: 20px;
+    font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 16px;
+  }
+  .persona-badge.main { background: #1b263b; color: white; }
+  .persona-badge.sub { background: #415a77; color: white; }
+  .persona-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .persona-desc { font-size: 13px; color: #666; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #f0f0f0; }
+  .attr-row { display: flex; gap: 8px; font-size: 13px; margin-bottom: 10px; }
+  .attr-key { color: #888; width: 80px; flex-shrink: 0; }
+  .attr-val { color: #2c2c2c; font-weight: 500; }
+  .attr-val.highlight { color: #1b263b; font-weight: 700; }
+
+  /* ─── 東京固有の問題 ─── */
+  .kanto-issues { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .issue-card {
+    background: white; border-radius: 12px; padding: 22px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-left: 4px solid #1b263b;
+  }
+  .issue-card .icon { font-size: 24px; margin-bottom: 10px; }
+  .issue-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #1b263b; }
+  .issue-card p { font-size: 13px; color: #555; line-height: 1.6; }
+  .issue-card .data { font-size: 11px; color: #888; margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0f0f0; }
+
+  /* ─── 選択ジレンマ ─── */
+  .dilemma-box {
+    background: white; border-radius: 16px; padding: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .dilemma-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 24px; color: #1b263b; }
+  .dilemma-row {
+    display: flex; align-items: stretch; gap: 0; margin-bottom: 16px;
+    border-radius: 10px; overflow: hidden;
+  }
+  .dilemma-option {
+    flex: 1; padding: 20px; font-size: 13px;
+  }
+  .dilemma-option.left { background: #e8f4f8; }
+  .dilemma-option.right { background: #fce4ec; }
+  .dilemma-option h5 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .dilemma-option.left h5 { color: #1b263b; }
+  .dilemma-option.right h5 { color: #c62828; }
+  .dilemma-option ul { padding-left: 16px; color: #555; line-height: 1.8; }
+  .dilemma-vs {
+    width: 48px; background: #1b263b; color: white; display: flex;
+    align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0;
+  }
+  .resolution {
+    background: #f0f8e8; border-left: 4px solid #4caf50;
+    border-radius: 0 8px 8px 0; padding: 14px 16px; font-size: 13px; color: #2e7d32;
+    margin-top: 8px;
+  }
+
+  /* ─── インサイトボックス ─── */
+  .insight-box {
+    background: #f0f5fa; border-left: 4px solid #1b263b;
+    border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0;
+  }
+  .insight-box .quote { font-size: 13px; color: #444; font-style: italic; line-height: 1.7; }
+  .insight-box .quote::before { content: '「'; }
+  .insight-box .quote::after { content: '」'; }
+
+  /* ─── タイムライン ─── */
+  .timeline { background: white; border-radius: 16px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .tl-step {
+    display: flex; gap: 16px; margin-bottom: 20px;
+    position: relative; align-items: flex-start;
+  }
+  .tl-step:not(:last-child)::after {
+    content: ''; position: absolute; left: 19px; top: 44px;
+    width: 2px; height: calc(100% - 8px); background: #e0e7ef;
+  }
+  .tl-dot {
+    width: 40px; height: 40px; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; font-size: 13px;
+    font-weight: 700; flex-shrink: 0; color: white; z-index: 1;
+  }
+  .tl-content { flex: 1; }
+  .tl-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: #1b263b; }
+  .tl-desc { font-size: 13px; color: #666; }
+  .tl-tag {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; margin-top: 4px;
+  }
+  .tl-tag.window { background: #e0f2fe; color: #0277bd; }
+  .tl-tag.danger { background: #fce4ec; color: #c62828; }
+  .tl-tag.kanto { background: #e8f4f8; color: #1b263b; }
+
+  /* ─── 共働き ─── */
+  .working-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .working-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .working-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 14px; color: #1b263b; }
+  .working-card ul { list-style: none; }
+  .working-card ul li { font-size: 13px; color: #444; padding: 6px 0; border-bottom: 1px solid #f5f5f5; display: flex; gap: 8px; }
+  .working-card ul li:last-child { border-bottom: none; }
+
+  /* ─── 戦略インプリケーション ─── */
+  .implication-box {
+    background: linear-gradient(135deg, #0d1b2a, #1b263b);
+    border-radius: 16px; padding: 40px; color: white;
+  }
+  .implication-box h3 { font-size: 20px; font-weight: 700; margin-bottom: 24px; color: #78b4d4; }
+  .imp-list { display: flex; flex-direction: column; gap: 16px; }
+  .imp-item { display: flex; gap: 16px; align-items: flex-start; }
+  .imp-num {
+    width: 32px; height: 32px; background: rgba(120,180,212,0.2); border: 1px solid #78b4d4;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #78b4d4; flex-shrink: 0;
+  }
+  .imp-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .imp-content p { font-size: 13px; color: #b0bec5; line-height: 1.6; }
+
+  /* ─── 比較まとめ表 ─── */
+  .compare-table { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .compare-table table { width: 100%; border-collapse: collapse; }
+  .compare-table thead { background: #1b263b; color: white; }
+  .compare-table th { padding: 14px 20px; font-size: 13px; font-weight: 600; text-align: left; }
+  .compare-table td { padding: 13px 20px; font-size: 13px; border-bottom: 1px solid #f0f0f0; color: #444; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #fafafa; }
+  .td-kanto { font-weight: 700; color: #1b263b !important; }
+  .td-national { color: #90a4ae !important; }
+  .td-diff { color: #e53935 !important; font-weight: 600; }
+
+  /* ─── HR ─── */
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 40px 0; }
+
+  /* ─── Sources ─── */
+  .sources { background: #f8f8f8; border-radius: 8px; padding: 20px; font-size: 12px; color: #888; line-height: 1.8; }
+  .sources strong { color: #555; }
+
+  /* ─── Tag ─── */
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .tag.blue { background: #e3f2fd; color: #1565c0; }
+  .tag.green { background: #e8f5e9; color: #2e7d32; }
+  .tag.red { background: #fce4ec; color: #c62828; }
+  .tag.kanto { background: #e8f4f8; color: #1b263b; }
+</style>
+</head>
+<body>
+
+<!-- カバー -->
+<div class="cover">
+  <div class="label">Research Report · 関東・都心エリア特化版 · 2026.06.05</div>
+  <h1>関東・都心圏で家を建てようとしている人は<br><span>何者で、何を怖れているか</span></h1>
+  <div class="subtitle">全国データとの乖離を明確にした、首都圏特化ペルソナリサーチ</div>
+  <div class="meta">
+    <span><strong>対象エリア</strong>：東京・神奈川・埼玉・千葉（南関東）</span>
+    <span><strong>データソース</strong>：国交省R6年度 / リクルート / AtHome / 各種統計</span>
+    <span><strong>作成</strong>：CEO室 / @yamazaki_myhome 戦略設計</span>
+  </div>
+</div>
+
+<!-- 全国比較バナー -->
+<div class="comparison-banner">
+  <div class="badge">KEY FINDING</div>
+  <div class="text">首都圏は全国と<strong>別の世界</strong>。年収・総費用・悩みの構造が全く異なる。ペルソナを首都圏に絞ると想定年収・価格帯・土地問題がシフトする。</div>
+</div>
+
+<div class="container">
+
+  <!-- ────────────────── -->
+  <!-- SECTION 1: 全国vs首都圏の数字の差 -->
+  <!-- ────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">まず数字で見る「首都圏と全国の乖離」</div>
+    </div>
+
+    <div class="vs-grid">
+      <div class="vs-card kanto">
+        <h4>🗼 首都圏（東京・神奈川・埼玉・千葉）</h4>
+        <div class="vs-item">
+          <span class="key">世帯年収（平均）</span>
+          <span class="val">1,042<span class="unit">万円</span></span>
+        </div>
+        <div class="vs-item">
+          <span class="key">注文住宅 総費用</span>
+          <span class="val">7,364<span class="unit">万円</span></span>
+        </div>
+        <div class="vs-item">
+          <span class="key">土地代の割合</span>
+          <span class="val">43〜56<span class="unit">%</span></span>
+        </div>
+        <div class="vs-item">
+          <span class="key">敷地面積（平均）</span>
+          <span class="val">185<span class="unit">㎡</span></span>
+        </div>
+        <div class="vs-item">
+          <span class="key">月返済額（目安）</span>
+          <span class="val">13.2<span class="unit">万円</span></span>
+        </div>
+      </div>
+      <div class="vs-card national">
+        <h4>🗾 全国平均</h4>
+        <div class="vs-item">
+          <span class="key">世帯年収（平均）</span>
+          <span class="val">907<span class="unit">万円</span></span>
+        </div>
+        <div class="vs-item">
+          <span class="key">注文住宅 総費用</span>
+          <span class="val">6,188<span class="unit">万円</span></span>
+        </div>
+        <div class="vs-item">
+          <span class="key">土地代の割合</span>
+          <span class="val">32<span class="unit">%</span></span>
+        </div>
+        <div class="vs-item">
+          <span class="key">敷地面積（平均）</span>
+          <span class="val">237<span class="unit">㎡</span></span>
+        </div>
+        <div class="vs-item">
+          <span class="key">月返済額（目安）</span>
+          <span class="val">12.1<span class="unit">万円</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 比較表 -->
+    <div class="compare-table">
+      <table>
+        <thead>
+          <tr>
+            <th>指標</th>
+            <th>首都圏</th>
+            <th>全国平均</th>
+            <th>差分・特徴</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>世帯年収（平均）</td>
+            <td class="td-kanto">1,042万円</td>
+            <td class="td-national">907万円</td>
+            <td class="td-diff">＋135万円（15%高い）</td>
+          </tr>
+          <tr>
+            <td>注文住宅 総費用（土地込み）</td>
+            <td class="td-kanto">7,364万円</td>
+            <td class="td-national">6,188万円</td>
+            <td class="td-diff">＋1,176万円（19%高い）</td>
+          </tr>
+          <tr>
+            <td>東京都のみ 総費用</td>
+            <td class="td-kanto">6,104〜9,136万円</td>
+            <td class="td-national">—</td>
+            <td class="td-diff">南関東（埼玉）は9,136万円最高値</td>
+          </tr>
+          <tr>
+            <td>土地代が総費用に占める割合</td>
+            <td class="td-kanto">東京都：55.9%</td>
+            <td class="td-national">32.4%</td>
+            <td class="td-diff">土地代が家の半分以上を占める</td>
+          </tr>
+          <tr>
+            <td>敷地面積（平均）</td>
+            <td class="td-kanto">185.6㎡</td>
+            <td class="td-national">237.0㎡</td>
+            <td class="td-diff">△51.4㎡（22%狭い）</td>
+          </tr>
+          <tr>
+            <td>住宅ローン 年間返済額</td>
+            <td class="td-kanto">158.0万円</td>
+            <td class="td-national">144.8万円</td>
+            <td class="td-diff">＋13.2万円／年</td>
+          </tr>
+          <tr>
+            <td>平均返済期間</td>
+            <td class="td-kanto">35.6年（土地あり）</td>
+            <td class="td-national">33.9年（建物のみ）</td>
+            <td class="td-diff">ほぼ全員が35年ローン</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="insight-box" style="margin-top:20px;">
+      <div class="quote">首都圏で家を建てるということは、「土地代という見えにくい大きな費用」を抱えながら、全国より1,200万円高い買い物をするということ。年収は高いが、それ以上に価格が高い。</div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ────────────────── -->
+  <!-- SECTION 2: 首都圏固有の統計データ -->
+  <!-- ────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">首都圏の家づくり検討者の実像（統計）</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card highlight">
+        <div class="num">1,042<small>万円</small></div>
+        <div class="label">三大都市圏 世帯年収平均<br>（全国より135万高い）</div>
+        <div class="source">国交省 R6年度</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">35<small>〜37歳</small></div>
+        <div class="label">首都圏での購入ピーク年齢<br>（全国より2〜4歳高い傾向）</div>
+        <div class="source">各種統計より推定</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">7,364<small>万円</small></div>
+        <div class="label">三大都市圏 注文住宅総費用<br>（土地込み平均）</div>
+        <div class="source">国交省 R6年度</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">85<small>%</small></div>
+        <div class="label">変動金利を選ぶ割合<br>（金利上昇リスクを抱える）</div>
+        <div class="source">国交省 R6年度</div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="num">70<small>%</small></div>
+        <div class="label">家づくり情報収集にInstagramを<br>使う割合</div>
+        <div class="source">住宅SNS調査</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">55<small>%</small></div>
+        <div class="label">東京都では購入費用の55%が<br>土地代（全国32%）</div>
+        <div class="source">タウンライフ調査</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">300<small>万円</small></div>
+        <div class="label">自己資金中央値<br>（7,000万円超の買い物に対して）</div>
+        <div class="source">国交省 R6年度</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">91<small>%</small></div>
+        <div class="label">住宅ローン減税を<br>利用予定と回答</div>
+        <div class="source">国交省 R6年度</div>
+      </div>
+    </div>
+
+    <!-- 土地代の比較グラフ -->
+    <div class="bar-chart">
+      <h3>エリア別 注文住宅の土地代（2024年度）</h3>
+      <div class="bar-row">
+        <div class="bar-label" style="color:#1b263b;font-weight:700;">東京都</div>
+        <div class="bar-track"><div class="bar-fill kanto" style="width:100%;">3,413万円</div></div>
+        <div class="bar-val" style="color:#1b263b;font-weight:800;">3,413万</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label" style="color:#1b263b;font-weight:700;">首都圏</div>
+        <div class="bar-track"><div class="bar-fill kanto" style="width:80%;background:#415a77;">3,148万円</div></div>
+        <div class="bar-val" style="color:#415a77;font-weight:800;">3,148万</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">三大都市圏</div>
+        <div class="bar-track"><div class="bar-fill" style="width:65%;background:#607d8b;">2,220万円</div></div>
+        <div class="bar-val">2,220万</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">全国平均</div>
+        <div class="bar-track"><div class="bar-fill national" style="width:44%;">1,414万円</div></div>
+        <div class="bar-val">1,414万</div>
+      </div>
+      <p style="font-size:12px;color:#888;margin-top:12px;">東京都の土地代は全国平均の約2.4倍。土地代だけで地方の家1軒分に相当する。</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ────────────────── -->
+  <!-- SECTION 3: 首都圏固有の悩み・課題 -->
+  <!-- ────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">首都圏だからこそ生まれる、特有の悩み</div>
+    </div>
+
+    <div class="kanto-issues">
+      <div class="issue-card">
+        <div class="icon">🗾</div>
+        <h4>土地探しが最難関</h4>
+        <p>全国1位の難易度。「条件に合う土地がない」は首都圏では深刻で、1〜2年かかることも珍しくない。</p>
+        <div class="data">HOMES調査：困ったこと2位「土地がなかなか見つからない」／首都圏では1位に相当</div>
+      </div>
+      <div class="issue-card">
+        <div class="icon">🚃</div>
+        <h4>通勤 vs 価格のトレードオフ</h4>
+        <p>駅近なら土地が高い。郊外なら広くて安いが通勤が辛い。夫婦で「どこに建てるか」の意見対立が起きやすい。</p>
+        <div class="data">土地探しで重視：通勤利便性39%（日常利便性69%に次ぐ2位）</div>
+      </div>
+      <div class="issue-card">
+        <div class="icon">💴</div>
+        <h4>7,000万円超の資金計画</h4>
+        <p>首都圏の平均は7,364万円。自己資金中央値300万円に対し、7,000万円超のローンを組む現実がある。</p>
+        <div class="data">月返済額：13.2万円。返済負担率：18.3%（年収の約18%）</div>
+      </div>
+      <div class="issue-card">
+        <div class="icon">🏠</div>
+        <h4>狭小地・変形地への対応</h4>
+        <p>首都圏の敷地面積は全国平均より22%狭い。狭い土地で理想の間取りを実現できるか不安を感じる。</p>
+        <div class="data">三大都市圏の敷地面積：185㎡（全国237㎡より52㎡狭い）</div>
+      </div>
+      <div class="issue-card">
+        <div class="icon">📈</div>
+        <h4>変動金利リスク（85%が選択）</h4>
+        <p>85%が変動金利を選ぶ中、2024〜2025年の利上げで返済増の不安が現実になっている。</p>
+        <div class="data">変動金利選択率：84.5%（全国）/ 首都圏では借入額が大きいためリスクも大きい</div>
+      </div>
+      <div class="issue-card">
+        <div class="icon">🌆</div>
+        <h4>23区内 vs 郊外の大きな選択</h4>
+        <p>23区内（6,000〜8,000万円）か、郊外神奈川・埼玉・千葉（4,500〜6,000万円）か。この二択に悩む。</p>
+        <div class="data">23区内戸建て：6,000〜8,000万円 / 東京郊外：4,500〜6,000万円</div>
+      </div>
+    </div>
+
+    <br>
+
+    <!-- 23区vs郊外ジレンマ -->
+    <div class="dilemma-box">
+      <h3>首都圏最大のジレンマ：「23区内に建てるか、郊外に出るか」</h3>
+      <div class="dilemma-row">
+        <div class="dilemma-option left">
+          <h5>✅ 23区内・都心近く</h5>
+          <ul>
+            <li>通勤が楽（30分以内）</li>
+            <li>将来の資産価値が高い</li>
+            <li>子どもの教育環境・利便性</li>
+            <li>賃貸に戻れる流動性がある</li>
+          </ul>
+        </div>
+        <div class="dilemma-vs">VS</div>
+        <div class="dilemma-option right">
+          <h5>⚠️ 23区内・都心近くのデメリット</h5>
+          <ul>
+            <li>土地代が3,000〜5,000万円超</li>
+            <li>狭小地・変形地が多い</li>
+            <li>7,000〜9,000万円の総費用</li>
+            <li>隣家との距離が近い</li>
+          </ul>
+        </div>
+      </div>
+      <div class="dilemma-row">
+        <div class="dilemma-option left">
+          <h5>✅ 郊外（神奈川・埼玉・千葉）</h5>
+          <ul>
+            <li>広い土地が手に入る</li>
+            <li>総費用を5,000万円台に抑えられる</li>
+            <li>自然環境・庭が確保できる</li>
+            <li>同じ予算でグレードが上がる</li>
+          </ul>
+        </div>
+        <div class="dilemma-vs">VS</div>
+        <div class="dilemma-option right">
+          <h5>⚠️ 郊外のデメリット</h5>
+          <ul>
+            <li>通勤60〜90分（体力・時間的負担）</li>
+            <li>妻の職場復帰時に通勤が辛い</li>
+            <li>将来の資産価値の不確実性</li>
+            <li>車が必須になる生活変化</li>
+          </ul>
+        </div>
+      </div>
+      <div class="resolution">
+        💡 <strong>首都圏の検討者の多くはここで長期間停滞する。</strong>「土地から全てが決まる」という事実を知らないまま、建物の話を先に進めようとして混乱する人が多い。
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ────────────────── -->
+  <!-- SECTION 4: 共働き世帯の特性 -->
+  <!-- ────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">首都圏特有の属性：共働き世帯の家づくり</div>
+    </div>
+
+    <div class="insight-box">
+      <div class="quote">首都圏では共働きが事実上の前提。世帯年収1,042万円の多くは、夫婦2人分の収入。妻が育休から復帰することを見越した上で「夫婦の通勤・家事効率・保育環境」が家づくりの最重要条件になる。</div>
+    </div>
+
+    <br>
+    <div class="working-grid">
+      <div class="working-card">
+        <h4>🏡 共働き世帯の家づくり優先順位</h4>
+        <ul>
+          <li><span>1位</span> 家事動線（キッチン→洗濯→収納の効率）</li>
+          <li><span>2位</span> 収納の充実（帰宅後の片付けが楽）</li>
+          <li><span>3位</span> 夫婦それぞれの通勤利便性</li>
+          <li><span>4位</span> 保育園・小学校への距離</li>
+          <li><span>5位</span> 在宅ワークスペースの確保</li>
+        </ul>
+      </div>
+      <div class="working-card">
+        <h4>📱 情報収集パターン（共働き・育休中）</h4>
+        <ul>
+          <li><span>平日夜</span> 育休中の妻がInstagram/YouTubeで調査</li>
+          <li><span>通勤中</span> 夫がスマホでSUUMO・LIFULLを閲覧</li>
+          <li><span>週末</span> 夫婦でモデルハウス見学を計画</li>
+          <li><span>主導権</span> 育休中の妻が情報収集をリードする傾向</li>
+          <li><span>SNS利用</span> 住宅購入経験者の約<strong>70%</strong>がInstagram活用</li>
+        </ul>
+      </div>
+      <div class="working-card">
+        <h4>💬 共働きが生む特有の不安</h4>
+        <ul>
+          <li><span>時間</span> 平日に打ち合わせの時間が取れない</li>
+          <li><span>復職</span> 妻の復職後も通勤できるエリアか不安</li>
+          <li><span>保育</span> 希望エリアで保育園に入れるか</li>
+          <li><span>住宅ローン</span> 妻が産休・育休で収入減の時期に審査通る？</li>
+          <li><span>決断</span> 夫婦の意見がまとまらない（場所・予算）</li>
+        </ul>
+      </div>
+      <div class="working-card">
+        <h4>📅 検討タイミングの特徴</h4>
+        <ul>
+          <li><span>出産後</span> 産後6〜12ヶ月が最も検索行動が活発</li>
+          <li><span>育休中</span> 時間がある妻が家づくりをリードし始める</li>
+          <li><span>復職前</span> 「復職前に決めたい」という締め切り感が生まれる</li>
+          <li><span>賃貸更新</span> 2年ごとの更新タイミングで本格化</li>
+          <li><span>小学校前</span> 「入学前に引越しを終えたい」という逆算</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ────────────────── -->
+  <!-- SECTION 5: 確定ペルソナ（首都圏版） -->
+  <!-- ────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">確定ペルソナ（首都圏・都心版）</div>
+    </div>
+
+    <div class="persona-grid">
+      <!-- ペルソナA -->
+      <div class="persona-card main">
+        <div class="persona-badge main">PERSONA A ／ メインターゲット（首都圏版）</div>
+        <div class="persona-name">田中 健太（34歳）・美咲（32歳）</div>
+        <div class="persona-desc">都内勤務の共働き夫婦。出産をきっかけに本格検討開始。展示場未訪問。</div>
+
+        <div class="attr-row"><span class="attr-key">年齢</span><span class="attr-val">夫34歳（都内企業・正社員）／妻32歳（育休中・復職予定）</span></div>
+        <div class="attr-row"><span class="attr-key">世帯年収</span><span class="attr-val highlight">900〜1,100万円（夫700万 + 妻復職後400万）</span></div>
+        <div class="attr-row"><span class="attr-key">居住</span><span class="attr-val">都内または近郊の賃貸2LDK（家賃18〜22万円）</span></div>
+        <div class="attr-row"><span class="attr-key">子ども</span><span class="attr-val">第1子（0〜2歳）が生まれたばかり</span></div>
+        <div class="attr-row"><span class="attr-key">検討状況</span><span class="attr-val">Instagram・YouTubeで情報収集中。展示場未訪問</span></div>
+        <div class="attr-row"><span class="attr-key">想定予算</span><span class="attr-val highlight">5,500〜7,500万円（感覚値。まだ現実が見えていない）</span></div>
+        <div class="attr-row"><span class="attr-key">最大の課題</span><span class="attr-val highlight">「どこに建てるか（23区内 vs 郊外）」が決まらない</span></div>
+
+        <div class="insight-box" style="margin-top:16px;">
+          <div class="quote">土地から買わないといけないのは分かってる。でも東京の土地って3,000万以上するじゃないですか。建物と合わせて7,000万って言われると、それで合ってるのかどうかも分からない。</div>
+        </div>
+      </div>
+
+      <!-- ペルソナB -->
+      <div class="persona-card sub">
+        <div class="persona-badge sub">PERSONA B ／ セカンドオピニオン層（首都圏版）</div>
+        <div class="persona-name">鈴木 翔（36歳）・由美（34歳）</div>
+        <div class="persona-desc">打ち合わせ中だが「この見積もりは本当に妥当か」と不安な共働き夫婦。</div>
+
+        <div class="attr-row"><span class="attr-key">年齢</span><span class="attr-val">夫36歳／妻34歳</span></div>
+        <div class="attr-row"><span class="attr-key">世帯年収</span><span class="attr-val highlight">1,100〜1,300万円（共働き・ともに正社員）</span></div>
+        <div class="attr-row"><span class="attr-key">居住</span><span class="attr-val">都内・神奈川・埼玉の賃貸</span></div>
+        <div class="attr-row"><span class="attr-key">状況</span><span class="attr-val">土地も決まった。工務店と打ち合わせ中。でも確信が持てない</span></div>
+        <div class="attr-row"><span class="attr-key">不安の核心</span><span class="attr-val highlight">「7,500万円の買い物を正しくしているか誰かに確認してほしい」</span></div>
+        <div class="attr-row"><span class="attr-key">接触経路</span><span class="attr-val">「注文住宅 セカンドオピニオン」でGoogle検索</span></div>
+
+        <div class="insight-box" style="margin-top:16px;">
+          <div class="quote">担当者は良い人だと思う。でも向こうは商売だし。見積もりの金額がこれでいいのか、もっと安くできるのかが自分では判断できない。</div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    <!-- 首都圏特有の不安構造 -->
+    <div style="background:white;border-radius:12px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:20px;color:#1b263b;">首都圏ペルソナAの不安構造（全国版との違い）</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#1b263b;letter-spacing:1px;margin-bottom:10px;">首都圏特有の不安（全国版にない）</div>
+          <div style="background:#f0f5fa;border-radius:8px;padding:14px;font-size:13px;color:#444;line-height:1.8;margin-bottom:10px;">
+            🏙️ <strong>「23区か郊外か」で夫婦の意見が割れている</strong><br>
+            夫は「通勤楽にしたい」妻は「広い家がいい」という典型的対立
+          </div>
+          <div style="background:#f0f5fa;border-radius:8px;padding:14px;font-size:13px;color:#444;line-height:1.8;margin-bottom:10px;">
+            💴 <strong>「7,000万円以上の借金を本当に返せるか」</strong><br>
+            全国平均の1,200万円以上高い費用に対するリアルな恐怖
+          </div>
+          <div style="background:#f0f5fa;border-radius:8px;padding:14px;font-size:13px;color:#444;line-height:1.8;">
+            📈 <strong>「変動金利で借りていいのか」</strong><br>
+            2024〜2025年の利上げで「7,000万円×金利上昇」のダメージが怖い
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#415a77;letter-spacing:1px;margin-bottom:10px;">全国共通の不安（首都圏でも当然ある）</div>
+          <div style="background:#f5f5f5;border-radius:8px;padding:14px;font-size:13px;color:#666;line-height:1.8;margin-bottom:10px;">
+            📋 「何から始めればいいか分からない」
+          </div>
+          <div style="background:#f5f5f5;border-radius:8px;padding:14px;font-size:13px;color:#666;line-height:1.8;margin-bottom:10px;">
+            🏗️ 「どこに頼めばいいか分からない」<br>
+            ※ 首都圏ではHM大手の選択肢が地方より多い分さらに混乱しやすい
+          </div>
+          <div style="background:#f5f5f5;border-radius:8px;padding:14px;font-size:13px;color:#666;line-height:1.8;">
+            😰 「間取り・収納・コンセントで後悔したくない」<br>
+            ※ 首都圏では狭小地ゆえに収納・動線の設計難易度が高い
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ────────────────── -->
+  <!-- SECTION 6: 接触タイムライン（首都圏版） -->
+  <!-- ────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title">山﨑さんと接触できる「タイミングと窓」（首都圏版）</div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-dot" style="background:#b0bec5;">0</div>
+        <div class="tl-content">
+          <div class="tl-title">出産（最大トリガー）</div>
+          <div class="tl-desc">「子どもが生まれた。そろそろ広い家を考えよう」。でも今すぐは動かない。</div>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:#78b4d4;">1</div>
+        <div class="tl-content">
+          <div class="tl-title">Instagram・YouTube での情報収集開始（出産後3〜6ヶ月）</div>
+          <div class="tl-desc">育休中の妻がスマホで「#家づくり」「#注文住宅」を検索。情報収集フェーズに入る。</div>
+          <div class="tl-tag window">★ 最も接触しやすいタイミング</div>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:#415a77;">2</div>
+        <div class="tl-content">
+          <div class="tl-title">山﨑さんの投稿に出会い → LINE登録 → PDF受け取り</div>
+          <div class="tl-desc">「中立・分かりやすい・営業じゃない」が刺さりフォロー。全体像を渡すことで「地図」になる。</div>
+          <div class="tl-tag window">★ ロードマップPDFが機能する瞬間</div>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:#1b263b;">3</div>
+        <div class="tl-content">
+          <div class="tl-title">土地探し開始（最難関フェーズ・首都圏特有）</div>
+          <div class="tl-desc">「23区か郊外か」の意思決定が必要。土地が見つからない長期化。夫婦の意見が割れやすい。</div>
+          <div class="tl-tag kanto">首都圏では半年〜1年以上かかることも</div>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:#455a64;">4</div>
+        <div class="tl-content">
+          <div class="tl-title">展示場訪問・複数社比較（54%がここで止まる）</div>
+          <div class="tl-desc">首都圏では大手HMの展示場が多く「大手 vs 地元工務店」の選択も出てくる。</div>
+          <div class="tl-tag danger">展示場訪問後 = 紹介が難しくなる</div>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:#607d8b;">5</div>
+        <div class="tl-content">
+          <div class="tl-title">打ち合わせ中の不安 → セカンドオピニオン需要発生</div>
+          <div class="tl-desc">「7,000万円の見積もりを見て、これが正しいか分からない」という状態。</div>
+          <div class="tl-tag window">★ ペルソナBの接触タイミング</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ────────────────── -->
+  <!-- SECTION 7: 戦略インプリケーション（首都圏版） -->
+  <!-- ────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div class="section-title">首都圏特化から導く戦略的示唆</div>
+    </div>
+
+    <div class="implication-box">
+      <h3>全国版ペルソナから「首都圏版」に変えると何が変わるか</h3>
+      <div class="imp-list">
+        <div class="imp-item">
+          <div class="imp-num">1</div>
+          <div class="imp-content">
+            <h4>ターゲットの年収帯が上がる（900〜1,100万円）</h4>
+            <p>共働き前提で世帯年収1,000万円超が標準。「お金がない」ではなく「7,000万円の買い物の正しい判断基準が分からない」が本質的な悩み。コンテンツの切り口を「節約」ではなく「正しい判断」に変える。</p>
+          </div>
+        </div>
+        <div class="imp-item">
+          <div class="imp-num">2</div>
+          <div class="imp-content">
+            <h4>「土地問題」が全てのコンテンツの軸になる</h4>
+            <p>首都圏では土地代が総費用の55%を占める。「どこに建てるか（エリア選択）」が間取りより先に決まる問題。「23区 vs 郊外の選び方」「通勤 vs 価格のトレードオフ」を扱うコンテンツは首都圏では絶大な需要がある。</p>
+          </div>
+        </div>
+        <div class="imp-item">
+          <div class="imp-num">3</div>
+          <div class="imp-content">
+            <h4>「育休中の妻」がメインの情報収集者</h4>
+            <p>首都圏では共働きが前提のため、育休中の妻が家づくり情報をリードする傾向が強い。夕方〜夜のInstagram閲覧がメインの接触機会。「子どもが昼寝している間に見られる」ような消費しやすいコンテンツ設計が重要。</p>
+          </div>
+        </div>
+        <div class="imp-item">
+          <div class="imp-num">4</div>
+          <div class="imp-content">
+            <h4>変動金利リスク・金利上昇の不安は首都圏で特に深刻</h4>
+            <p>借入額が7,000万円超のため、0.5%の金利上昇で年間35万円の返済増。この現実を正直に伝えるコンテンツは首都圏の検討者に強く刺さる。「変動か固定か」の中立な解説は差別化になる。</p>
+          </div>
+        </div>
+        <div class="imp-item">
+          <div class="imp-num">5</div>
+          <div class="imp-content">
+            <h4>ロードマップPDFには「エリア選択ガイド」を追加すべき</h4>
+            <p>全国版にはない首都圏固有のステップとして「エリア選択（23区 vs 郊外の判断軸）」を追加。これは競合ロードマップにほぼ存在しないコンテンツであり、首都圏ターゲットへの大きな差別化になる。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- データソース -->
+  <div class="sources">
+    <strong>データ出典</strong>：国土交通省「令和6年度 住宅市場動向調査報告書（2025年6月）」／リクルート「2024年注文住宅動向・トレンド調査」／AtHome「注文住宅購入者の実態調査（2024年9月）」／タウンライフ「東京の注文住宅価格相場調査」／AlbaLink「500人アンケート」／LIFULL HOME'S「注文住宅を建てた500人に聞く家づくりで困ったことTOP5」／大和ハウス「土地探しアンケート」／各住宅情報メディア
+  </div>
+
+</div>
+</body>
+</html>

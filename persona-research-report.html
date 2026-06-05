@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ペルソナリサーチレポート｜家づくりロードマップPDF 戦略設計</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    background: #f5f4f0;
+    color: #2c2c2c;
+    line-height: 1.7;
+  }
+
+  /* ─── カバー ─── */
+  .cover {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: white;
+    padding: 80px 60px;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .cover .label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #a8c5da;
+    margin-bottom: 20px;
+  }
+  .cover h1 {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+  .cover h1 span { color: #64b5f6; }
+  .cover .subtitle {
+    font-size: 16px;
+    color: #b0bec5;
+    margin-bottom: 40px;
+  }
+  .cover .meta {
+    display: flex;
+    gap: 32px;
+    font-size: 13px;
+    color: #78909c;
+  }
+  .cover .meta strong { color: #a8c5da; }
+
+  /* ─── レイアウト ─── */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* ─── セクション ─── */
+  .section {
+    margin-bottom: 64px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .section-num {
+    width: 36px;
+    height: 36px;
+    background: #1a1a2e;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a2e;
+  }
+
+  /* ─── 統計カード ─── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px 20px;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border-top: 3px solid #1a1a2e;
+  }
+  .stat-card .num {
+    font-size: 36px;
+    font-weight: 800;
+    color: #1a1a2e;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-card .num small {
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .stat-card .label {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.4;
+  }
+  .stat-card .source {
+    font-size: 10px;
+    color: #aaa;
+    margin-top: 6px;
+  }
+
+  /* ─── 分布グラフ（CSS棒グラフ） ─── */
+  .bar-chart {
+    background: white;
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .bar-chart h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #1a1a2e;
+  }
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+    gap: 12px;
+  }
+  .bar-label {
+    width: 110px;
+    font-size: 13px;
+    color: #444;
+    flex-shrink: 0;
+    text-align: right;
+  }
+  .bar-track {
+    flex: 1;
+    background: #f0f0f0;
+    border-radius: 4px;
+    height: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    transition: width 0.8s ease;
+  }
+  .bar-fill.highlight { background: #1a1a2e; }
+  .bar-fill.normal { background: #607d8b; }
+  .bar-fill.light { background: #b0bec5; }
+  .bar-val {
+    width: 45px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #333;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* ─── ペルソナカード ─── */
+  .persona-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .persona-card {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+  .persona-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+  }
+  .persona-card.main::before { background: #1a1a2e; }
+  .persona-card.sub::before { background: #0f3460; }
+  .persona-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .persona-badge.main { background: #1a1a2e; color: white; }
+  .persona-badge.sub { background: #0f3460; color: white; }
+  .persona-name {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .persona-desc {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .persona-attrs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .attr-row {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .attr-key {
+    color: #888;
+    width: 72px;
+    flex-shrink: 0;
+  }
+  .attr-val { color: #2c2c2c; font-weight: 500; }
+
+  /* ─── インサイトボックス ─── */
+  .insight-box {
+    background: #f8f9ff;
+    border-left: 4px solid #1a1a2e;
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin-top: 16px;
+  }
+  .insight-box .quote {
+    font-size: 13px;
+    color: #444;
+    font-style: italic;
+    line-height: 1.7;
+  }
+  .insight-box .quote::before { content: '「'; }
+  .insight-box .quote::after { content: '」'; }
+
+  /* ─── 不安構造 ─── */
+  .anxiety-layer {
+    margin-top: 16px;
+  }
+  .anxiety-item {
+    background: white;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .anxiety-item .icon { flex-shrink: 0; font-size: 16px; }
+  .anxiety-item .text { color: #444; line-height: 1.5; }
+  .anxiety-item .text strong { color: #1a1a2e; }
+
+  /* ─── フロー ─── */
+  .flow-container {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .flow-steps {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  .flow-step {
+    flex: 1;
+    min-width: 110px;
+    text-align: center;
+    position: relative;
+  }
+  .flow-step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -10px;
+    top: 24px;
+    font-size: 18px;
+    color: #ccc;
+    z-index: 1;
+  }
+  .flow-dot {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+  }
+  .flow-step .name {
+    font-size: 11px;
+    color: #444;
+    line-height: 1.4;
+  }
+  .flow-step .period {
+    font-size: 10px;
+    color: #aaa;
+    margin-top: 4px;
+  }
+
+  /* ─── トリガー表 ─── */
+  .trigger-table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .trigger-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .trigger-table thead {
+    background: #1a1a2e;
+    color: white;
+  }
+  .trigger-table th {
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+  }
+  .trigger-table td {
+    padding: 14px 20px;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #444;
+  }
+  .trigger-table tr:last-child td { border-bottom: none; }
+  .trigger-table tr:nth-child(even) td { background: #fafafa; }
+  .rank {
+    font-weight: 800;
+    font-size: 18px;
+    color: #1a1a2e;
+  }
+  .rank.gold { color: #f59e0b; }
+  .rank.silver { color: #94a3b8; }
+  .rank.bronze { color: #b45309; }
+
+  /* ─── 行動フロー ─── */
+  .behavior-flow {
+    background: white;
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .behavior-stage {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .behavior-stage:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 44px;
+    width: 2px;
+    height: calc(100% - 8px);
+    background: #e0e0e0;
+  }
+  .stage-dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+    color: white;
+    z-index: 1;
+  }
+  .stage-content { flex: 1; }
+  .stage-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #1a1a2e;
+  }
+  .stage-desc { font-size: 13px; color: #666; }
+  .stage-note {
+    display: inline-block;
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    color: #856404;
+    margin-top: 4px;
+  }
+  .stage-note.green {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+  }
+  .stage-note.red {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+  }
+
+  /* ─── インサイトサマリー ─── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .summary-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .summary-card .icon { font-size: 28px; margin-bottom: 12px; }
+  .summary-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #1a1a2e; }
+  .summary-card p { font-size: 13px; color: #555; line-height: 1.6; }
+
+  /* ─── 戦略インプリケーション ─── */
+  .implication-box {
+    background: linear-gradient(135deg, #1a1a2e, #0f3460);
+    border-radius: 16px;
+    padding: 40px;
+    color: white;
+  }
+  .implication-box h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: #64b5f6;
+  }
+  .implication-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .implication-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .imp-num {
+    width: 32px;
+    height: 32px;
+    background: rgba(100,181,246,0.2);
+    border: 1px solid #64b5f6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #64b5f6;
+    flex-shrink: 0;
+  }
+  .imp-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .imp-content p { font-size: 13px; color: #b0bec5; line-height: 1.6; }
+
+  /* ─── データソース ─── */
+  .sources {
+    background: #f8f8f8;
+    border-radius: 8px;
+    padding: 20px;
+    font-size: 12px;
+    color: #888;
+    line-height: 1.8;
+  }
+  .sources strong { color: #555; }
+
+  /* ─── ラベル ─── */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .tag.blue { background: #e3f2fd; color: #1565c0; }
+  .tag.green { background: #e8f5e9; color: #2e7d32; }
+  .tag.orange { background: #fff3e0; color: #e65100; }
+  .tag.red { background: #fce4ec; color: #c62828; }
+
+  /* ─── divider ─── */
+  .divider {
+    border: none;
+    border-top: 1px solid #e8e8e8;
+    margin: 40px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- カバー -->
+<div class="cover">
+  <div class="label">Research Report · 2026.06.05</div>
+  <h1>家づくりを検討する人は<br><span>何者で、何を怖れているか</span></h1>
+  <div class="subtitle">ロードマップPDF 戦略設計のためのペルソナリサーチレポート</div>
+  <div class="meta">
+    <span><strong>調査対象</strong>：注文住宅検討〜取得者</span>
+    <span><strong>サンプル数</strong>：延べ約35,000人超の統計データ</span>
+    <span><strong>作成</strong>：CEO室 / @yamazaki_myhome 戦略設計</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ────────────────── -->
+  <!-- SECTION 1: データで見る実像 -->
+  <!-- ────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">データで見る「家を建てる人」の実像</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="num">33.3<small>歳</small></div>
+        <div class="label">購入時の平均年齢</div>
+        <div class="source">AlbaLink 500人調査</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">45<small>%</small></div>
+        <div class="label">30代が占める割合（最多）</div>
+        <div class="source">国交省 R6年度調査</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">700<small>万円</small></div>
+        <div class="label">世帯年収（最多層：600〜800万）</div>
+        <div class="source">国交省 R6年度調査</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">53<small>%</small></div>
+        <div class="label">小学生以下の子どもあり</div>
+        <div class="source">国交省 R6年度調査</div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="num">3.2<small>人</small></div>
+        <div class="label">平均居住人数（夫婦＋子1人が最多）</div>
+        <div class="source">国交省 R6年度調査</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">12.4<small>ヶ月</small></div>
+        <div class="label">検討〜購入までの平均期間</div>
+        <div class="source">AlbaLink 500人調査</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">54<small>%</small></div>
+        <div class="label">情報収集に住宅展示場を訪問</div>
+        <div class="source">AtHome 実態調査2024</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">9<small>割</small></div>
+        <div class="label">何らかの後悔あり（完成後）</div>
+        <div class="source">複数調査共通</div>
+      </div>
+    </div>
+
+    <!-- 年代別分布 -->
+    <div class="bar-chart">
+      <h3>注文住宅取得者の年代別分布（国交省 令和6年度 住宅市場動向調査）</h3>
+      <div class="bar-row">
+        <div class="bar-label">30代</div>
+        <div class="bar-track">
+          <div class="bar-fill highlight" style="width:45.1%">45.1%</div>
+        </div>
+        <div class="bar-val">45.1%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">60歳以上</div>
+        <div class="bar-track">
+          <div class="bar-fill normal" style="width:20.9%">20.9%</div>
+        </div>
+        <div class="bar-val">20.9%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">40代</div>
+        <div class="bar-track">
+          <div class="bar-fill normal" style="width:17.6%">17.6%</div>
+        </div>
+        <div class="bar-val">17.6%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">50代</div>
+        <div class="bar-track">
+          <div class="bar-fill light" style="width:11.5%">11.5%</div>
+        </div>
+        <div class="bar-val">11.5%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">20代</div>
+        <div class="bar-track">
+          <div class="bar-fill light" style="width:5%"></div>
+        </div>
+        <div class="bar-val">5.0%</div>
+      </div>
+    </div>
+
+    <br>
+
+    <!-- 年収別分布 -->
+    <div class="bar-chart">
+      <h3>注文住宅取得者の世帯年収分布（国交省 R6年度調査）</h3>
+      <div class="bar-row">
+        <div class="bar-label">600〜800万円</div>
+        <div class="bar-track">
+          <div class="bar-fill highlight" style="width:30.2%">30.2%</div>
+        </div>
+        <div class="bar-val">30.2%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">800〜1000万円</div>
+        <div class="bar-track">
+          <div class="bar-fill normal" style="width:22%">22%</div>
+        </div>
+        <div class="bar-val">22.0%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">400〜600万円</div>
+        <div class="bar-track">
+          <div class="bar-fill normal" style="width:20%">20%</div>
+        </div>
+        <div class="bar-val">20.0%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">1000万円以上</div>
+        <div class="bar-track">
+          <div class="bar-fill light" style="width:18%">18%</div>
+        </div>
+        <div class="bar-val">18.0%</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ────────────────── -->
+  <!-- SECTION 2: 検討のきっかけ -->
+  <!-- ────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">何が「家づくりを始めるきっかけ」になるか</div>
+    </div>
+
+    <div class="trigger-table">
+      <table>
+        <thead>
+          <tr>
+            <th width="60">順位</th>
+            <th>きっかけ・動機</th>
+            <th>詳細</th>
+            <th>年代との関係</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rank gold">1位</span></td>
+            <td><strong>妊娠・出産</strong></td>
+            <td>子育て環境の整備。「もっと広い家が必要」という切実な動機。</td>
+            <td><span class="tag blue">30代前半</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank silver">2位</span></td>
+            <td><strong>子どもの入園・入学</strong></td>
+            <td>転校を避けたい。通学利便性の確保。</td>
+            <td><span class="tag blue">30代前半〜中盤</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank bronze">3位</span></td>
+            <td><strong>結婚・婚約</strong></td>
+            <td>新居での新生活スタート。</td>
+            <td><span class="tag green">20代後半〜30代前半</span></td>
+          </tr>
+          <tr>
+            <td>4位</td>
+            <td>賃貸の契約更新</td>
+            <td>「家賃がもったいない」というコスト意識の高まり。</td>
+            <td><span class="tag blue">30代</span></td>
+          </tr>
+          <tr>
+            <td>5位</td>
+            <td>子どもが大きくなった</td>
+            <td>プライベート空間の必要性・部屋数の不足。</td>
+            <td><span class="tag orange">30代中盤〜後半</span></td>
+          </tr>
+          <tr>
+            <td>6位</td>
+            <td>資金の目処がついた</td>
+            <td>貯蓄・給与増加・相続等。</td>
+            <td><span class="tag orange">30〜40代</span></td>
+          </tr>
+          <tr>
+            <td>7位</td>
+            <td>老後の安心</td>
+            <td>「賃貸だと老後が心配」というライフプランへの意識。</td>
+            <td><span class="tag red">40〜50代</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <br>
+    <div class="insight-box">
+      <div class="quote">20〜30代では「結婚・出産・子どもの成長」で住まいが手狭になったことがきっかけ。<br>「子ども・家族のため」が動機の約47%と半数近くを占める。（ARUHI住宅購入調査2021）</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ────────────────── -->
+  <!-- SECTION 3: 情報収集行動 -->
+  <!-- ────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">「検討開始」から「展示場」まで何をしているか</div>
+    </div>
+
+    <div class="behavior-flow">
+      <div class="behavior-stage">
+        <div class="stage-dot" style="background:#1a1a2e;">①</div>
+        <div class="stage-content">
+          <div class="stage-title">きっかけ発生（出産・賃貸更新など）</div>
+          <div class="stage-desc">「そろそろ家を考えなきゃ」という意識が生まれる。ただし何も動かない人が多い。</div>
+        </div>
+      </div>
+      <div class="behavior-stage">
+        <div class="stage-dot" style="background:#0f3460;">②</div>
+        <div class="stage-content">
+          <div class="stage-title">SNS・Google での情報収集開始</div>
+          <div class="stage-desc">Instagram「#家づくり」「#間取り」/ YouTube / Google検索で情報を集め始める。</div>
+          <div class="stage-note green">⬅ ここでInstagramを通じて接触可能</div>
+        </div>
+      </div>
+      <div class="behavior-stage">
+        <div class="stage-dot" style="background:#455a64;">③</div>
+        <div class="stage-content">
+          <div class="stage-title">カタログ請求・比較サイト閲覧</div>
+          <div class="stage-desc">タウンライフ・SUUMO・LIFULLなどを閲覧。この段階で「情報の洪水」に圧倒されやすい。</div>
+          <div class="stage-note">情報量に圧倒され「考えるのをやめる」離脱リスクあり</div>
+        </div>
+      </div>
+      <div class="behavior-stage">
+        <div class="stage-dot" style="background:#607d8b;">④</div>
+        <div class="stage-content">
+          <div class="stage-title">展示場・モデルハウス訪問（約54%）</div>
+          <div class="stage-desc">ここで初めて施工会社と対面。担当者がつき始める。<br>※ 残り46%はこの段階に至っていない。</div>
+          <div class="stage-note red">展示場訪問後 = 特定会社の営業担当がつく → 紹介が難しくなる</div>
+        </div>
+      </div>
+      <div class="behavior-stage">
+        <div class="stage-dot" style="background:#78909c;">⑤</div>
+        <div class="stage-content">
+          <div class="stage-title">複数社での比較・打ち合わせ（平均12ヶ月）</div>
+          <div class="stage-desc">間取り提案を受けながら会社を絞り込む。この段階での悩み = セカンドオピニオン需要。</div>
+          <div class="stage-note green">⬅ セカンドオピニオン層の接触タイミング</div>
+        </div>
+      </div>
+      <div class="behavior-stage">
+        <div class="stage-dot" style="background:#90a4ae;">⑥</div>
+        <div class="stage-content">
+          <div class="stage-title">契約・着工・完成</div>
+          <div class="stage-desc">平均検討期間12.45ヶ月で契約。半数近く（46%）が半年以内に購入を決めている。</div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <div class="bar-chart">
+      <h3>「展示場未訪問」の人がどれだけいるか ― 接触可能なウィンドウの試算</h3>
+      <div class="bar-row">
+        <div class="bar-label">展示場訪問済み</div>
+        <div class="bar-track">
+          <div class="bar-fill normal" style="width:54%">54%（担当者あり）</div>
+        </div>
+        <div class="bar-val">54%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label" style="color:#1a1a2e;font-weight:700;">展示場未訪問</div>
+        <div class="bar-track">
+          <div class="bar-fill highlight" style="width:46%">46%（接触可能層）</div>
+        </div>
+        <div class="bar-val" style="font-weight:700;color:#1a1a2e;">46%</div>
+      </div>
+      <p style="font-size:12px;color:#888;margin-top:12px;">※ 毎年の新設注文住宅着工 約20万戸・30代初回取得者の割合から試算すると、<strong style="color:#1a1a2e;">年間約2.5〜3万組</strong>が「展示場未訪問の探索・比較期」にある計算（AtHome実態調査2024より算出）</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ────────────────── -->
+  <!-- SECTION 4: 確定ペルソナ2タイプ -->
+  <!-- ────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">確定ペルソナ（2タイプ）</div>
+    </div>
+
+    <div class="persona-grid">
+      <!-- ペルソナA -->
+      <div class="persona-card main">
+        <div class="persona-badge main">PERSONA A ／ メインターゲット</div>
+        <div class="persona-name">田中 健太・美咲 夫婦</div>
+        <div class="persona-desc">探索・比較期 ─ まだ展示場に行っていない</div>
+
+        <div class="persona-attrs">
+          <div class="attr-row"><span class="attr-key">年齢</span><span class="attr-val">夫33歳（会社員）／妻31歳（育休中）</span></div>
+          <div class="attr-row"><span class="attr-key">世帯年収</span><span class="attr-val">700万円前後</span></div>
+          <div class="attr-row"><span class="attr-key">居住</span><span class="attr-val">都市近郊・賃貸2LDK</span></div>
+          <div class="attr-row"><span class="attr-key">子ども</span><span class="attr-val">第1子（0〜1歳）が生まれたばかり</span></div>
+          <div class="attr-row"><span class="attr-key">状況</span><span class="attr-val">Instagram/YouTube で検索中。展示場未訪問</span></div>
+          <div class="attr-row"><span class="attr-key">検討期間</span><span class="attr-val">検討から3〜6ヶ月（まだ初期）</span></div>
+        </div>
+
+        <div class="insight-box">
+          <div class="quote">知識がないまま展示場に行ったら、言われるがままになりそうで怖い。自分の味方になってくれる人の情報が先に欲しい。</div>
+        </div>
+      </div>
+
+      <!-- ペルソナB -->
+      <div class="persona-card sub">
+        <div class="persona-badge sub">PERSONA B ／ 副ターゲット（高転換）</div>
+        <div class="persona-name">鈴木 翔・由美 夫婦</div>
+        <div class="persona-desc">セカンドオピニオン層 ─ 打ち合わせ中・確信が持てない</div>
+
+        <div class="persona-attrs">
+          <div class="attr-row"><span class="attr-key">年齢</span><span class="attr-val">夫35歳／妻33歳</span></div>
+          <div class="attr-row"><span class="attr-key">世帯年収</span><span class="attr-val">850万円前後</span></div>
+          <div class="attr-row"><span class="attr-key">居住</span><span class="attr-val">戸建購入を前提に引越し準備中</span></div>
+          <div class="attr-row"><span class="attr-key">子ども</span><span class="attr-val">1人（2〜3歳）</span></div>
+          <div class="attr-row"><span class="attr-key">状況</span><span class="attr-val">工務店と打ち合わせ中。方向性は決まったが確信がない</span></div>
+          <div class="attr-row"><span class="attr-key">接触経路</span><span class="attr-val">「住宅 セカンドオピニオン」でGoogle検索</span></div>
+        </div>
+
+        <div class="insight-box">
+          <div class="quote">この見積もりが妥当かどうか分からない。担当者を信じたいけど、本当に自分の利益を考えてくれているのか不安。誰かに確認してもらいたい。</div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    <!-- 2ペルソナの不安構造 -->
+    <div style="background:white;border-radius:12px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:20px;color:#1a1a2e;">ペルソナAの不安構造（表層と深層）</h3>
+      <p style="font-size:12px;color:#888;margin-bottom:16px;">言語化できる不安と、言語化できていない深層の不安を分けて設計することがコンテンツ設計の鍵</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#607d8b;letter-spacing:1px;margin-bottom:12px;">表層の不安（本人が言語化できる）</div>
+          <div class="anxiety-item">
+            <div class="icon">📋</div>
+            <div class="text"><strong>「何から始めればいいか分からない」</strong><br>全体像がなく、最初の一歩が踏み出せない</div>
+          </div>
+          <div class="anxiety-item">
+            <div class="icon">💴</div>
+            <div class="text"><strong>「いくら借りていいか分からない」</strong><br>ローンの仕組みを理解していない</div>
+          </div>
+          <div class="anxiety-item">
+            <div class="icon">🏗️</div>
+            <div class="text"><strong>「どこに頼めばいいか判断できない」</strong><br>HM・工務店の比較基準がない</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#1a1a2e;letter-spacing:1px;margin-bottom:12px;">深層の不安（本人も気づいていない本音）</div>
+          <div class="anxiety-item">
+            <div class="icon">⚠️</div>
+            <div class="text"><strong>「営業に言いなりになって損をしそう」</strong><br>情報格差を自覚しており、プロに負ける恐れ</div>
+          </div>
+          <div class="anxiety-item">
+            <div class="icon">😰</div>
+            <div class="text"><strong>「一生で一番大きな買い物を失敗したくない」</strong><br>取り返しのつかない後悔への恐れ</div>
+          </div>
+          <div class="anxiety-item">
+            <div class="icon">🎯</div>
+            <div class="text"><strong>「自分の味方になってくれる存在が欲しい」</strong><br>中立で正直な情報提供者への渇望</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ────────────────── -->
+  <!-- SECTION 5: Instagramとの関係 -->
+  <!-- ────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">ターゲットとInstagramの関係</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <div style="background:white;border-radius:12px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+        <h4 style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:16px;">🔍 よく検索するキーワード</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <span class="tag blue">#家づくり</span>
+          <span class="tag blue">#注文住宅</span>
+          <span class="tag blue">#間取り</span>
+          <span class="tag blue">#マイホーム記録</span>
+          <span class="tag blue">#住宅ローン</span>
+          <span class="tag blue">#工務店</span>
+          <span class="tag green">#家づくり初心者</span>
+          <span class="tag green">#家づくり後悔</span>
+          <span class="tag green">#新築</span>
+        </div>
+      </div>
+      <div style="background:white;border-radius:12px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+        <h4 style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:16px;">💾 保存しやすい投稿タイプ</h4>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:13px;color:#444;">✅「〇〇しないほうがいい」系（警告型）</div>
+          <div style="font-size:13px;color:#444;">✅「知らないと損する」系（情報格差解消型）</div>
+          <div style="font-size:13px;color:#444;">✅「一覧・チェックリスト」系（使える系）</div>
+          <div style="font-size:13px;color:#444;">✅「比較・早見表」系（判断材料型）</div>
+        </div>
+      </div>
+      <div style="background:white;border-radius:12px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+        <h4 style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:16px;">✅ フォローする判断基準</h4>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:13px;color:#444;">◎ 「特定会社を推していない」</div>
+          <div style="font-size:13px;color:#444;">◎ 「分かりやすい、初心者向け」</div>
+          <div style="font-size:13px;color:#444;">◎ 「顔出し・人柄が見える」</div>
+          <div style="font-size:13px;color:#444;">△ 「専門家っぽいが親しみやすい」</div>
+        </div>
+      </div>
+      <div style="background:white;border-radius:12px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+        <h4 style="font-size:14px;font-weight:700;color:#c62828;margin-bottom:16px;">⚠️ 警戒するもの（離脱原因）</h4>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:13px;color:#444;">✗ タウンライフ・一括比較サイトへの誘導</div>
+          <div style="font-size:13px;color:#444;">✗ 特定ハウスメーカーを「おすすめ」する投稿</div>
+          <div style="font-size:13px;color:#444;">✗ 専門用語だらけで置いていかれる感</div>
+          <div style="font-size:13px;color:#444;">✗ 「しつこい営業が来そう」な雰囲気のCTA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ────────────────── -->
+  <!-- SECTION 6: 後悔データ -->
+  <!-- ────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title">「後悔」のリアル ─ 9割が後悔する理由</div>
+    </div>
+
+    <div class="bar-chart">
+      <h3>後悔ランキング（AtHome 228人調査 + スーモカウンター調査）</h3>
+      <div class="bar-row">
+        <div class="bar-label">間取り設計</div>
+        <div class="bar-track">
+          <div class="bar-fill highlight" style="width:80%">全調査共通 1位</div>
+        </div>
+        <div class="bar-val">57票</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">設備選択</div>
+        <div class="bar-track">
+          <div class="bar-fill normal" style="width:56%">40票</div>
+        </div>
+        <div class="bar-val">40票</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">収納不足</div>
+        <div class="bar-track">
+          <div class="bar-fill normal" style="width:37%">26票</div>
+        </div>
+        <div class="bar-val">26票</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">コンセント位置・数</div>
+        <div class="bar-track">
+          <div class="bar-fill normal" style="width:34%">24票 / 23.5%</div>
+        </div>
+        <div class="bar-val">24票</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">窓の位置・大きさ</div>
+        <div class="bar-track">
+          <div class="bar-fill light" style="width:30%">21票</div>
+        </div>
+        <div class="bar-val">21票</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">冷暖房効率</div>
+        <div class="bar-track">
+          <div class="bar-fill light" style="width:26%">18票</div>
+        </div>
+        <div class="bar-val">18票</div>
+      </div>
+    </div>
+
+    <br>
+    <div style="background:white;border-radius:12px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:16px;color:#1a1a2e;">「なぜ9割が後悔するのか」─ 構造的な原因</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="anxiety-item">
+          <div class="icon">📊</div>
+          <div class="text"><strong>情報の非対称性</strong><br>施工会社は何百棟の経験。ユーザーは一生に一度。知識格差がそのまま後悔になる。</div>
+        </div>
+        <div class="anxiety-item">
+          <div class="icon">🧠</div>
+          <div class="text"><strong>決定疲れ（Decision Fatigue）</strong><br>打ち合わせで数百〜数千の決定をする。終盤に「もうこれでいいや」が後悔の温床。</div>
+        </div>
+        <div class="anxiety-item">
+          <div class="icon">🔮</div>
+          <div class="text"><strong>「今の自分」で「未来の生活」を設計</strong><br>子どもの成長、在宅ワーク化など。10年後を想像できないまま決める。</div>
+        </div>
+        <div class="anxiety-item">
+          <div class="icon">💰</div>
+          <div class="text"><strong>見えない費用の存在</strong><br>諸費用・地盤改良・外構・カーテン・家電。後から「こんなにかかると思わなかった」。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ────────────────── -->
+  <!-- SECTION 7: 戦略的示唆 -->
+  <!-- ────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div class="section-title">本リサーチから導く戦略的示唆</div>
+    </div>
+
+    <div class="implication-box">
+      <h3>ペルソナリサーチが示す「やるべきこと」</h3>
+      <div class="implication-list">
+        <div class="implication-item">
+          <div class="imp-num">1</div>
+          <div class="imp-content">
+            <h4>「展示場に行く前に読んでほしい」がコアコンセプト</h4>
+            <p>展示場訪問前の46%に届けることが最大の接触機会。このタイミングに中立な全体像を渡せる存在は市場にほぼいない。</p>
+          </div>
+        </div>
+        <div class="implication-item">
+          <div class="imp-num">2</div>
+          <div class="imp-content">
+            <h4>ターゲットは「33歳・子ども誕生直後・出産後6〜12ヶ月」が最もホット</h4>
+            <p>妊娠・出産が検討の最大トリガー。出産後に検索行動が活発化するため、このタイミングに合わせたコンテンツ設計が有効。</p>
+          </div>
+        </div>
+        <div class="implication-item">
+          <div class="imp-num">3</div>
+          <div class="imp-content">
+            <h4>深層の不安「自分の味方がいない」に応えることが差別化</h4>
+            <p>表層の不安（何から始めるか）への回答は競合も提供している。「営業に負けない知識を渡す」「中立の味方」という立ち位置に独自価値がある。</p>
+          </div>
+        </div>
+        <div class="implication-item">
+          <div class="imp-num">4</div>
+          <div class="imp-content">
+            <h4>セカンドオピニオン需要は高転換・即行動層</h4>
+            <p>打ち合わせ中の不安は切実度が高く、発見から問い合わせまでの転換が速い。「住宅 セカンドオピニオン」での検索流入を想定したコンテンツも並行して持つべき。</p>
+          </div>
+        </div>
+        <div class="implication-item">
+          <div class="imp-num">5</div>
+          <div class="imp-content">
+            <h4>ロードマップPDFは「地図」であると同時に「信頼の証明」</h4>
+            <p>PDFを読み終わった時に「山﨑さんに相談したい」と思わせる設計が必要。手順書ではなく、伴走者への入口として機能させること。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- データソース -->
+  <div class="sources">
+    <strong>データ出典</strong>：国土交通省「令和6年度 住宅市場動向調査報告書」／LIFULL HOME'S「注文住宅を建てた500人に聞く家づくりで困ったことTOP5（2022年）」／AtHome「注文住宅購入者の実態調査（2024年9月）」／AlbaLink「家を買ったタイミングランキング 500人アンケート」／SUUMO「注文住宅を建てた人に聞いた大変だったこと」／AtHome「注文住宅の失敗を徹底調査（2024年4月・228人）」／スーモカウンター「注文住宅を建てた人の後悔ポイント」／THE ROOM TOUR「30万人フォロワーアンケート」
+  </div>
+
+</div>
+</body>
+</html>

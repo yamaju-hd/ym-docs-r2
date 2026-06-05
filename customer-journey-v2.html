@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>カスタマージャーニー ＋ パーセプションフロー v2</title>
+<style>
+  :root {
+    --navy: #0C1C34;
+    --orange: #D4845A;
+    --orange-light: #F2A97E;
+    --bg: #F8F6F2;
+    --white: #FFFFFF;
+    --gray: #6B7280;
+    --gray-light: #F3F4F6;
+    --border: #E5E7EB;
+    --green: #059669;
+    --red: #DC2626;
+    --yellow: #D97706;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+    line-height: 1.7;
+    font-size: 14px;
+  }
+  /* Header */
+  .header {
+    background: var(--navy);
+    color: white;
+    padding: 40px 48px 32px;
+    border-bottom: 4px solid var(--orange);
+  }
+  .header-meta { font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 8px; letter-spacing: 0.05em; }
+  .header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+  .header h1 span { color: var(--orange-light); }
+  .header-sub { margin-top: 12px; font-size: 13px; color: rgba(255,255,255,0.65); }
+
+  /* Layout */
+  .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+  .section { margin-bottom: 56px; }
+  .section-title {
+    font-size: 18px; font-weight: 700; color: var(--navy);
+    border-left: 4px solid var(--orange); padding-left: 14px;
+    margin-bottom: 24px;
+  }
+  .section-sub {
+    font-size: 14px; font-weight: 700; color: var(--navy);
+    margin: 24px 0 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-sub::before { content: '▶'; color: var(--orange); font-size: 10px; }
+
+  /* Persona cards */
+  .persona-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .persona-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .persona-card.main { border-top: 4px solid var(--orange); }
+  .persona-card.sub { border-top: 4px solid #6366F1; }
+  .persona-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    color: var(--orange); margin-bottom: 6px; text-transform: uppercase;
+  }
+  .persona-card.sub .persona-label { color: #6366F1; }
+  .persona-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .persona-attrs { font-size: 12px; color: var(--gray); margin-bottom: 14px; }
+  .persona-detail { font-size: 13px; line-height: 1.8; }
+  .persona-detail dt { font-weight: 700; color: var(--navy); margin-top: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .persona-detail dd { color: #374151; padding-left: 8px; border-left: 2px solid var(--border); margin-top: 4px; }
+
+  /* Timeline */
+  .timeline-header {
+    background: var(--navy);
+    color: white;
+    border-radius: 10px;
+    padding: 16px 24px;
+    font-size: 12px;
+    margin-bottom: 4px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .timeline-arrow { font-size: 18px; color: var(--orange-light); }
+
+  /* Phase cards */
+  .phase-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .phase-header {
+    display: flex; align-items: stretch;
+  }
+  .phase-num {
+    background: var(--navy);
+    color: white;
+    width: 64px;
+    min-width: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+    gap: 4px;
+  }
+  .phase-num .label { font-size: 9px; color: rgba(255,255,255,0.5); letter-spacing: 0.05em; }
+  .phase-title-block {
+    flex: 1;
+    padding: 16px 20px;
+    background: var(--gray-light);
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .phase-title { font-size: 15px; font-weight: 700; }
+  .phase-state { font-size: 12px; color: var(--gray); margin-top: 3px; }
+  .phase-highlight {
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 4px;
+    align-self: center;
+    margin-right: 16px;
+    white-space: nowrap;
+  }
+  .hl-unreachable { background: #F3F4F6; color: var(--gray); }
+  .hl-key { background: #FEF3C7; color: #92400E; }
+  .hl-critical { background: #FEE2E2; color: #991B1B; }
+  .hl-normal { background: #DBEAFE; color: #1E40AF; }
+
+  .phase-body { padding: 20px 24px; }
+  .phase-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .phase-item {}
+  .phase-item-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
+    color: var(--orange); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .phase-item-content { font-size: 13px; line-height: 1.7; }
+  .phase-item-content.emotion { color: #4B5563; font-style: italic; }
+  .data-badge {
+    display: inline-block;
+    background: #EDE9FE;
+    color: #4C1D95;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    margin-top: 4px;
+  }
+  .risk-badge {
+    display: inline-block;
+    background: #FEE2E2;
+    color: #991B1B;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    margin-top: 4px;
+  }
+  .touch-badge {
+    display: inline-block;
+    background: #D1FAE5;
+    color: #065F46;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    margin-top: 4px;
+  }
+
+  /* Perception flow */
+  .perception-axis {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .perception-axis-header {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 24px;
+    background: var(--gray-light);
+    border-bottom: 1px solid var(--border);
+  }
+  .axis-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--navy); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; flex-shrink: 0;
+  }
+  .axis-title { font-size: 15px; font-weight: 700; }
+  .perception-body { padding: 20px 24px; }
+  .perception-flow-row {
+    display: grid; grid-template-columns: 1fr 60px 1fr; gap: 16px;
+    align-items: center; margin-bottom: 20px;
+  }
+  .perception-box {
+    background: var(--gray-light);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px; line-height: 1.7;
+  }
+  .perception-box.before { border-left: 3px solid #DC2626; }
+  .perception-box.after { border-left: 3px solid var(--green); }
+  .perception-box-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .perception-box.before .perception-box-label { color: #DC2626; }
+  .perception-box.after .perception-box-label { color: var(--green); }
+  .arrow-cell { text-align: center; font-size: 24px; color: var(--orange); }
+  .perception-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .meta-block {
+    background: #F9FAFB;
+    border-radius: 8px; padding: 12px 14px;
+    font-size: 12px; line-height: 1.6;
+  }
+  .meta-label { font-weight: 700; font-size: 10px; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .meta-label.catalyst { color: var(--orange); text-transform: uppercase; }
+  .meta-label.resist { color: #DC2626; text-transform: uppercase; }
+  .meta-label.condition { color: #059669; text-transform: uppercase; }
+
+  /* Dependency */
+  .dep-diagram {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .dep-row { display: flex; justify-content: center; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
+  .dep-box {
+    background: var(--navy);
+    color: white;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 140px;
+    text-align: center;
+  }
+  .dep-box.action { background: var(--orange); }
+  .dep-arrow-down { text-align: center; font-size: 20px; color: var(--orange); margin: 4px 0; }
+  .dep-note {
+    font-size: 11px; color: var(--gray); margin-top: 4px;
+  }
+
+  /* Failure table */
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    background: var(--navy); color: white;
+    padding: 10px 14px; font-size: 12px; font-weight: 600;
+    text-align: left;
+  }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: top; }
+  tr:nth-child(even) td { background: var(--gray-light); }
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 99px;
+    font-size: 11px; font-weight: 600;
+  }
+  .badge-red { background: #FEE2E2; color: #991B1B; }
+  .badge-yellow { background: #FEF3C7; color: #92400E; }
+  .badge-blue { background: #DBEAFE; color: #1E40AF; }
+
+  /* Issues */
+  .issue-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .issue-card {
+    background: white; border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .issue-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+  .issue-list { list-style: none; }
+  .issue-list li {
+    font-size: 13px; padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; gap: 8px;
+    line-height: 1.5;
+  }
+  .issue-list li:last-child { border-bottom: none; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+  .dot-green { background: var(--green); }
+  .dot-red { background: #DC2626; }
+  .dot-orange { background: var(--orange); }
+
+  /* Footer */
+  .footer {
+    background: var(--navy); color: rgba(255,255,255,0.5);
+    text-align: center; padding: 24px;
+    font-size: 12px; margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-meta">YAMAJU Inc. — Research / 2026-06-06</div>
+  <h1>カスタマージャーニー ＋ <span>パーセプションフロー</span> <span style="font-size:16px;color:rgba(255,255,255,0.4)">v2</span></h1>
+  <div class="header-sub">インプット: 国交省R6 / HOMES500人 / AtHome228人 / AlbaLink500人 / ボイスノート3000人 / 家づくりヒーロー競合分析</div>
+</div>
+
+<div class="container">
+
+  <!-- Persona -->
+  <div class="section">
+    <div class="section-title">ペルソナ確認</div>
+    <div class="persona-grid">
+      <div class="persona-card main">
+        <div class="persona-label">Main Target — Persona A</div>
+        <div class="persona-name">田中 健太・美咲 夫婦</div>
+        <div class="persona-attrs">33 / 31歳｜世帯年収700万｜第1子0〜1歳｜賃貸2LDK｜探索・比較期</div>
+        <dl class="persona-detail">
+          <dt>核心の不安</dt>
+          <dd>「知識がないまま一生で最大の買い物をしてしまう」</dd>
+          <dt>本当に欲しいもの</dt>
+          <dd>中立な地図 ＋ 自分の味方になる人</dd>
+          <dt>接触ウィンドウ</dt>
+          <dd>出産後6〜12ヶ月、Instagram検索が活性化するタイミング（検討〜購入 平均12.45ヶ月）</dd>
+        </dl>
+      </div>
+      <div class="persona-card sub">
+        <div class="persona-label">Sub Target — Persona B</div>
+        <div class="persona-name">鈴木 翔・由美 夫婦</div>
+        <div class="persona-attrs">35 / 33歳｜世帯年収850万｜子ども2〜3歳｜HM打ち合わせ中</div>
+        <dl class="persona-detail">
+          <dt>核心の不安</dt>
+          <dd>「営業側に誘導されていないか、自分では判断できない」</dd>
+          <dt>本当に欲しいもの</dt>
+          <dd>中立な第三者による検証・同席</dd>
+          <dt>接触ウィンドウ</dt>
+          <dd>Google「住宅 セカンドオピニオン」検索。困り度が高く、ジャーニーは短い</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <!-- Journey A -->
+  <div class="section">
+    <div class="section-title">カスタマージャーニーマップ — ペルソナA（全9フェーズ）</div>
+
+    <div class="timeline-header">
+      <span>[出産]</span>
+      <span class="timeline-arrow">──── 0〜6ヶ月 ────</span>
+      <span>[検索開始]</span>
+      <span class="timeline-arrow">──── 1〜3ヶ月 ────</span>
+      <span>[LINE登録]</span>
+      <span class="timeline-arrow">──── 数週間〜数ヶ月 ────</span>
+      <span>[相談]</span>
+    </div>
+
+    <!-- Phase 0 -->
+    <div class="phase-card">
+      <div class="phase-header">
+        <div class="phase-num"><span>0</span><span class="label">PHASE</span></div>
+        <div class="phase-title-block">
+          <div class="phase-title">無関心期</div>
+          <div class="phase-state">家のことをまだ真剣に考えていない</div>
+        </div>
+        <div class="phase-highlight hl-unreachable">接触不可</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-grid">
+          <div class="phase-item">
+            <div class="phase-item-label">思考・感情</div>
+            <div class="phase-item-content">「いつかは家が欲しいなあ」（漠然。具体性ゼロ）</div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">山﨑さんとの接点</div>
+            <div class="phase-item-content">なし（SNS検索すらしていない）</div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">データ根拠</div>
+            <div class="phase-item-content">
+              購入きっかけ1位=妊娠・出産（AlbaLink）<br>
+              → ほぼ全員がこのフェーズを通過して次へ進む
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 1 -->
+    <div class="phase-card">
+      <div class="phase-header">
+        <div class="phase-num"><span>1</span><span class="label">PHASE</span></div>
+        <div class="phase-title-block">
+          <div class="phase-title">漠然認識期</div>
+          <div class="phase-state">「そろそろ本気で考えなきゃ」が芽生え始めた</div>
+        </div>
+        <div class="phase-highlight hl-unreachable">接触不可</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-grid">
+          <div class="phase-item">
+            <div class="phase-item-label">トリガー</div>
+            <div class="phase-item-content">第1子誕生 / 賃貸更新が近づいた / 同僚が家を建てた</div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">思考・感情</div>
+            <div class="phase-item-content emotion">「子どもが生まれて2LDKが手狭。でも家づくりって何から始めるんだろう」</div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">行動</div>
+            <div class="phase-item-content">親・友人に相談。ネット検索（漠然と）。まだInstagram検索はしていない</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase-card">
+      <div class="phase-header">
+        <div class="phase-num"><span>2</span><span class="label">PHASE</span></div>
+        <div class="phase-title-block">
+          <div class="phase-title">Instagram検索開始期</div>
+          <div class="phase-state">スマホで「家づくり」を調べ始めた</div>
+        </div>
+        <div class="phase-highlight hl-normal">接触可能</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-grid">
+          <div class="phase-item">
+            <div class="phase-item-label">トリガー・行動</div>
+            <div class="phase-item-content">
+              深夜・育児の隙間時間にふとInstagram検索<br>
+              <code style="font-size:11px;color:#4C1D95;">#家づくり #注文住宅 #マイホーム記録 #間取り</code>
+            </div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">思考・感情</div>
+            <div class="phase-item-content emotion">「情報がいっぱいある。でも何が正しいか分からない。圧倒される」</div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">離脱リスク ＋ タッチポイント</div>
+            <div class="phase-item-content">
+              <span class="risk-badge">情報過多で「よく分からない」と諦め</span><br>
+              <span class="risk-badge">タウンライフ等に流れる</span><br><br>
+              <span class="touch-badge">保存数が高い投稿がExplore/検索に出れば発見</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase-card">
+      <div class="phase-header">
+        <div class="phase-num"><span>3</span><span class="label">PHASE</span></div>
+        <div class="phase-title-block">
+          <div class="phase-title">発見・第一印象評価期</div>
+          <div class="phase-state">山﨑さんの投稿に初めて遭遇した</div>
+        </div>
+        <div class="phase-highlight hl-critical">最大離脱ポイント</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-grid">
+          <div class="phase-item">
+            <div class="phase-item-label">3秒の評価（1枚目）</div>
+            <div class="phase-item-content">「読む価値があるか？」をビジュアル＋タイトルだけで判断。ここで離脱が最大</div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">精読中の評価軸</div>
+            <div class="phase-item-content">
+              ① 特定会社を推していないか？<br>
+              ② 初心者目線か？<br>
+              ③ 専門用語だらけでないか？<br>
+              → プロフィールで「何者？」を確認
+            </div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">タッチポイント ＋ 離脱</div>
+            <div class="phase-item-content">
+              <span class="touch-badge">① 投稿1枚目のフック</span><br>
+              <span class="touch-badge">② スライド内容の分かりやすさ</span><br>
+              <span class="touch-badge">③ プロフィール文</span><br><br>
+              <span class="risk-badge">「これは自分に関係ない」で離脱</span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;padding:12px 16px;background:#FEF3C7;border-radius:8px;font-size:12px;">
+          <strong>競合データ:</strong> 家づくりヒーロー（119K）は「元営業マンが解説」「悪用厳禁」で信頼性を担保。山﨑さんは「完全中立・HMも工務店も両対応」という競合にない軸が強み。
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="phase-card">
+      <div class="phase-header">
+        <div class="phase-num"><span>4</span><span class="label">PHASE</span></div>
+        <div class="phase-title-block">
+          <div class="phase-title">信頼形成期</div>
+          <div class="phase-state">過去投稿を複数閲覧し、フォローを検討している</div>
+        </div>
+        <div class="phase-highlight hl-key">積み上げが必要</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-grid">
+          <div class="phase-item">
+            <div class="phase-item-label">行動</div>
+            <div class="phase-item-content">過去投稿をスクロール / 複数投稿を保存 / フォロー</div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">評価軸（3つ）</div>
+            <div class="phase-item-content">
+              ① 一貫して中立か？<br>
+              ② 発信内容が体系的か？<br>
+              ③ 自分の段階（展示場未訪問）に合っているか？
+            </div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">離脱リスク</div>
+            <div class="phase-item-content">
+              <span class="risk-badge">過去投稿が少ない</span><br>
+              <span class="risk-badge">内容に一貫性がない</span><br>
+              <span class="risk-badge">特定会社名が出てくる</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 5 -->
+    <div class="phase-card">
+      <div class="phase-header">
+        <div class="phase-num"><span>5</span><span class="label">PHASE</span></div>
+        <div class="phase-title-block">
+          <div class="phase-title">LINE登録期</div>
+          <div class="phase-state">プロフィールのLINEリンクを発見し、登録するか迷っている</div>
+        </div>
+        <div class="phase-highlight hl-key">警戒心との戦い</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-grid">
+          <div class="phase-item">
+            <div class="phase-item-label">トリガー</div>
+            <div class="phase-item-content">「ロードマップPDFがもらえる」「もっと深く知りたい」</div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">思考・感情</div>
+            <div class="phase-item-content emotion">「PDFは欲しい。でも登録すると営業が来るのでは？」<br>→「欲しい」と「警戒」のせめぎ合い</div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">タッチポイント ＋ 離脱</div>
+            <div class="phase-item-content">
+              <span class="touch-badge">プロフィールのCTA文</span><br>
+              <span class="touch-badge">LINE登録直後の自動メッセージ</span><br><br>
+              <span class="risk-badge">「また営業が来そう」という過去経験</span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;padding:12px 16px;background:#D1FAE5;border-radius:8px;font-size:12px;">
+          <strong>競合データ:</strong> 家づくりヒーローはLINE友達25,692人を獲得。LINE誘導モデルの有効性は実証済み。
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 6 -->
+    <div class="phase-card">
+      <div class="phase-header">
+        <div class="phase-num"><span>6</span><span class="label">PHASE</span></div>
+        <div class="phase-title-block">
+          <div class="phase-title">PDF受取・活用期</div>
+          <div class="phase-state">ロードマップPDFを読んでいる（最重要タッチポイント）</div>
+        </div>
+        <div class="phase-highlight hl-critical">品質が全てを決める</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-grid">
+          <div class="phase-item">
+            <div class="phase-item-label">行動</div>
+            <div class="phase-item-content">PDFを読む・保存 / 夫婦で共有 / Instagramに戻って確認</div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">思考・感情</div>
+            <div class="phase-item-content emotion">「全体像が見えた！これは保存版だ」<br>「不安が少し解消した。この人は本当に役立つ情報を持っている」</div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">離脱リスク</div>
+            <div class="phase-item-content">
+              <span class="risk-badge">PDFが薄い＝ブロック直行</span><br>
+              <span class="risk-badge">山﨑さんへの誘導が露骨すぎる</span><br><br>
+              <span class="data-badge">根拠: 「何から始めるか分からない」が全調査共通の最大悩み</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 7 -->
+    <div class="phase-card">
+      <div class="phase-header">
+        <div class="phase-num"><span>7</span><span class="label">PHASE</span></div>
+        <div class="phase-title-block">
+          <div class="phase-title">関係深化期</div>
+          <div class="phase-state">ステップ配信を読みながら、Instagramも継続閲覧</div>
+        </div>
+        <div class="phase-highlight hl-key">最も長いフェーズ</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-grid">
+          <div class="phase-item">
+            <div class="phase-item-label">変化</div>
+            <div class="phase-item-content">「情報を得る相手」→「この人に直接聞いてみたい」へ徐々にシフト</div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">思考</div>
+            <div class="phase-item-content emotion">「この人の情報は具体的で使える。もっと知りたい」</div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">離脱リスク</div>
+            <div class="phase-item-content">
+              <span class="risk-badge">配信品質の低下</span><br>
+              <span class="risk-badge">頻度が多すぎてブロック</span><br>
+              <span class="risk-badge">自分の悩みに合ったコンテンツがない</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 8 -->
+    <div class="phase-card">
+      <div class="phase-header">
+        <div class="phase-num"><span>8</span><span class="label">PHASE</span></div>
+        <div class="phase-title-block">
+          <div class="phase-title">相談行動期</div>
+          <div class="phase-state">検討が具体化し、直接質問したくなった</div>
+        </div>
+        <div class="phase-highlight hl-key">背中を押すだけ</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-grid">
+          <div class="phase-item">
+            <div class="phase-item-label">トリガー</div>
+            <div class="phase-item-content">土地情報を見た / 展示場に行く予定ができた / 友人が着工した</div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">思考・感情</div>
+            <div class="phase-item-content emotion">「山﨑さんに聞いてみたい。でも有料？気軽に聞ける？」<br>→ 信頼が行動意欲を上回ったとき動く</div>
+          </div>
+          <div class="phase-item">
+            <div class="phase-item-label">離脱リスク</div>
+            <div class="phase-item-content">
+              <span class="risk-badge">「有料かも」という不安</span><br>
+              <span class="risk-badge">「今はまだ早い」という先延ばし</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Journey B -->
+  <div class="section">
+    <div class="section-title">カスタマージャーニーマップ — ペルソナB（5フェーズ）</div>
+    <div style="background:#EDE9FE;border-radius:8px;padding:12px 16px;font-size:13px;margin-bottom:16px;">
+      ペルソナBは困り度が高く、ジャーニーが短い。「認知→相談」の距離が短いが、<strong>信頼の証明が鍵</strong>。PDFよりも直接相談の動線が有効。
+    </div>
+    <table>
+      <thead>
+        <tr><th>フェーズ</th><th>状態</th><th>思考・感情</th><th>タッチポイント</th><th>離脱リスク</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-red">①不安発生</span></td>
+          <td>打ち合わせが進むほど不安が増す</td>
+          <td>「担当者は営業側の人間。本当に自分の味方か？」</td>
+          <td>なし</td>
+          <td>「仕方ない」と不安を飲み込む</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-yellow">②情報探索</span></td>
+          <td>「誰か中立な人に確認してほしい」</td>
+          <td>「セカンドオピニオンしてくれる人がいるはず」</td>
+          <td>Google「住宅 セカンドオピニオン」検索</td>
+          <td>見つかりにくい（ニッチ）</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-yellow">③発見・評価</span></td>
+          <td>山﨑さんの「中立」「伴走」を発見</td>
+          <td>「この人なら正直に言ってくれそう」</td>
+          <td>プロフィール・過去投稿の実績感</td>
+          <td>実績・信頼性の確認ができない</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-blue">④即行動</span></td>
+          <td>困り度が高いため素早く動く</td>
+          <td>「早く確認したい。私の段階でも相談できる？」</td>
+          <td>LINE問い合わせ窓口</td>
+          <td>「費用が高そう」「断られそう」</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-blue">⑤相談開始</span></td>
+          <td>現状を共有・検証依頼</td>
+          <td>「同じ方向を向いて確認してくれる安心感」</td>
+          <td>伴走サービス全般</td>
+          <td>─</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Perception Flow -->
+  <div class="section">
+    <div class="section-title">パーセプションフロー — 5つの認識軸（ペルソナA）</div>
+    <div style="background:#F0FDF4;border-radius:8px;padding:12px 16px;font-size:13px;margin-bottom:24px;">
+      単なる「before/after」ではなく、<strong>5つの認識軸それぞれの変化と順序・依存関係</strong>を設計図として整理。
+    </div>
+
+    <!-- Axis 1 -->
+    <div class="perception-axis">
+      <div class="perception-axis-header">
+        <div class="axis-num">1</div>
+        <div class="axis-title">家づくりの全体像認識</div>
+      </div>
+      <div class="perception-body">
+        <div class="perception-flow-row">
+          <div class="perception-box before">
+            <div class="perception-box-label">Before</div>
+            「家づくりは複雑で、専門知識がないと無理。どこから手をつければいいか分からない」
+          </div>
+          <div class="arrow-cell">→</div>
+          <div class="perception-box after">
+            <div class="perception-box-label">After</div>
+            「8つのフェーズに分けると全体が見える。今どこにいるか、次に何をすべきか分かる」
+          </div>
+        </div>
+        <div class="perception-meta">
+          <div class="meta-block">
+            <div class="meta-label catalyst">変化を生む経験</div>
+            全体像の可視化（8ステップ・期間・力の入れどころ）を見る
+          </div>
+          <div class="meta-block">
+            <div class="meta-label resist">抵抗 → 克服条件</div>
+            「本当にこの通りいくの？うちは違う」<br>→ 自分の状況に近い事例があると感じること
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Axis 2 -->
+    <div class="perception-axis">
+      <div class="perception-axis-header">
+        <div class="axis-num">2</div>
+        <div class="axis-title">情報環境認識</div>
+      </div>
+      <div class="perception-body">
+        <div class="perception-flow-row">
+          <div class="perception-box before">
+            <div class="perception-box-label">Before</div>
+            「家づくりの情報はたくさんあるが、みんな誰かの利益になるよう書かれている。比較サイト・HMオウンドメディア・YouTuberアフィリエイト…信頼できる情報源がない」
+          </div>
+          <div class="arrow-cell">→</div>
+          <div class="perception-box after">
+            <div class="perception-box-label">After</div>
+            「完全中立な発信者がいる。この人の情報は信頼できる」
+          </div>
+        </div>
+        <div class="perception-meta">
+          <div class="meta-block">
+            <div class="meta-label catalyst">変化を生む経験</div>
+            特定会社を一切推薦しない発信が複数投稿にわたって積み重なる
+          </div>
+          <div class="meta-block">
+            <div class="meta-label resist">抵抗 → 克服条件</div>
+            「本当に中立なの？どこかから収益を得ているはず」<br>→ 複数投稿で一貫性＋ビジネスモデルが透明であること
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Axis 3 -->
+    <div class="perception-axis">
+      <div class="perception-axis-header">
+        <div class="axis-num">3</div>
+        <div class="axis-title">自己能力認識</div>
+      </div>
+      <div class="perception-body">
+        <div class="perception-flow-row">
+          <div class="perception-box before">
+            <div class="perception-box-label">Before</div>
+            「自分は知識がなくて弱い。展示場に行ったら営業に言いなりになってしまう。勉強してもどうせ素人は素人」
+          </div>
+          <div class="arrow-cell">→</div>
+          <div class="perception-box after">
+            <div class="perception-box-label">After</div>
+            「知識を先につければ、対等に話せる。担当者の見極め方・質問の仕方が分かる」
+          </div>
+        </div>
+        <div class="perception-meta">
+          <div class="meta-block">
+            <div class="meta-label catalyst">変化を生む経験</div>
+            「事前に知っていれば防げる」具体的な情報を繰り返し得る
+          </div>
+          <div class="meta-block">
+            <div class="meta-label resist">抵抗 → 克服条件</div>
+            「知識をつけても素人は素人」という無力感<br>→ 「この知識があれば守れる」という具体的なケース
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Axis 4 -->
+    <div class="perception-axis">
+      <div class="perception-axis-header">
+        <div class="axis-num">4</div>
+        <div class="axis-title">山﨑さんへの信頼（最も時間がかかる）</div>
+      </div>
+      <div class="perception-body">
+        <div class="perception-flow-row">
+          <div class="perception-box before">
+            <div class="perception-box-label">Before</div>
+            「誰？何の人？どうせ後から何か売ってくる。中立と言いながら実は誰かの味方。実績もないのに」
+          </div>
+          <div class="arrow-cell">→</div>
+          <div class="perception-box after">
+            <div class="perception-box-label">After</div>
+            「施主側に立つ本物の伴走者。自分の利益を考えて動いてくれる人だ。相談してみよう」
+          </div>
+        </div>
+        <div class="perception-meta">
+          <div class="meta-block">
+            <div class="meta-label catalyst">変化を生む経験</div>
+            継続閲覧での一貫性 ＋ 山﨑さん個人の人柄・ストーリーへの共感
+          </div>
+          <div class="meta-block">
+            <div class="meta-label resist">抵抗 → 克服条件</div>
+            「良い人っぽいが結局ビジネス」「実績がない」<br>→ ① 中立性の証明 ② 人柄への共感 ③「頼んだ人の体験」
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Axis 5 -->
+    <div class="perception-axis">
+      <div class="perception-axis-header">
+        <div class="axis-num">5</div>
+        <div class="axis-title">行動・相談へのハードル認識（最後の一押し）</div>
+      </div>
+      <div class="perception-body">
+        <div class="perception-flow-row">
+          <div class="perception-box before">
+            <div class="perception-box-label">Before</div>
+            「相談するとお金がかかる。しつこい連絡が来る。今はまだ早い。忙しい」
+          </div>
+          <div class="arrow-cell">→</div>
+          <div class="perception-box after">
+            <div class="perception-box-label">After</div>
+            「まずLINEで聞くだけ。リスクゼロ。今の段階でも相談していい」
+          </div>
+        </div>
+        <div class="perception-meta">
+          <div class="meta-block">
+            <div class="meta-label catalyst">変化を生む経験</div>
+            「まず話すだけでいい」「無料で気軽に」が繰り返し伝わる
+          </div>
+          <div class="meta-block">
+            <div class="meta-label resist">抵抗 → 克服条件</div>
+            「本当に無料？」「今はまだ早い気がする」<br>→ 「今のあなたの段階でもOK」という明確な背中押し
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dependency -->
+    <div class="section-sub">認識変化の依存関係と順序</div>
+    <div class="dep-diagram">
+      <div class="dep-row">
+        <div class="dep-box">軸1：全体像認識</div>
+      </div>
+      <div class="dep-arrow-down">↓</div>
+      <div style="font-size:11px;color:var(--gray);margin-bottom:4px;">これが先に変化しないと軸2が機能しない</div>
+      <div class="dep-row">
+        <div class="dep-box">軸2：情報環境認識</div>
+        <div style="font-size:20px;color:var(--orange)">→</div>
+        <div class="dep-box">軸3：自己能力認識</div>
+      </div>
+      <div class="dep-arrow-down">↓</div>
+      <div style="font-size:11px;color:var(--gray);margin-bottom:4px;">軸2+3の積み重ねが軸4を育む</div>
+      <div class="dep-row">
+        <div class="dep-box">軸4：山﨑さんへの信頼</div>
+      </div>
+      <div class="dep-arrow-down">↓</div>
+      <div style="font-size:11px;color:var(--gray);margin-bottom:4px;">軸4が十分高まって初めて軸5が動く</div>
+      <div class="dep-row">
+        <div class="dep-box">軸5：行動ハードル除去</div>
+      </div>
+      <div class="dep-arrow-down">↓</div>
+      <div class="dep-row">
+        <div class="dep-box action">相談行動</div>
+      </div>
+      <div style="margin-top:16px;padding:12px 20px;background:#FEF3C7;border-radius:8px;font-size:12px;text-align:left;max-width:500px;margin-left:auto;margin-right:auto;">
+        <strong>重要:</strong> 軸4（信頼）は最も時間がかかる。焦って売り込むと逆効果。軸1〜3を丁寧に積み上げることが先決。
+      </div>
+    </div>
+  </div>
+
+  <!-- Failure patterns -->
+  <div class="section">
+    <div class="section-title">失敗パターン — ジャーニーが途切れる7つの典型</div>
+    <table>
+      <thead>
+        <tr><th>パターン</th><th>発生フェーズ</th><th>原因</th><th>深刻度</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1枚目で離脱</td>
+          <td>フェーズ3</td>
+          <td>フックが弱い・「自分に関係ない」と判断</td>
+          <td><span class="badge badge-red">最大離脱</span></td>
+        </tr>
+        <tr>
+          <td>プロフィールで離脱</td>
+          <td>フェーズ3</td>
+          <td>何者か分からない・CTAが不明確</td>
+          <td><span class="badge badge-red">2番目に大きい</span></td>
+        </tr>
+        <tr>
+          <td>フォローせず終わり</td>
+          <td>フェーズ4</td>
+          <td>過去投稿が少ない・一貫性がない</td>
+          <td><span class="badge badge-yellow">積み上げ資産が必要</span></td>
+        </tr>
+        <tr>
+          <td>LINE登録しない</td>
+          <td>フェーズ5</td>
+          <td>「営業が来そう」への警戒</td>
+          <td><span class="badge badge-yellow">CTAの設計が重要</span></td>
+        </tr>
+        <tr>
+          <td>PDFを読んでブロック</td>
+          <td>フェーズ6</td>
+          <td>PDF品質が期待値以下</td>
+          <td><span class="badge badge-red">全ての投資が無駄になる</span></td>
+        </tr>
+        <tr>
+          <td>関係深化せずフェードアウト</td>
+          <td>フェーズ7</td>
+          <td>配信が自分ごとにならない</td>
+          <td><span class="badge badge-yellow">長期戦・ドロップが多い</span></td>
+        </tr>
+        <tr>
+          <td>問い合わせを先延ばし</td>
+          <td>フェーズ8</td>
+          <td>「今は早い」「有料かも」</td>
+          <td><span class="badge badge-yellow">背中押しメッセージが必要</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Issues -->
+  <div class="section">
+    <div class="section-title">現時点での課題整理</div>
+    <div class="issue-grid">
+      <div class="issue-card">
+        <h4>✅ 接点がある（または作れる）フェーズ</h4>
+        <ul class="issue-list">
+          <li><span class="dot dot-green"></span>フェーズ2：保存数・Exploreへの表示が鍵</li>
+          <li><span class="dot dot-green"></span>フェーズ3：1枚目のフック、プロフィール文が決定的</li>
+          <li><span class="dot dot-green"></span>フェーズ4：投稿の蓄積・一貫性（時間がかかる）</li>
+          <li><span class="dot dot-green"></span>フェーズ5：CTAの言葉と設計</li>
+          <li><span class="dot dot-green"></span>フェーズ6：PDFの品質</li>
+          <li><span class="dot dot-green"></span>フェーズ7〜8：配信・問い合わせ窓口</li>
+        </ul>
+      </div>
+      <div class="issue-card">
+        <h4>🕳️ 現在「穴」になっているフェーズ</h4>
+        <ul class="issue-list">
+          <li><span class="dot dot-orange"></span>フェーズ0〜1：接触不可。無理に動く必要なし</li>
+          <li><span class="dot dot-red"></span><strong>フェーズ3の入口：Instagramアカウント未開設</strong>→ 全フェーズがまだ機能していない</li>
+          <li><span class="dot dot-red"></span><strong>フェーズ5：LINE未開設</strong> → 登録の仕組みがない</li>
+        </ul>
+        <div style="margin-top:16px;padding:12px;background:#FEE2E2;border-radius:8px;font-size:12px;">
+          <strong>今すぐ進めるべき最優先:</strong><br>
+          1. Instagramアカウント開設<br>
+          2. LINE公式アカウント開設<br>
+          3. ロードマップPDF制作（リサーチ完了後）
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  YAMAJU Inc. — Customer Journey v2 — 2026-06-06 — Research Dept.
+</div>
+
+</body>
+</html>

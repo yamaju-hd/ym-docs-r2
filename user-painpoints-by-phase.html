@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ユーザー困り事・悩みリスト｜YAMAJU Research</title>
+<style>
+  :root {
+    --navy: #0C1C34;
+    --navy-mid: #1a2f52;
+    --navy-light: #2d4a7a;
+    --orange: #D4845A;
+    --orange-light: #F2A97E;
+    --orange-pale: #fdf0e8;
+    --cream: #faf8f5;
+    --gray: #6b7280;
+    --gray-light: #f3f4f6;
+    --red: #dc2626;
+    --red-pale: #fef2f2;
+    --yellow: #d97706;
+    --yellow-pale: #fffbeb;
+    --green: #059669;
+    --green-pale: #ecfdf5;
+    --text: #1f2937;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* Header */
+  .site-header {
+    background: var(--navy);
+    color: white;
+    padding: 40px 24px 32px;
+    text-align: center;
+  }
+  .site-header .label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--orange-light);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .site-header h1 {
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .site-header .meta {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+  }
+
+  /* Nav pills */
+  .nav-pills {
+    background: var(--navy-mid);
+    padding: 12px 24px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-pill {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.8);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .nav-pill:hover {
+    background: var(--orange);
+    color: white;
+    border-color: var(--orange);
+  }
+
+  /* Main layout */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* Section heading */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 48px 0 24px;
+  }
+  .section-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--navy);
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .section-header .sub {
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 2px;
+  }
+
+  /* Part banner */
+  .part-banner {
+    background: var(--navy);
+    color: white;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 48px 0 28px;
+  }
+  .part-banner .part-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--orange-light);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .part-banner h2 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .part-banner p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 6px;
+  }
+
+  /* STEP card */
+  .step-card {
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border: 1px solid #e5e7eb;
+  }
+  .step-card-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .step-badge {
+    background: var(--navy);
+    color: white;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .step-card-header .step-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    flex: 1;
+  }
+  .step-card-header .step-meta {
+    font-size: 11px;
+    color: var(--gray);
+    margin-top: 3px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .step-meta-chip {
+    background: var(--gray-light);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    color: var(--gray);
+  }
+  .step-meta-chip.cjm {
+    background: #ede9fe;
+    color: #6d28d9;
+  }
+  .regret-chip {
+    background: var(--red-pale);
+    color: var(--red);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .step-card-body {
+    padding: 16px 20px;
+  }
+
+  /* Sub-category */
+  .sub-category {
+    margin-bottom: 18px;
+  }
+  .sub-category-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--orange-pale);
+  }
+
+  /* Pain point list */
+  .pain-list {
+    list-style: none;
+  }
+  .pain-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 14px;
+    color: var(--text);
+    border-bottom: 1px solid #f9fafb;
+  }
+  .pain-list li:last-child {
+    border-bottom: none;
+  }
+  .pain-list li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--orange);
+    border-radius: 50%;
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+  .pain-list li .tag {
+    display: inline-block;
+    background: var(--red-pale);
+    color: var(--red);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .pain-list li .tag.data {
+    background: #ede9fe;
+    color: #7c3aed;
+  }
+
+  /* Phase table */
+  .phase-table-wrap {
+    overflow-x: auto;
+    margin: 0 0 32px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead tr {
+    background: var(--navy);
+    color: white;
+  }
+  thead th {
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+  }
+  tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+  }
+  tbody tr:hover {
+    background: #f9fafb;
+  }
+  tbody td {
+    padding: 10px 12px;
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) {
+    background: #f9fafb;
+  }
+  tbody tr:nth-child(even):hover {
+    background: #f3f4f6;
+  }
+
+  /* Persona B */
+  .persona-b-card {
+    background: #ede9fe;
+    border: 1px solid #c4b5fd;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .persona-b-card .pb-header {
+    background: #7c3aed;
+    color: white;
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .persona-b-card .pb-body {
+    padding: 14px 18px;
+  }
+
+  /* Priority matrix */
+  .priority-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+    margin: 20px 0 32px;
+  }
+  .priority-card {
+    background: white;
+    border-radius: 10px;
+    padding: 14px 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .priority-card .p-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .stars {
+    color: var(--orange);
+    font-size: 13px;
+  }
+  .p-category {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    flex: 1;
+  }
+  .p-phases {
+    font-size: 11px;
+    color: var(--gray);
+    margin-top: 4px;
+  }
+
+  /* Top demand section */
+  .demand-section {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 32px 0;
+    color: white;
+  }
+  .demand-section h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--orange-light);
+    margin-bottom: 16px;
+  }
+  .demand-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .demand-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .demand-num {
+    width: 28px;
+    height: 28px;
+    background: var(--orange);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .demand-text {
+    flex: 1;
+  }
+  .demand-text strong {
+    display: block;
+    font-size: 14px;
+    color: white;
+    margin-bottom: 2px;
+  }
+  .demand-text span {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* Regret ranking */
+  .regret-table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #fecaca;
+    margin: 20px 0;
+  }
+  .regret-table .rt-header {
+    background: var(--red);
+    color: white;
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .regret-row {
+    display: flex;
+    align-items: center;
+    padding: 11px 18px;
+    border-bottom: 1px solid #fef2f2;
+    gap: 12px;
+    font-size: 13px;
+  }
+  .regret-row:last-child {
+    border-bottom: none;
+  }
+  .regret-rank {
+    width: 28px;
+    height: 28px;
+    background: var(--red-pale);
+    color: var(--red);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .regret-rank.top3 {
+    background: var(--red);
+    color: white;
+  }
+  .regret-row .regret-content {
+    flex: 1;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .regret-row .regret-source {
+    font-size: 11px;
+    color: var(--gray);
+    white-space: nowrap;
+  }
+
+  /* Next actions */
+  .next-actions {
+    background: var(--green-pale);
+    border: 1px solid #a7f3d0;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 40px;
+  }
+  .next-actions h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 12px;
+  }
+  .next-actions ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .next-actions li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: #065f46;
+  }
+  .next-actions li::before {
+    content: '→';
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* Stress chart */
+  .stress-chart {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    margin: 20px 0;
+  }
+  .stress-chart h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 16px;
+  }
+  .stress-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .stress-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .stress-label {
+    font-size: 12px;
+    color: var(--gray);
+    width: 80px;
+    flex-shrink: 0;
+    text-align: right;
+  }
+  .stress-bar-wrap {
+    flex: 1;
+    height: 20px;
+    background: #f3f4f6;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .stress-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+  .stress-value {
+    font-size: 11px;
+    color: var(--gray);
+    width: 60px;
+    flex-shrink: 0;
+    font-style: italic;
+  }
+
+  @media (max-width: 640px) {
+    .step-card-header { flex-direction: column; }
+    .step-meta-chip { font-size: 10px; }
+    .priority-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="label">YAMAJU Inc. — Research Department</div>
+  <h1>ユーザー困り事・悩みリスト<br>フェーズ別 詳細版</h1>
+  <div class="meta">作成日: 2026-06-06 ｜ インプット: ペルソナ確定版 / CJMv2 / 不安後悔調査 / ローン予算分析</div>
+</header>
+
+<nav class="nav-pills">
+  <a href="#overview" class="nav-pill">概要</a>
+  <a href="#personaA" class="nav-pill">ペルソナA（探索期）</a>
+  <a href="#personaB" class="nav-pill">ペルソナB（セカンドオピニオン）</a>
+  <a href="#matrix" class="nav-pill">全体マトリクス</a>
+  <a href="#demand" class="nav-pill">需要度ランキング</a>
+  <a href="#regret" class="nav-pill">後悔ランキング</a>
+</nav>
+
+<div class="container">
+
+  <!-- OVERVIEW -->
+  <div id="overview">
+    <div class="section-header">
+      <div class="section-icon">📋</div>
+      <div>
+        <div class="section-header h2" style="font-size:18px;font-weight:700;color:var(--navy);">このドキュメントの目的</div>
+        <div class="sub">解決策を設計する前に、ユーザーの悩みを網羅的に把握する</div>
+      </div>
+    </div>
+
+    <div style="background:white;border-radius:12px;padding:20px 24px;border:1px solid #e5e7eb;margin-bottom:32px;">
+      <p style="font-size:14px;color:var(--text);line-height:1.8;margin-bottom:12px;">
+        悩みには2つの軸がある。<strong>①CJMフェーズ</strong>（山﨑さんとの関係性の段階）と<strong>②家づくりステップ</strong>（実際のプロセスの段階）。この2軸を統合して整理した。
+      </p>
+      <p style="font-size:14px;color:var(--text);line-height:1.8;">
+        解決策の設計はこのリストが完成してから行う。<br>
+        山﨑さんが提供できること（ロードマップ・LINE相談・会社比較資料・打ち合わせ同席・予算提示）は、<strong>このリストを見て「どの悩みに対応するか」を決める</strong>ための素材として使う。
+      </p>
+    </div>
+
+    <div class="phase-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>CJMフェーズ</th>
+            <th>家づくりSTEP</th>
+            <th>悩みの質</th>
+            <th>最大の不安</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>フェーズ2</strong> 検索開始</td>
+            <td>STEP 1</td>
+            <td>情報の多さ・混乱</td>
+            <td>「何から始めればいいか分からない」</td>
+          </tr>
+          <tr>
+            <td><strong>フェーズ3</strong> 発見・評価</td>
+            <td>STEP 1〜2</td>
+            <td>「信頼できるか」の判断</td>
+            <td>「また誰かに誘導されるのでは」</td>
+          </tr>
+          <tr>
+            <td><strong>フェーズ4</strong> 信頼形成</td>
+            <td>STEP 1〜3</td>
+            <td>全体像の把握・資金</td>
+            <td>「いくらかかるか全体が見えない」</td>
+          </tr>
+          <tr>
+            <td><strong>フェーズ5</strong> LINE登録</td>
+            <td>STEP 2〜3</td>
+            <td>資金・土地の具体的不安</td>
+            <td>「営業じゃない人に相談したい」</td>
+          </tr>
+          <tr>
+            <td><strong>フェーズ6</strong> PDF活用</td>
+            <td>STEP 2〜3</td>
+            <td>全体像をもらい次の行動</td>
+            <td>「どの順番で何をすれば良いか」</td>
+          </tr>
+          <tr>
+            <td><strong>フェーズ7</strong> 関係深化</td>
+            <td>STEP 3〜4</td>
+            <td>土地・HM選びの具体的困りごと</td>
+            <td>「誰に聞けば中立なことを言ってくれるか」</td>
+          </tr>
+          <tr>
+            <td><strong>フェーズ8</strong> 相談行動</td>
+            <td>STEP 4〜6</td>
+            <td>設計・契約の「これでいいか」確認</td>
+            <td>「後悔しないか誰かに確認してほしい」</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PERSONA A -->
+  <div id="personaA">
+    <div class="part-banner">
+      <div class="part-label">PART 1</div>
+      <h2>ペルソナA「探索・比較期」の悩みマップ</h2>
+      <p>田中健太・美咲 夫婦 / 33・31歳 / 世帯年収700万 / 第1子0〜1歳 / 展示場未訪問</p>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step-card">
+      <div class="step-card-header">
+        <div class="step-badge">STEP 1</div>
+        <div>
+          <div class="step-title">情報収集・理想イメージ化</div>
+          <div class="step-meta">
+            <span class="step-meta-chip cjm">CJM フェーズ2〜4</span>
+            <span class="step-meta-chip">所要時間: 約1ヶ月</span>
+            <span class="regret-chip">後悔: 「もっと早く調べておけば」</span>
+          </div>
+        </div>
+      </div>
+      <div class="step-card-body">
+        <div class="sub-category">
+          <div class="sub-category-title">情報面の悩み</div>
+          <ul class="pain-list">
+            <li>何から始めればいいか分からない<span class="tag data">HOMES 1位</span></li>
+            <li>情報が多すぎて、何が正しいか分からない</li>
+            <li>Instagram・YouTube・ブログで言っていることがバラバラで混乱する</li>
+            <li>比較サイト（スーモ・ホームズ）に登録したら電話・メールが大量に来て怖くなった</li>
+            <li>「注文住宅・建売・マンション・中古」の違いと自分への向き不向きが分からない</li>
+            <li>「HMと工務店」の違いが分からない</li>
+            <li>家づくりの専門用語（工法・断熱・ZEH・建ぺい率・容積率・延床面積）が分からない</li>
+            <li>何を優先すれば良いか分からない（立地？広さ？デザイン？性能？価格？）</li>
+            <li>地元の工務店の探し方が分からない</li>
+            <li>比較サイトやポータルの情報が「誰かの利益のために書かれている」と感じている</li>
+          </ul>
+        </div>
+        <div class="sub-category">
+          <div class="sub-category-title">行動面の悩み</div>
+          <ul class="pain-list">
+            <li>子どもが小さくて情報収集する時間が取れない（深夜スキマ時間のみ）</li>
+            <li>夫婦で情報収集のスピードが違う（どちらかが積極的、どちらかが受け身）</li>
+            <li>「勉強しなきゃ」と思うが何を勉強すれば良いか分からない</li>
+            <li>住宅展示場にいきなり行くと営業に押されるという話を聞いて怖い</li>
+            <li>どのタイミングで展示場に行けば良いか分からない</li>
+          </ul>
+        </div>
+        <div class="sub-category">
+          <div class="sub-category-title">精神面の悩み</div>
+          <ul class="pain-list">
+            <li>「知識のない自分が、一生で一番大きな買い物をする」という漠然とした恐怖</li>
+            <li>「何も知らないうちに営業にはめられそう」という不安</li>
+            <li>「いつかは家が欲しい」と思いながら何年も先延ばしにしてきた罪悪感</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-card">
+      <div class="step-card-header">
+        <div class="step-badge">STEP 2</div>
+        <div>
+          <div class="step-title">資金計画・住宅ローン検討</div>
+          <div class="step-meta">
+            <span class="step-meta-chip cjm">CJM フェーズ3〜6</span>
+            <span class="step-meta-chip">★★★★★ 重要度MAX</span>
+            <span class="regret-chip">後悔: THE ROOM TOUR 4位</span>
+          </div>
+        </div>
+      </div>
+      <div class="step-card-body">
+        <div class="sub-category">
+          <div class="sub-category-title">「いくら借りるか」の悩み</div>
+          <ul class="pain-list">
+            <li>いくら借りられるのか分からない</li>
+            <li>「借りられる額」と「返せる額」の違いを知らない<span class="tag">罠</span></li>
+            <li>審査金利（3〜4%）と実際の適用金利（1%前後）の違いを知らない<span class="tag">罠</span></li>
+            <li>変動金利と固定金利、どちらが正解か分からない（2025年以降の利上げで特に混乱）</li>
+            <li>ペアローンのメリット・デメリットが分からない</li>
+            <li>育休中の妻の収入はローン審査でどう扱われるのか分からない</li>
+            <li>頭金はいくら入れるべきか分からない</li>
+            <li>フラット35はどんな人に向いているのか分からない</li>
+          </ul>
+        </div>
+        <div class="sub-category">
+          <div class="sub-category-title">「隠れたコスト」の悩み</div>
+          <ul class="pain-list">
+            <li>諸費用（登記・仲介手数料・ローン手数料 = 物件価格の3〜7%）を想定していない<span class="tag">罠</span></li>
+            <li>地盤改良費（50〜100万円）が後から発生することを知らない</li>
+            <li>外構・照明・カーテン・家電の費用（200〜300万円）を予算に入れていない<span class="tag">罠</span></li>
+            <li>引越し費用・仮住まい費用を忘れる</li>
+            <li>固定資産税（年20〜40万円）を将来の生活費に入れていない</li>
+            <li>建物価格だけ見て「予算内」と思っているが総額は全く違う</li>
+          </ul>
+        </div>
+        <div class="sub-category">
+          <div class="sub-category-title">「判断できない」の悩み</div>
+          <ul class="pain-list">
+            <li>「毎月いくら返せるのか」が今の家賃感覚で計算して良いのか分からない</li>
+            <li>複数の銀行に仮審査を出すと信用情報に影響するか不安</li>
+            <li>住宅ローン控除の仕組みと得になる金額の計算方法が分からない</li>
+            <li>「2,000万の家」と「5,000万の家」で何が変わるのか具体的にイメージできない</li>
+            <li>「どのくらいの価格帯を検討すれば良いか」が分からないので何も調べられない</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-card">
+      <div class="step-card-header">
+        <div class="step-badge">STEP 3</div>
+        <div>
+          <div class="step-title">土地探し</div>
+          <div class="step-meta">
+            <span class="step-meta-chip cjm">CJM フェーズ5〜7</span>
+            <span class="step-meta-chip">所要時間: 3ヶ月〜1年以上（最長）</span>
+            <span class="regret-chip">HOMES 2位「土地が見つからない」</span>
+          </div>
+        </div>
+      </div>
+      <div class="step-card-body">
+        <div class="sub-category">
+          <div class="sub-category-title">「何が良い土地か分からない」</div>
+          <ul class="pain-list">
+            <li>土地の良し悪しを判断する基準が自分にない</li>
+            <li>首都圏では予算内で希望エリアに土地が見つからない</li>
+            <li>建築条件付き土地の意味・デメリットを知らない（HMを自由に選べないことを後から知る）<span class="tag">罠</span></li>
+            <li>旗竿地・変形地のメリット・デメリットが分からない</li>
+            <li>用途地域・建ぺい率・容積率が何を意味するか分からない</li>
+            <li>ハザードマップ（洪水・土砂・液状化）のチェック方法が分からない</li>
+            <li>地盤の良し悪しを見た目では判断できない</li>
+            <li>「南向き・日当たり良好」の落とし穴を知らない（南道路は前の車が気になる等）</li>
+            <li>隣地・前面道路の状況が将来どう影響するか分からない</li>
+          </ul>
+        </div>
+        <div class="sub-category">
+          <div class="sub-category-title">「プロセス」の悩み</div>
+          <ul class="pain-list">
+            <li>土地を先に買うべきか、HM/工務店と一緒に探すべきか順番が分からない</li>
+            <li>「土地から探す」vs「建売から探す」vs「中古」どれが自分に合っているか分からない</li>
+            <li>不動産会社の言葉を信頼していいか分からない</li>
+            <li>「良い土地はすぐ売れる」という言葉に煽られて、本当に決断すべきか分からない</li>
+            <li>希望エリアで予算内の土地が出てこず、妥協のラインが分からない</li>
+          </ul>
+        </div>
+        <div class="sub-category">
+          <div class="sub-category-title">精神面の悩み</div>
+          <ul class="pain-list">
+            <li>「気に入った土地が他の人に取られる」焦りが繰り返し発生する精神的消耗</li>
+            <li>毎週末不動産会社を回るが手応えがなく疲弊する</li>
+            <li>「いつか出てくる」と思っていたら1年経ってしまった</li>
+            <li>土地で予算をオーバーしたら建物はどこで削るのか分からない</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-card">
+      <div class="step-card-header">
+        <div class="step-badge">STEP 4</div>
+        <div>
+          <div class="step-title">HM・工務店選び</div>
+          <div class="step-meta">
+            <span class="step-meta-chip cjm">CJM フェーズ6〜8</span>
+            <span class="step-meta-chip">所要時間: 1〜3ヶ月</span>
+            <span class="regret-chip">AtHome 9位 / THE ROOM TOUR 10位</span>
+          </div>
+        </div>
+      </div>
+      <div class="step-card-body">
+        <div class="sub-category">
+          <div class="sub-category-title">「比較できない」の悩み</div>
+          <ul class="pain-list">
+            <li>HMと工務店の具体的な違い・選ぶ基準が分からない</li>
+            <li>大手HMは安心なのか、小さい工務店でも大丈夫なのか判断できない</li>
+            <li>複数社に見積もりを出してもらっても比較の仕方が分からない（条件が揃っていない）</li>
+            <li>「ウチが一番安い」「ウチが一番性能が高い」と言われるがどこを信じれば良いか分からない</li>
+            <li>住宅性能（耐震等級・断熱性能・UA値・C値）の数字の意味・基準が分からない</li>
+            <li>「工法（在来工法・2×4・RC・鉄骨）」の違いと向き不向きが分からない</li>
+            <li>完成現場見学会に行っても良し悪しの判断ポイントが分からない</li>
+          </ul>
+        </div>
+        <div class="sub-category">
+          <div class="sub-category-title">「担当者・信頼」の悩み</div>
+          <ul class="pain-list">
+            <li>担当営業マンの良し悪しを見極められない（愛想が良ければ良いと思ってしまう）</li>
+            <li>相見積もりを取ることを「失礼」と思っていて言いにくい</li>
+            <li>工務店は「倒産したら家が完成しない」という話を聞いて不安</li>
+            <li>アフターフォロー・保証内容の比較方法が分からない（10年保証の中身が違う）</li>
+            <li>途中で担当者が変わることへの不安</li>
+            <li>「この会社で大丈夫か」を確認する方法が分からない</li>
+          </ul>
+        </div>
+        <div class="sub-category">
+          <div class="sub-category-title">決断の悩み</div>
+          <ul class="pain-list">
+            <li>何社まで絞ってから本決定すれば良いか分からない</li>
+            <li>「もっと他にも見れば良かった」と後悔したくないが比較しすぎると疲弊する</li>
+            <li>契約を急かされているが本当に今決めていいのか分からない</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-card">
+      <div class="step-card-header">
+        <div class="step-badge">STEP 5</div>
+        <div>
+          <div class="step-title">設計・間取り・打ち合わせ</div>
+          <div class="step-meta">
+            <span class="step-meta-chip cjm">CJM フェーズ8</span>
+            <span class="step-meta-chip">所要時間: 3〜6ヶ月（最も体力消耗）</span>
+            <span class="regret-chip">🔴 後悔の70%以上がここで発生</span>
+          </div>
+        </div>
+      </div>
+      <div class="step-card-body">
+        <div class="sub-category">
+          <div class="sub-category-title">設計・間取りの悩み</div>
+          <ul class="pain-list">
+            <li>「良い間取り」の基準・評価軸が分からない</li>
+            <li>動線設計の失敗（トイレ動線・回遊動線・バリアフリー）をどう防ぐか分からない<span class="tag data">AtHome 1位</span></li>
+            <li>収納の量・配置・使いやすさを図面だけでは想像できない<span class="tag data">AtHome 3位</span></li>
+            <li>コンセントの位置・数を「住んでみないと分からない」状態で決めることへの不安<span class="tag data">スーモ 1位(23.5%)</span></li>
+            <li>窓の位置・大きさ（採光 vs 断熱 vs プライバシー）のトレードオフが分からない<span class="tag data">AtHome 5位</span></li>
+            <li>「実際に住んだらどう感じるか」を図面から想像する力がない</li>
+            <li>ショールームで見た素材・設備が実際の空間でどう見えるか分からない</li>
+            <li>無垢材・タイル・造作家具などの実用性の問題（傷・寒さ等）が分からない</li>
+            <li>冷暖房効率に影響する断熱性能・窓の仕様の選び方が分からない<span class="tag data">AtHome 6位</span></li>
+            <li>外構を設計段階から考えておかないと予算が尽きることを知らない<span class="tag data">THE ROOM TOUR 5位</span></li>
+          </ul>
+        </div>
+        <div class="sub-category">
+          <div class="sub-category-title">プロセス・精神面の悩み</div>
+          <ul class="pain-list">
+            <li>決めることが多すぎて疲弊する（数百〜数千項目）</li>
+            <li>仕事・育児と並行しながら打ち合わせをこなす体力・時間がない<span class="tag data">SUUMO 1位の声</span></li>
+            <li>「決定疲れ（Decision Fatigue）」で終盤に重要な細部を曖昧に決めてしまう</li>
+            <li>担当者の提案が分からないまま「これで大丈夫ですか？」と聞くことしかできない</li>
+            <li>HMの提案に「それはおかしい」と思っても素人が専門家に反論できない</li>
+            <li>夫婦で意見が違って揉める（優先事項のすり合わせができていない）</li>
+            <li>設計図面の読み方が分からない</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6〜8 condensed -->
+    <div class="step-card">
+      <div class="step-card-header">
+        <div class="step-badge">STEP 6</div>
+        <div>
+          <div class="step-title">契約</div>
+          <div class="step-meta">
+            <span class="step-meta-chip cjm">CJM フェーズ8以降</span>
+            <span class="step-meta-chip">所要時間: 約1ヶ月</span>
+          </div>
+        </div>
+      </div>
+      <div class="step-card-body">
+        <ul class="pain-list">
+          <li>契約書の内容が難しくて何を確認すれば良いか分からない</li>
+          <li>「後から変更できない内容」が何か事前に教えてもらえない<span class="tag">罠</span></li>
+          <li>契約後の仕様変更で追加費用が発生するパターンを知らない<span class="tag">罠</span></li>
+          <li>ローンの金利タイプ（変動 vs 固定）の最終判断をどちらにするか迷い続けている</li>
+          <li>住宅ローン本審査の手続きの煩雑さ・タイミングが分からない</li>
+          <li>「つなぎ融資」の必要性と費用が分からない</li>
+          <li>契約時の値引き交渉：してもいいのか・どう交渉すれば失礼にならないか分からない</li>
+          <li>「もっと良い会社があったかも」という後悔が拭えないまま捺印</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-card-header">
+        <div class="step-badge">STEP 7</div>
+        <div>
+          <div class="step-title">着工〜完成</div>
+          <div class="step-meta">
+            <span class="step-meta-chip cjm">着工中</span>
+            <span class="step-meta-chip">所要時間: 4〜6ヶ月</span>
+          </div>
+        </div>
+      </div>
+      <div class="step-card-body">
+        <ul class="pain-list">
+          <li>工事現場に行くべき頻度・見るべきポイントが分からない</li>
+          <li>施工ミス・手抜き工事がないか確認できる知識がない</li>
+          <li>完成前の仕様変更が可能か・費用はどのくらいかかるか分からない</li>
+          <li>工期が延びた場合の生活（仮住まい費用・賃貸更新）の対処が分からない</li>
+          <li>着工中の「大丈夫かな」という漠然とした不安をどこにぶつければ良いか分からない</li>
+          <li>近隣への挨拶・工事中のクレーム対応をどうすれば良いか分からない</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-card-header">
+        <div class="step-badge">STEP 8</div>
+        <div>
+          <div class="step-title">引き渡し・入居後</div>
+          <div class="step-meta">
+            <span class="step-meta-chip">入居後</span>
+          </div>
+        </div>
+      </div>
+      <div class="step-card-body">
+        <ul class="pain-list">
+          <li>施主検査で何をどこまでチェックすれば良いか分からない</li>
+          <li>不具合・施工ミスを発見したときの報告方法・保証の使い方が分からない</li>
+          <li>外構・家具・カーテン予算が足りない（典型的な後悔パターン）</li>
+          <li>固定資産税の金額が想定より高くて驚く</li>
+          <li>住宅ローン控除（減税）の確定申告のやり方が分からない</li>
+          <li>メンテナンスのスケジュール・費用の見込み方が分からない</li>
+          <li>「住んでみて分かる不満」が入居後1年以内に次々出てきて後悔する</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Stress chart -->
+    <div class="stress-chart">
+      <h4>精神的負荷マップ（フェーズ別）</h4>
+      <div class="stress-bars">
+        <div class="stress-row">
+          <div class="stress-label">情報収集</div>
+          <div class="stress-bar-wrap"><div class="stress-bar" style="width:45%;background:#f59e0b;"></div></div>
+          <div class="stress-value">中（混乱）</div>
+        </div>
+        <div class="stress-row">
+          <div class="stress-label">資金計画</div>
+          <div class="stress-bar-wrap"><div class="stress-bar" style="width:65%;background:#f97316;"></div></div>
+          <div class="stress-value">高（不安）</div>
+        </div>
+        <div class="stress-row">
+          <div class="stress-label">土地探し</div>
+          <div class="stress-bar-wrap"><div class="stress-bar" style="width:80%;background:#ef4444;"></div></div>
+          <div class="stress-value">最長・消耗</div>
+        </div>
+        <div class="stress-row">
+          <div class="stress-label">HM選び</div>
+          <div class="stress-bar-wrap"><div class="stress-bar" style="width:70%;background:#ef4444;"></div></div>
+          <div class="stress-value">高（比較疲れ）</div>
+        </div>
+        <div class="stress-row">
+          <div class="stress-label">設計打合せ</div>
+          <div class="stress-bar-wrap"><div class="stress-bar" style="width:100%;background:#dc2626;"></div></div>
+          <div class="stress-value">★最大</div>
+        </div>
+        <div class="stress-row">
+          <div class="stress-label">契約手続き</div>
+          <div class="stress-bar-wrap"><div class="stress-bar" style="width:55%;background:#f97316;"></div></div>
+          <div class="stress-value">中〜高</div>
+        </div>
+        <div class="stress-row">
+          <div class="stress-label">着工〜完成</div>
+          <div class="stress-bar-wrap"><div class="stress-bar" style="width:40%;background:#f59e0b;"></div></div>
+          <div class="stress-value">中（漠然）</div>
+        </div>
+        <div class="stress-row">
+          <div class="stress-label">入居後</div>
+          <div class="stress-bar-wrap"><div class="stress-bar" style="width:50%;background:#f59e0b;"></div></div>
+          <div class="stress-value">中（後悔）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSONA B -->
+  <div id="personaB">
+    <div class="part-banner" style="background:#4c1d95;">
+      <div class="part-label">PART 2</div>
+      <h2>ペルソナB「セカンドオピニオン層」の悩みマップ</h2>
+      <p>鈴木翔・由美 夫婦 / 35・33歳 / 世帯年収850万 / HM打ち合わせ中 / 困り度：高</p>
+    </div>
+
+    <div class="persona-b-card">
+      <div class="pb-header">「見積もり・提案が適正か分からない」</div>
+      <div class="pb-body">
+        <ul class="pain-list">
+          <li>この見積もりは相場より高いのか安いのか判断できない</li>
+          <li>「オプション追加」を勧められているが本当に必要か分からない</li>
+          <li>「グレードアップしないと品質が落ちる」と言われたが本当か確認できない</li>
+          <li>建材・設備の価格が適正かどうか素人には分からない</li>
+          <li>「今月末までに決めないと値引きできない」という催促が本当かどうか分からない<span class="tag">罠</span></li>
+          <li>値引き交渉の余地がどれくらいあるのか分からない</li>
+          <li>他社と本当に比べられているのか自信がない</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="persona-b-card">
+      <div class="pb-header">「担当者・会社を信頼していいか分からない」</div>
+      <div class="pb-body">
+        <ul class="pain-list">
+          <li>担当者が本当に自分たちの利益を考えてくれているのか分からない</li>
+          <li>担当者が「良い人そう」だが、それと「良い家を建ててくれるか」は別の話</li>
+          <li>会社の財務状況・倒産リスクを調べる方法が分からない</li>
+          <li>アフターフォローの内容が口頭の説明だけで不安</li>
+          <li>他社（工務店 vs HM）を比べずにここに決めようとしていることへの後ろめたさ</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="persona-b-card">
+      <div class="pb-header">「設計の内容が本当に良いか分からない」</div>
+      <div class="pb-body">
+        <ul class="pain-list">
+          <li>提案された間取りが本当に最適か、他の案があるか分からない</li>
+          <li>担当の設計士に「ここを変えたい」と言っていいのか、関係が壊れるか心配</li>
+          <li>仕様が今の希望だけで設計されていて、将来の生活変化に対応できるか不安</li>
+          <li>断熱・耐震・設備の仕様が標準で良いのか、アップグレードすべきか判断できない</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="persona-b-card">
+      <div class="pb-header">「今の段階でまだ変更できるか分からない」</div>
+      <div class="pb-body">
+        <ul class="pain-list">
+          <li>「もっと良い会社があったかも」と思いながら打ち合わせが進んでいる</li>
+          <li>変更したい点があるが、打ち合わせが進んでいて今更言い出しにくい</li>
+          <li>契約直前だが、この会社でなくてもまだ変えられるか分からない</li>
+          <li>もし変えた場合の費用（キャンセル費用・今まで払った費用）がどうなるか分からない</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATRIX -->
+  <div id="matrix">
+    <div class="part-banner">
+      <div class="part-label">PART 3</div>
+      <h2>全体マトリクス（俯瞰）</h2>
+      <p>11カテゴリ × 頻度スコアで優先度を可視化</p>
+    </div>
+
+    <div class="priority-grid">
+      <div class="priority-card">
+        <div class="p-header">
+          <span class="stars">★★★★★</span>
+          <span class="p-category">①全体像・何から始めるか</span>
+        </div>
+        <div class="p-phases">ペルソナA STEP1 / フェーズ2〜4</div>
+      </div>
+      <div class="priority-card">
+        <div class="p-header">
+          <span class="stars">★★★★★</span>
+          <span class="p-category">②お金・ローン・予算</span>
+        </div>
+        <div class="p-phases">ペルソナA STEP2 / フェーズ4〜6</div>
+      </div>
+      <div class="priority-card">
+        <div class="p-header">
+          <span class="stars">★★★★★</span>
+          <span class="p-category">⑥設計・間取りの判断</span>
+        </div>
+        <div class="p-phases">ペルソナA STEP5 / フェーズ8</div>
+      </div>
+      <div class="priority-card">
+        <div class="p-header">
+          <span class="stars">★★★★☆</span>
+          <span class="p-category">③土地の選び方・リスク</span>
+        </div>
+        <div class="p-phases">ペルソナA STEP3 / フェーズ6〜7</div>
+      </div>
+      <div class="priority-card">
+        <div class="p-header">
+          <span class="stars">★★★★☆</span>
+          <span class="p-category">④HM・工務店の選び方</span>
+        </div>
+        <div class="p-phases">ペルソナA/B STEP4〜5</div>
+      </div>
+      <div class="priority-card">
+        <div class="p-header">
+          <span class="stars">★★★★☆</span>
+          <span class="p-category">⑤担当者・会社の信頼性</span>
+        </div>
+        <div class="p-phases">ペルソナA/B STEP4〜6</div>
+      </div>
+      <div class="priority-card">
+        <div class="p-header">
+          <span class="stars">★★★★☆</span>
+          <span class="p-category">⑦見積もり・価格の適正判断</span>
+        </div>
+        <div class="p-phases">ペルソナB STEP5〜6（最大の悩み）</div>
+      </div>
+      <div class="priority-card">
+        <div class="p-header">
+          <span class="stars">★★★★☆</span>
+          <span class="p-category">⑧情報の信頼性・中立性</span>
+        </div>
+        <div class="p-phases">ペルソナA STEP1〜4（全般）</div>
+      </div>
+      <div class="priority-card">
+        <div class="p-header">
+          <span class="stars">★★★★☆</span>
+          <span class="p-category">⑨決断・判断疲れ</span>
+        </div>
+        <div class="p-phases">ペルソナA/B STEP5〜6</div>
+      </div>
+      <div class="priority-card">
+        <div class="p-header">
+          <span class="stars">★★★☆☆</span>
+          <span class="p-category">⑩精神的サポート・伴走</span>
+        </div>
+        <div class="p-phases">ペルソナA/B STEP5〜7</div>
+      </div>
+      <div class="priority-card">
+        <div class="p-header">
+          <span class="stars">★★★☆☆</span>
+          <span class="p-category">⑪着工後・入居後のケア</span>
+        </div>
+        <div class="p-phases">ペルソナA/B STEP7〜8</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEMAND -->
+  <div id="demand">
+    <div class="demand-section">
+      <h3>需要度 ★★★★★ — 山﨑さんに最も需要がある悩みTOP5</h3>
+
+      <div class="demand-item">
+        <div class="demand-num">1</div>
+        <div class="demand-text">
+          <strong>「何から始めるか・全体像が分からない」</strong>
+          <span>→ 山﨑さんが提供できる「ロードマップ」が直撃する悩み。全ペルソナAが共通して持つ</span>
+        </div>
+      </div>
+      <div class="demand-item">
+        <div class="demand-num">2</div>
+        <div class="demand-text">
+          <strong>「中立な立場で教えてくれる人がいない」</strong>
+          <span>→ 比較サイト・HM・工務店は全員「自社の利益がある側」→ 山﨑さんの唯一無二の立場</span>
+        </div>
+      </div>
+      <div class="demand-item">
+        <div class="demand-num">3</div>
+        <div class="demand-text">
+          <strong>「担当者・HMの良し悪しを判断できない」</strong>
+          <span>→ 元業界経験者・実績ある伴走者だから言える「見極め方」</span>
+        </div>
+      </div>
+      <div class="demand-item">
+        <div class="demand-num">4</div>
+        <div class="demand-text">
+          <strong>「見積もりが適正か判断できない」（ペルソナB）</strong>
+          <span>→ セカンドオピニオン需要の核心。困り度が高く、すぐ相談に動く</span>
+        </div>
+      </div>
+      <div class="demand-item">
+        <div class="demand-num">5</div>
+        <div class="demand-text">
+          <strong>「知識がないまま大きな判断をする怖さ」</strong>
+          <span>→ 「事前に知識をつけてから動く」という山﨑さんのコンセプトが直撃</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="demand-section" style="background:#1e3a5f;">
+      <h3 style="color:#93c5fd;">需要度 ★★★★ — 高い需要がある悩みTOP5</h3>
+
+      <div class="demand-item">
+        <div class="demand-num" style="background:#3b82f6;">6</div>
+        <div class="demand-text">
+          <strong>「土地の良し悪しを判断できない」</strong>
+          <span>→ 専門知識が必要で、素人では判断できない最たる分野</span>
+        </div>
+      </div>
+      <div class="demand-item">
+        <div class="demand-num" style="background:#3b82f6;">7</div>
+        <div class="demand-text">
+          <strong>「いくら借りればいいか・資金計画の不安」</strong>
+          <span>→ 全ての判断の出発点。ここが曖昧だと何も動けない</span>
+        </div>
+      </div>
+      <div class="demand-item">
+        <div class="demand-num" style="background:#3b82f6;">8</div>
+        <div class="demand-text">
+          <strong>「設計・間取りでこれで大丈夫か不安」</strong>
+          <span>→ 後悔率最高。設計中に「第三者に確認してほしい」ニーズが最大化する</span>
+        </div>
+      </div>
+      <div class="demand-item">
+        <div class="demand-num" style="background:#3b82f6;">9</div>
+        <div class="demand-text">
+          <strong>「打ち合わせで言いたいことが言えない・押し切られそう」</strong>
+          <span>→ 同席・伴走サービスの需要に直結</span>
+        </div>
+      </div>
+      <div class="demand-item">
+        <div class="demand-num" style="background:#3b82f6;">10</div>
+        <div class="demand-text">
+          <strong>「決断疲れで重要な選択を曖昧にしてしまう」</strong>
+          <span>→ 伴走支援での「判断サポート」に大きな価値がある</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGRET -->
+  <div id="regret">
+    <div class="part-banner">
+      <div class="part-label">参考データ</div>
+      <h2>「知らなかったことで後悔する」TOP10</h2>
+      <p>調査データに基づく後悔ランキング（入居者調査：複数調査統合）</p>
+    </div>
+
+    <div class="regret-table">
+      <div class="rt-header">後悔ランキング — データ根拠あり</div>
+      <div class="regret-row">
+        <div class="regret-rank top3">1</div>
+        <div class="regret-content">間取りの失敗（動線・収納）</div>
+        <div class="regret-source">AtHome 57票・全調査共通1位</div>
+      </div>
+      <div class="regret-row">
+        <div class="regret-rank top3">2</div>
+        <div class="regret-content">コンセントの位置・数が足りない</div>
+        <div class="regret-source">スーモ 23.5%</div>
+      </div>
+      <div class="regret-row">
+        <div class="regret-rank top3">3</div>
+        <div class="regret-content">予算・ローンの組み方の失敗</div>
+        <div class="regret-source">THE ROOM TOUR 4位</div>
+      </div>
+      <div class="regret-row">
+        <div class="regret-rank">4</div>
+        <div class="regret-content">収納不足（量・配置・使いやすさ）</div>
+        <div class="regret-source">AtHome 3位</div>
+      </div>
+      <div class="regret-row">
+        <div class="regret-rank">5</div>
+        <div class="regret-content">周辺環境の確認不足（騒音・交通量）</div>
+        <div class="regret-source">AtHome 後悔調査</div>
+      </div>
+      <div class="regret-row">
+        <div class="regret-rank">6</div>
+        <div class="regret-content">外構を後回しにして予算切れ</div>
+        <div class="regret-source">THE ROOM TOUR 5位</div>
+      </div>
+      <div class="regret-row">
+        <div class="regret-rank">7</div>
+        <div class="regret-content">地盤改良費の想定外出費</div>
+        <div class="regret-source">HOMES調査 3位</div>
+      </div>
+      <div class="regret-row">
+        <div class="regret-rank">8</div>
+        <div class="regret-content">窓の位置・断熱性能の軽視</div>
+        <div class="regret-source">AtHome 5〜6位</div>
+      </div>
+      <div class="regret-row">
+        <div class="regret-rank">9</div>
+        <div class="regret-content">担当者・HM選びのミス</div>
+        <div class="regret-source">AtHome 9位 / THE ROOM TOUR 10位</div>
+      </div>
+      <div class="regret-row">
+        <div class="regret-rank">10</div>
+        <div class="regret-content">着工後の仕様変更（費用が高かった）</div>
+        <div class="regret-source">SUUMO 体験談</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEXT ACTIONS -->
+  <div class="next-actions">
+    <h3>次のアクション（解決策設計フェーズへ）</h3>
+    <ul>
+      <li>各悩みに対応する「山﨑さんの解決策メニュー」の設計（ロードマップPDF / LINE個別相談 / 会社比較資料 / 見積もりチェック / 打ち合わせ同席 / 予算別方向性提示）</li>
+      <li>悩みの「重なり」から、1つの解決策が複数の悩みをカバーできる「レバレッジポイント」を特定する</li>
+      <li>需要度TOP5の悩みに対してロードマップPDFが何割をカバーするかを評価する</li>
+    </ul>
+  </div>
+
+</div>
+
+<footer style="background:var(--navy);color:rgba(255,255,255,0.4);text-align:center;padding:20px;font-size:12px;">
+  YAMAJU Inc. — Research Department ｜ 2026-06-06 ｜ user-painpoints-by-phase.md
+</footer>
+
+</body>
+</html>
