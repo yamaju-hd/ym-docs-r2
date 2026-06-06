@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>3C分析サマリー｜山寿株式会社 家づくり伴走支援事業</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    background: #f5f4f0;
+    color: #2c2c2c;
+    line-height: 1.7;
+  }
+
+  /* ─── カバー ─── */
+  .cover {
+    background: linear-gradient(135deg, #0d2137 0%, #1a3a52 50%, #0f5156 100%);
+    color: white;
+    padding: 80px 60px;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .cover .label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #7fd4c1;
+    margin-bottom: 20px;
+  }
+  .cover h1 {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+  .cover h1 span { color: #5ecdbe; }
+  .cover .subtitle {
+    font-size: 16px;
+    color: #b0cece;
+    margin-bottom: 40px;
+  }
+  .cover .meta {
+    display: flex;
+    gap: 32px;
+    font-size: 13px;
+    color: #78909c;
+  }
+  .cover .meta strong { color: #9ac8c4; }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #6ba3a0;
+    text-decoration: none;
+    margin-bottom: 24px;
+    letter-spacing: 0.04em;
+  }
+  .back-link:hover { color: #5ecdbe; }
+
+  /* ─── レイアウト ─── */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* ─── セクション ─── */
+  .section { margin-bottom: 64px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #e8e8e4;
+  }
+  .section-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .badge-customer { background: #e8f5ec; color: #2E7D4F; }
+  .badge-competitor { background: #fff0e8; color: #c45a2a; }
+  .badge-company { background: #e8f0ff; color: #2B5CB8; }
+  .badge-synthesis { background: #f0e8ff; color: #6B3FBF; }
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a2e;
+  }
+
+  /* ─── 統計カード ─── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 700px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  .stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border-top: 3px solid #1a3a52;
+  }
+  .stat-card .num {
+    font-size: 32px;
+    font-weight: 800;
+    color: #1a3a52;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-card .num small { font-size: 16px; font-weight: 600; }
+  .stat-card .lbl { font-size: 12px; color: #666; line-height: 1.4; }
+  .stat-card .src { font-size: 10px; color: #aaa; margin-top: 6px; }
+
+  /* ─── 汎用テーブル ─── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    margin-bottom: 24px;
+  }
+  .data-table th {
+    background: #1a3a52;
+    color: white;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+  }
+  .data-table td {
+    padding: 12px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0ee;
+    vertical-align: top;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:nth-child(even) td { background: #f9f9f7; }
+
+  /* ─── ホワイトカード ─── */
+  .white-card {
+    background: white;
+    border-radius: 12px;
+    padding: 28px 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    margin-bottom: 20px;
+  }
+  .white-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a3a52;
+    margin-bottom: 16px;
+  }
+
+  /* ─── ペインツリー ─── */
+  .pain-tree {
+    background: #f8f8f5;
+    border-radius: 8px;
+    padding: 20px 24px;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+    line-height: 2;
+    border-left: 3px solid #1a3a52;
+  }
+  .pain-tree .surface { color: #c45a2a; font-weight: 700; }
+  .pain-tree .deep { color: #8B1A1A; font-weight: 700; }
+
+  /* ─── フェーズテーブル ─── */
+  .phase-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .phase-good { background: #e8f5ec; color: #2E7D4F; }
+  .phase-maybe { background: #fff8e1; color: #e65100; }
+  .phase-no { background: #fce8e8; color: #c62828; }
+
+  /* ─── ポジショニングマップ ─── */
+  .position-map {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    margin-bottom: 20px;
+  }
+  .position-map h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a3a52;
+    margin-bottom: 20px;
+  }
+  .map-grid {
+    display: grid;
+    grid-template-columns: 40px 1fr 1fr;
+    grid-template-rows: 1fr 1fr 40px;
+    gap: 0;
+    height: 320px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+  .map-label-y {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f3;
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    border-right: 1px solid #e5e5e5;
+  }
+  .map-quadrant {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .q-top-left { background: #f8f8f5; border-right: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5; }
+  .q-top-right { background: #e8f5ec; border-bottom: 1px solid #e5e5e5; }
+  .q-bottom-left { background: #f8f8f5; border-right: 1px solid #e5e5e5; }
+  .q-bottom-right { background: #f8f8f5; }
+  .map-label-x {
+    grid-column: 2 / 4;
+    grid-row: 3;
+    display: flex;
+    background: #f5f5f3;
+    border-top: 1px solid #e5e5e5;
+  }
+  .map-label-x div {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+  }
+  .map-player {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .player-competitor { background: #fce8e8; color: #8B1A1A; }
+  .player-yamaju { background: #0d2137; color: white; }
+  .map-quadrant h4 {
+    font-size: 11px;
+    font-weight: 700;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  /* ─── 強弱表 ─── */
+  .strength-item {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid #f0f0ee;
+  }
+  .strength-item:last-child { border-bottom: none; }
+  .strength-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-green { background: #e8f5ec; }
+  .icon-red { background: #fce8e8; }
+  .strength-item h4 { font-size: 14px; font-weight: 700; color: #1a3a52; margin-bottom: 4px; }
+  .strength-item p { font-size: 13px; color: #555; }
+  .strength-item .note { font-size: 12px; color: #888; margin-top: 4px; font-style: italic; }
+
+  /* ─── USPボックス ─── */
+  .usp-box {
+    background: linear-gradient(135deg, #0d2137, #1a3a52);
+    color: white;
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .usp-box .usp-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #7fd4c1;
+    margin-bottom: 16px;
+  }
+  .usp-box blockquote {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.7;
+    color: white;
+  }
+  .usp-box blockquote span { color: #5ecdbe; }
+
+  /* ─── 統合マトリクス ─── */
+  .matrix-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0;
+  }
+  .matrix-header {
+    background: #1a3a52;
+    color: white;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .matrix-header:last-child { border-right: none; }
+  .matrix-cell {
+    background: white;
+    padding: 16px;
+    font-size: 13px;
+    border-right: 1px solid #f0f0ee;
+    border-bottom: 1px solid #f0f0ee;
+    vertical-align: top;
+  }
+  .matrix-cell.highlight { background: #e8f5ec; font-weight: 600; color: #1a7a4a; }
+  .matrix-wrap {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    margin-bottom: 24px;
+  }
+
+  /* ─── アクションカード ─── */
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 700px) { .action-grid { grid-template-columns: 1fr; } }
+  .action-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border-top: 3px solid #0f5156;
+  }
+  .action-card .step {
+    font-size: 11px;
+    font-weight: 700;
+    color: #0f5156;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .action-card h4 { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .action-card p { font-size: 13px; color: #666; line-height: 1.6; }
+
+  /* ─── インサイトバッジ ─── */
+  .insight-box {
+    background: #fff8e1;
+    border-left: 4px solid #f59f00;
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 13px;
+    color: #4a3500;
+  }
+  .insight-box strong { color: #b36a00; }
+
+  footer {
+    margin-top: 48px;
+    padding: 24px 40px;
+    font-size: 12px;
+    color: #bbb;
+    text-align: center;
+    border-top: 1px solid #e8e8e4;
+  }
+</style>
+</head>
+<body>
+
+<!-- カバー -->
+<div class="cover">
+  <a class="back-link" href="index.html">← Research Hub に戻る</a>
+  <div class="label">Strategy Document · 2026-06-07</div>
+  <h1>3C分析サマリー<br><span>家づくり伴走支援事業</span></h1>
+  <p class="subtitle">Customer × Competitor × Company — 市場機会の構造的分析</p>
+  <div class="meta">
+    <span><strong>作成</strong> CEO室</span>
+    <span><strong>インプット</strong> ペルソナ調査 / 競合分析 / ロードマップ競合調査 / カスタマージャーニー v2</span>
+    <span><strong>事業</strong> STEP1 家づくり伴走支援</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ─── 1. Customer ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-badge badge-customer">Customer</span>
+      <h2 class="section-title">顧客 — 誰に届けるか</h2>
+    </div>
+
+    <!-- 市場規模 -->
+    <div class="white-card">
+      <h3>ターゲット市場の規模</h3>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="num">20<small>万戸</small></div>
+          <div class="lbl">年間新設注文住宅<br>着工戸数</div>
+          <div class="src">国土交通省</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">70<small>%</small></div>
+          <div class="lbl">初めて建てる層<br>の割合</div>
+          <div class="src">推計</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">40<small>%</small></div>
+          <div class="lbl">30代が占める<br>割合</div>
+          <div class="src">国交省R6</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">5〜6<small>万組</small></div>
+          <div class="lbl">毎年入る<br>「初めて30代」</div>
+          <div class="src">上記から推計</div>
+        </div>
+      </div>
+      <div class="insight-box">
+        <strong>接触可能なウィンドウ：</strong> 全体の30〜40%（1.5〜2.4万組/年）が「探索・比較期」にある。展示場未訪問の段階（AtHome調査：46%未訪問）かつ検討期前半6ヶ月が最も介入しやすいタイミング。
+      </div>
+    </div>
+
+    <!-- メインペルソナ -->
+    <div class="white-card">
+      <h3>メインターゲット：ペルソナA「探索・比較期」</h3>
+      <table class="data-table">
+        <tr><th style="width:140px">属性</th><th>詳細</th></tr>
+        <tr><td><strong>プロフィール</strong></td><td>田中 健太（33歳・会社員）+ 美咲（31歳・産休中）/ 世帯年収700万円前後</td></tr>
+        <tr><td><strong>家族</strong></td><td>第1子0〜1歳 / 賃貸2LDK暮らし</td></tr>
+        <tr><td><strong>購入の動機</strong></td><td>妊娠・出産（AlbaLink500人調査 1位）/ 賃貸更新が近づいてきた</td></tr>
+        <tr><td><strong>情報収集</strong></td><td>Instagram・YouTube・Google / 展示場にはまだ行っていない</td></tr>
+        <tr><td><strong>検討期間</strong></td><td>平均12.45ヶ月（AlbaLink調査）/ 出産後6〜12ヶ月で検索が活性化</td></tr>
+        <tr><td><strong>接触チャネル</strong></td><td>Instagram → フォロー → 公式LINE登録 → ロードマップPDF → ステップ配信 → 伴走相談</td></tr>
+      </table>
+
+      <h3 style="margin-top:24px">ペインの構造</h3>
+      <div class="pain-tree">
+        <div class="surface">▍表層の不安（言語化できる）</div>
+        ├─ 「何から始めればいいか分からない」<br>
+        ├─ 「いくら借りていいか分からない」<br>
+        └─ 「どこに頼めばいいか判断できない」<br>
+        <br>
+        <div class="deep">▍深層の不安（本音）</div>
+        ├─ 「営業に言いなりになって損をするかもしれない」<br>
+        ├─ 「知識がないまま一生最大の買い物をするのが怖い」<br>
+        └─ 「後悔したら取り返せない」
+      </div>
+
+      <h3 style="margin-top:24px">本当に欲しいもの（優先順）</h3>
+      <table class="data-table">
+        <tr><th>#</th><th>欲しいもの</th><th>コンテンツ機会</th></tr>
+        <tr><td>1</td><td>全体の地図（ロードマップ） — 「今どこにいるか」を把握したい</td><td>ロードマップPDF</td></tr>
+        <tr><td>2</td><td>中立な味方 — 「営業じゃない人の意見が欲しい」</td><td>SNS・LINE配信</td></tr>
+        <tr><td>3</td><td>事前武装 — 「展示場に行く前に知識をつけたい」</td><td>教育コンテンツ</td></tr>
+        <tr><td>4</td><td>お金の現実 — 「実際いくらかかるか」</td><td>ローン・予算コンテンツ</td></tr>
+        <tr><td>5</td><td>信頼できる専門家 — 「誰に相談すればいい？」</td><td>伴走相談への入口</td></tr>
+      </table>
+    </div>
+
+    <!-- フェーズ別接触可能性 -->
+    <div class="white-card">
+      <h3>フェーズ別 接触可能性マップ</h3>
+      <table class="data-table">
+        <tr>
+          <th>フェーズ</th>
+          <th>行動</th>
+          <th>接触可能性</th>
+          <th>介入方法</th>
+        </tr>
+        <tr>
+          <td>無関心期</td>
+          <td>SNSに触れていない</td>
+          <td><span class="phase-badge phase-no">✗ 不可</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>漠然認識期</td>
+          <td>「いつかは」と感じ始める</td>
+          <td><span class="phase-badge phase-maybe">△ 偶然のみ</span></td>
+          <td>バイラルコンテンツ</td>
+        </tr>
+        <tr>
+          <td><strong>探索期 ◎</strong></td>
+          <td><strong>Instagram/Googleで検索開始</strong></td>
+          <td><span class="phase-badge phase-good">◎ 最も接触しやすい</span></td>
+          <td><strong>教育コンテンツ・リール</strong></td>
+        </tr>
+        <tr>
+          <td><strong>比較期 ◎</strong></td>
+          <td><strong>複数の情報源・会社を比較中</strong></td>
+          <td><span class="phase-badge phase-good">◎ 最も価値を感じる</span></td>
+          <td><strong>PDF・比較コンテンツ</strong></td>
+        </tr>
+        <tr>
+          <td>展示場訪問後</td>
+          <td>特定会社の営業担当がつく</td>
+          <td><span class="phase-badge phase-maybe">△ 関係構築が難しい</span></td>
+          <td>セカンドオピニオン訴求</td>
+        </tr>
+        <tr>
+          <td>契約期</td>
+          <td>会社が絞れている</td>
+          <td><span class="phase-badge phase-no">✗ 介入余地なし</span></td>
+          <td>—</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- ペルソナB -->
+    <div class="white-card">
+      <h3>副ターゲット：ペルソナB「セカンドオピニオン層」</h3>
+      <table class="data-table">
+        <tr><th style="width:140px">属性</th><th>詳細</th></tr>
+        <tr><td><strong>プロフィール</strong></td><td>35・33歳夫婦 / 世帯年収850万円 / HM打ち合わせ中</td></tr>
+        <tr><td><strong>核心の需要</strong></td><td>見積もりチェック・打ち合わせ同席・中立な第三者による検証</td></tr>
+        <tr><td><strong>接触経路</strong></td><td>Google「住宅 セカンドオピニオン」「注文住宅 相談 中立」で検索 / 困り度が高くLINE問い合わせに直結しやすい</td></tr>
+        <tr><td><strong>収益貢献</strong></td><td>困り度が高いため即時収益化しやすい。単発相談料として取りやすい</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─── 2. Competitor ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-badge badge-competitor">Competitor</span>
+      <h2 class="section-title">競合 — 誰と戦うか</h2>
+    </div>
+
+    <!-- 競合マップ -->
+    <div class="white-card">
+      <h3>競合カテゴリ別マップ</h3>
+      <table class="data-table">
+        <tr>
+          <th>カテゴリ</th>
+          <th>代表例</th>
+          <th>強み</th>
+          <th>弱み（＝山﨑さんのチャンス）</th>
+        </tr>
+        <tr>
+          <td><strong>比較サイト</strong></td>
+          <td>タウンライフ / SUUMO / ホームズ</td>
+          <td>集客力・認知度・SEO</td>
+          <td>特定会社への誘導が目的。完全中立ではない</td>
+        </tr>
+        <tr>
+          <td><strong>個人インフルエンサー</strong></td>
+          <td>@aki_no_iezukuri（218K）</td>
+          <td>素人目線・親しみやすさ・リール量</td>
+          <td>専門家ではない。体験談に限定。アフィ収益あり</td>
+        </tr>
+        <tr>
+          <td><strong>中立系相談窓口</strong></td>
+          <td>家づくり相談所（FC展開）</td>
+          <td>組織力・ブランド・全国展開</td>
+          <td>個人ブランドではない。「会社感」が強い</td>
+        </tr>
+        <tr>
+          <td><strong>住宅会社オウンドメディア</strong></td>
+          <td>各HM・工務店ブログ</td>
+          <td>専門性・情報量</td>
+          <td>自社誘導が前提。中立ではない</td>
+        </tr>
+        <tr>
+          <td><strong>FP</strong></td>
+          <td>個人FP全般</td>
+          <td>お金の専門家</td>
+          <td>住宅全体の伴走はできない。金融商品販売が軸</td>
+        </tr>
+        <tr>
+          <td><strong>ロードマップコンテンツ</strong></td>
+          <td>11件調査（独立メディア〜大手HM）</td>
+          <td>情報量・認知度・SEO</td>
+          <td>中立視点なし / 感情変化の可視化なし / 相続視点なし</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- ポジショニングマップ -->
+    <div class="position-map">
+      <h3>ポジショニングマップ — 専門性 × 中立性</h3>
+      <div class="map-grid">
+        <div class="map-label-y">← 特定会社よりの ／ 中立よりの →</div>
+
+        <!-- 上左：専門性高・特定会社より -->
+        <div class="map-quadrant q-top-left">
+          <h4>専門性高 / 特定会社より</h4>
+          <span class="map-player player-competitor">住宅会社オウンドメディア</span>
+          <span class="map-player player-competitor">HM公式アカウント</span>
+        </div>
+
+        <!-- 上右：専門性高・中立より -->
+        <div class="map-quadrant q-top-right">
+          <h4>専門性高 / 中立 ← 山﨑さんの空白</h4>
+          <span class="map-player player-yamaju">◎ 山寿 / 山﨑さん</span>
+          <span class="map-player player-competitor" style="margin-top:6px">家づくり相談所（組織）</span>
+        </div>
+
+        <!-- 下左：専門性低・特定会社より -->
+        <div class="map-quadrant q-bottom-left">
+          <h4>専門性低 / 特定会社より</h4>
+          <span class="map-player player-competitor">比較サイト（SUUMO等）</span>
+        </div>
+
+        <!-- 下右：専門性低・中立より -->
+        <div class="map-quadrant q-bottom-right">
+          <h4>専門性低 / 中立より</h4>
+          <span class="map-player player-competitor">@aki_no_iezukuri（主婦目線）</span>
+          <span class="map-player player-competitor" style="margin-top:6px">個人ブログ</span>
+        </div>
+
+        <div class="map-label-x">
+          <div>← 特定会社よりの</div>
+          <div>中立よりの →</div>
+        </div>
+      </div>
+      <div class="insight-box" style="margin-top:16px">
+        <strong>「専門知識 × 完全中立 × 個人ブランド」の組み合わせがほぼ存在しない。</strong> 家づくり相談所はこのエリアに近いが、組織体・FC展開のため個人の温度感がない。山﨑さんが先行者として定着できれば圧倒的に有利。
+      </div>
+    </div>
+
+    <!-- 競合の共通弱点 -->
+    <div class="white-card">
+      <h3>競合の共通弱点（＝市場の空白）</h3>
+
+      <div class="strength-item">
+        <div class="strength-icon icon-red">①</div>
+        <div>
+          <h4>完全中立な情報提供者がいない</h4>
+          <p>全競合が「誰かの利益のために動いている」構造。比較サイトはHMからの広告費、YouTuberはアフィリエイト、HMメディアは自社誘導が前提。</p>
+        </div>
+      </div>
+      <div class="strength-item">
+        <div class="strength-icon icon-red">②</div>
+        <div>
+          <h4>プロセス全体を伴走してくれる存在がいない</h4>
+          <p>情報提供 or 点での専門家はいるが、「探索から契約まで」一緒に歩む存在がいない。FPは金融、設計士は設計、それぞれ部分最適。</p>
+        </div>
+      </div>
+      <div class="strength-item">
+        <div class="strength-icon icon-red">③</div>
+        <div>
+          <h4>感情・不安の変化を可視化したコンテンツがない</h4>
+          <p>ロードマップ調査11件中、「このフェーズではこういう不安が出る」という心理マップを持つものがほぼ皆無。情報はあっても感情に寄り添うものがない。</p>
+        </div>
+      </div>
+      <div class="strength-item">
+        <div class="strength-icon icon-red">④</div>
+        <div>
+          <h4>相続・資産形成の視点がない</h4>
+          <p>「家づくり＝資産形成」として捉えるロードマップがほぼ皆無。相続や資産承継の観点で家づくりを語れる競合がいない。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 3. Company ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-badge badge-company">Company</span>
+      <h2 class="section-title">自社 — 何が武器か</h2>
+    </div>
+
+    <!-- 強み -->
+    <div class="white-card">
+      <h3>強み — 競合との比較</h3>
+      <div class="strength-item">
+        <div class="strength-icon icon-green">✓</div>
+        <div>
+          <h4>完全中立</h4>
+          <p>特定のHM・工務店と利害関係なし。送客に依存しない収益モデルを選べる立場。</p>
+          <p class="note">→ 比較サイト・HMメディアとの決定的な差別化点</p>
+        </div>
+      </div>
+      <div class="strength-item">
+        <div class="strength-icon icon-green">✓</div>
+        <div>
+          <h4>専門家ネットワーク</h4>
+          <p>税理士・司法書士・弁護士・設計士等と連携可能。単なる情報提供にとどまらず、専門家送客まで一気通貫で対応できる。</p>
+          <p class="note">→ 個人ブロガー・インフルエンサーにはできない</p>
+        </div>
+      </div>
+      <div class="strength-item">
+        <div class="strength-icon icon-green">✓</div>
+        <div>
+          <h4>家づくり × 相続の両軸</h4>
+          <p>「家は資産である」という視点で語れる稀少性。相続・資産承継の観点まで提供できるのは市場にほぼ皆無。</p>
+          <p class="note">→ 市場にほぼ無競合のポジション</p>
+        </div>
+      </div>
+      <div class="strength-item">
+        <div class="strength-icon icon-green">✓</div>
+        <div>
+          <h4>個人ブランドの信頼性</h4>
+          <p>山﨑さん個人の顔出し・ストーリー・人柄への共感。組織系相談所にはない温度感と伴走感。</p>
+          <p class="note">→ 家づくり相談所（FC）との差別化</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 弱みと対策 -->
+    <div class="white-card">
+      <h3>弱み — 正直な評価と対策</h3>
+      <table class="data-table">
+        <tr>
+          <th style="width:200px">弱み</th>
+          <th>現時点の現実</th>
+          <th>対策</th>
+        </tr>
+        <tr>
+          <td><strong>認知度ゼロ</strong></td>
+          <td>フォロワー・実績なし。0からのスタート</td>
+          <td>Instagram一貫発信で積み上げ。先行者優位を取りに行く</td>
+        </tr>
+        <tr>
+          <td><strong>施工事例なし</strong></td>
+          <td>体験談として語れる過去がない</td>
+          <td>「中立の知識者」として専門性で勝負。事例よりも知識の深さで信頼を得る</td>
+        </tr>
+        <tr>
+          <td><strong>一人運営の限界</strong></td>
+          <td>スケールしにくい</td>
+          <td>コンテンツ資産化・LINE自動化・将来的にはツール化でスケール</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- USP -->
+    <div class="usp-box">
+      <div class="usp-label">USP — UNIQUE SELLING PROPOSITION</div>
+      <blockquote>
+        「住宅会社に騙されたくない、でも一人で判断する自信もない。<br>
+        そんな人の隣で、<span>中立な立場で一緒に考える家づくりの伴走者</span>」
+      </blockquote>
+    </div>
+  </div>
+
+  <!-- ─── 4. 統合 ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-badge badge-synthesis">統合</span>
+      <h2 class="section-title">3C統合 — 勝てる構造の整理</h2>
+    </div>
+
+    <div class="white-card">
+      <h3>ポジション定義</h3>
+      <p style="font-size:18px; font-weight:700; color:#1a3a52; text-align:center; padding:20px 0; border-bottom:1px solid #f0f0ee; margin-bottom:20px">
+        「高い専門性 × 完全中立」の空白地帯を占有する<br>
+        <span style="font-size:14px; font-weight:400; color:#666">=「信頼できる家づくりの家庭教師」</span>
+      </p>
+
+      <h3>勝てる構造マトリクス</h3>
+      <div class="matrix-wrap">
+        <div class="matrix-row">
+          <div class="matrix-header">顧客の本音ニーズ</div>
+          <div class="matrix-header">競合の空白</div>
+          <div class="matrix-header">山﨑さんが埋める</div>
+          <div class="matrix-header">具体的な手段</div>
+        </div>
+        <div class="matrix-row">
+          <div class="matrix-cell">「中立な味方が欲しい」</div>
+          <div class="matrix-cell">完全中立なプロがいない</div>
+          <div class="matrix-cell highlight">◎ 完全中立の専門家伴走</div>
+          <div class="matrix-cell">Instagram発信・LINE相談</div>
+        </div>
+        <div class="matrix-row">
+          <div class="matrix-cell">「全体像が見えない」</div>
+          <div class="matrix-cell">感情変化の可視化なし</div>
+          <div class="matrix-cell highlight">◎ ロードマップ＋心理マップ</div>
+          <div class="matrix-cell">ロードマップPDF（LINE特典）</div>
+        </div>
+        <div class="matrix-row">
+          <div class="matrix-cell">「専門家に頼りたい」</div>
+          <div class="matrix-cell">個人専門家ブランドなし</div>
+          <div class="matrix-cell highlight">◎ 山﨑さん個人ブランド</div>
+          <div class="matrix-cell">顔出し・ストーリー発信</div>
+        </div>
+        <div class="matrix-row">
+          <div class="matrix-cell">「資産として考えたい」</div>
+          <div class="matrix-cell">相続視点のコンテンツなし</div>
+          <div class="matrix-cell highlight">◎ 家づくり×相続の両軸</div>
+          <div class="matrix-cell">相続・資産コンテンツ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ファネル -->
+    <div class="white-card">
+      <h3>フェーズ別収益構造（STEP1）</h3>
+      <table class="data-table">
+        <tr>
+          <th>ターゲット</th>
+          <th>接触チャネル</th>
+          <th>提供価値</th>
+          <th>収益化</th>
+        </tr>
+        <tr>
+          <td><strong>ペルソナA（探索・比較期）</strong></td>
+          <td>Instagram → LINE → ステップ配信</td>
+          <td>知識武装・全体像の地図</td>
+          <td>伴走相談契約</td>
+        </tr>
+        <tr>
+          <td><strong>ペルソナB（セカンドオピニオン）</strong></td>
+          <td>Google / LINE問い合わせ</td>
+          <td>見積もりチェック・同席・検証</td>
+          <td>単発相談料（即時）</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- コンテンツへの示唆 -->
+    <div class="white-card">
+      <h3>コンテンツ設計への示唆</h3>
+      <table class="data-table">
+        <tr>
+          <th>コンテンツ</th>
+          <th>主な対象</th>
+          <th>目的</th>
+          <th>チャネル</th>
+        </tr>
+        <tr>
+          <td>ロードマップPDF</td>
+          <td>ペルソナA（メイン）</td>
+          <td>全体像を渡す → LINE継続関係</td>
+          <td>LINE登録特典</td>
+        </tr>
+        <tr>
+          <td>「展示場に行く前に読んでほしい」系投稿</td>
+          <td>ペルソナA</td>
+          <td>認知・フォロー獲得</td>
+          <td>Instagram</td>
+        </tr>
+        <tr>
+          <td>「打ち合わせ中の人へ」系投稿</td>
+          <td>ペルソナB（副）</td>
+          <td>即時問い合わせ誘導</td>
+          <td>Instagram</td>
+        </tr>
+        <tr>
+          <td>「見積もりのチェックポイント」系投稿</td>
+          <td>ペルソナB</td>
+          <td>セカンドオピニオン需要を喚起</td>
+          <td>Instagram / Google</td>
+        </tr>
+        <tr>
+          <td>LINE個別相談</td>
+          <td>A・B両方</td>
+          <td>伴走サービスへの入口</td>
+          <td>LINE</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─── 5. 結論 ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-badge badge-synthesis">結論</span>
+      <h2 class="section-title">今すぐ動くべき理由 ＋ 次のアクション</h2>
+    </div>
+
+    <div class="white-card" style="margin-bottom:24px">
+      <h3>今すぐ動くべき3つの理由</h3>
+      <div class="strength-item">
+        <div class="strength-icon icon-green">1</div>
+        <div>
+          <h4>市場に構造的な需要がある</h4>
+          <p>毎年5〜6万組の「初めて30代」が入ってくる反復市場。一時的なトレンドではない。</p>
+        </div>
+      </div>
+      <div class="strength-item">
+        <div class="strength-icon icon-green">2</div>
+        <div>
+          <h4>「完全中立 × 専門家 × 個人ブランド」は現時点でほぼ無競合</h4>
+          <p>先行者優位を取れるウィンドウが今開いている。数年後に同様のアカウントが増えれば差別化コストが上がる。</p>
+        </div>
+      </div>
+      <div class="strength-item">
+        <div class="strength-icon icon-green">3</div>
+        <div>
+          <h4>広告なしで自然流入を取れるタイミングがある</h4>
+          <p>出産後6〜12ヶ月のInstagram検索期という「接触ウィンドウ」に一貫して存在できれば、広告費をかけずに認知が積み上がる。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-grid">
+      <div class="action-card">
+        <div class="step">Next Action 01</div>
+        <h4>事業計画の確定</h4>
+        <p>サービスメニュー・単価・収益モデルをこの3C分析をベースに決定する</p>
+      </div>
+      <div class="action-card">
+        <div class="step">Next Action 02</div>
+        <h4>マーケティング戦略の確定</h4>
+        <p>Instagram → LINE → 伴走相談のファネル設計とKPIを確定する</p>
+      </div>
+      <div class="action-card">
+        <div class="step">Next Action 03</div>
+        <h4>コンテンツ着手</h4>
+        <p>content-inventory.md の★5リストから悩みベース・チャネル非依存で制作開始</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>内部資料 — 外部共有禁止 ／ 山寿株式会社 CEO室 ／ 2026-06-07</footer>
+</body>
+</html>
