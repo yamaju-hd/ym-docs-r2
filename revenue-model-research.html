@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>収益モデルリサーチ｜紹介料・ビジネスモデル網羅調査</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    background: #f5f4f0;
+    color: #2c2c2c;
+    line-height: 1.7;
+  }
+
+  /* ─── カバー ─── */
+  .cover {
+    background: linear-gradient(135deg, #1a2340 0%, #2d3a6b 50%, #1a3a52 100%);
+    color: white;
+    padding: 80px 60px;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #8090c8;
+    text-decoration: none;
+    margin-bottom: 24px;
+  }
+  .back-link:hover { color: #a0b0e0; }
+  .cover .label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #8090c8; margin-bottom: 20px; }
+  .cover h1 { font-size: 34px; font-weight: 700; line-height: 1.3; margin-bottom: 16px; }
+  .cover h1 span { color: #7ec8f0; }
+  .cover .subtitle { font-size: 15px; color: #b0bce8; margin-bottom: 40px; }
+  .cover .meta { display: flex; gap: 32px; font-size: 13px; color: #78909c; flex-wrap: wrap; }
+  .cover .meta strong { color: #90aac8; }
+
+  /* ─── コンテナ ─── */
+  .container { max-width: 960px; margin: 0 auto; padding: 60px 40px; }
+
+  /* ─── セクション ─── */
+  .section { margin-bottom: 64px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #e8e8e4;
+  }
+  .section-num {
+    width: 36px; height: 36px;
+    background: #1a2340;
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; flex-shrink: 0;
+  }
+  .section-title { font-size: 22px; font-weight: 700; color: #1a1a2e; }
+
+  /* ─── テーブル ─── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    margin-bottom: 24px;
+  }
+  .data-table th {
+    background: #1a2340;
+    color: white;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+  }
+  .data-table td {
+    padding: 12px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0ee;
+    vertical-align: top;
+    line-height: 1.7;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:nth-child(even) td { background: #f9f9f7; }
+
+  /* ─── カード ─── */
+  .white-card {
+    background: white;
+    border-radius: 12px;
+    padding: 28px 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    margin-bottom: 20px;
+  }
+  .white-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a2340;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0ee;
+  }
+
+  /* ─── ステータスバッジ ─── */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .badge-ok { background: #e8f5ec; color: #2E7D4F; }
+  .badge-warn { background: #fff8e1; color: #e65100; }
+  .badge-ng { background: #fce8e8; color: #c62828; }
+
+  /* ─── ハイライトボックス ─── */
+  .insight-box {
+    background: #e8f0ff;
+    border-left: 4px solid #3B6FCF;
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 13px;
+    color: #1a2e6e;
+  }
+  .insight-box strong { color: #2b5cb8; }
+
+  .warn-box {
+    background: #fff3e0;
+    border-left: 4px solid #f59f00;
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 13px;
+    color: #4a3500;
+  }
+  .warn-box strong { color: #b36a00; }
+
+  .danger-box {
+    background: #fce8e8;
+    border-left: 4px solid #e53935;
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 13px;
+    color: #5c1010;
+  }
+  .danger-box strong { color: #c62828; }
+
+  /* ─── モデル評価グリッド ─── */
+  .model-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 650px) { .model-grid { grid-template-columns: 1fr; } }
+
+  .model-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .model-card.ok { border-top: 3px solid #2E7D4F; }
+  .model-card.ng { border-top: 3px solid #c62828; }
+  .model-card .model-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .model-card.ok .model-tag { color: #2E7D4F; }
+  .model-card.ng .model-tag { color: #c62828; }
+  .model-card h4 { font-size: 15px; font-weight: 700; color: #1a2340; margin-bottom: 10px; }
+  .model-card p { font-size: 13px; color: #555; line-height: 1.7; }
+  .model-card .note { font-size: 12px; color: #888; margin-top: 8px; font-style: italic; }
+
+  /* ─── ロードマップ ─── */
+  .roadmap {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 650px) { .roadmap { grid-template-columns: 1fr; } }
+  .rm-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border-top: 4px solid #1a2340;
+  }
+  .rm-card:nth-child(2) { border-top-color: #2d3a6b; }
+  .rm-card:nth-child(3) { border-top-color: #1a3a52; }
+  .rm-card .phase { font-size: 11px; font-weight: 700; color: #1a2340; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .rm-card .period { font-size: 13px; color: #888; margin-bottom: 12px; }
+  .rm-card h4 { font-size: 14px; font-weight: 700; color: #1a2340; margin-bottom: 10px; }
+  .rm-card ul { font-size: 13px; color: #555; line-height: 1.9; padding-left: 0; list-style: none; }
+  .rm-card ul li::before { content: "・"; color: #1a2340; }
+
+  /* ─── 最重要ボックス ─── */
+  .priority-box {
+    background: linear-gradient(135deg, #1a2340, #2d3a6b);
+    color: white;
+    border-radius: 16px;
+    padding: 36px 40px;
+    margin-bottom: 24px;
+  }
+  .priority-box h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; color: #7ec8f0; }
+  .priority-box ol { padding-left: 20px; line-height: 2.2; font-size: 14px; }
+  .priority-box li { color: #d0e8f8; }
+  .priority-box li strong { color: white; }
+
+  footer {
+    margin-top: 48px;
+    padding: 24px 40px;
+    font-size: 12px;
+    color: #bbb;
+    text-align: center;
+    border-top: 1px solid #e8e8e4;
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <a class="back-link" href="index.html">← Research Hub に戻る</a>
+  <div class="label">Business Research · 2026-06-07</div>
+  <h1>収益モデルリサーチ<br><span>紹介料・ビジネスモデル網羅調査</span></h1>
+  <p class="subtitle">家づくり・相続伴走支援の事業計画策定のための収益構造分析</p>
+  <div class="meta">
+    <span><strong>担当</strong> リサーチ部</span>
+    <span><strong>対象</strong> 家づくり領域（HM・工務店・リノベ）＋ 相続領域（士業）</span>
+    <span><strong>目的</strong> STEP1 事業計画の収益モデル確定</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ─── 1. 家づくり紹介料 ─── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2 class="section-title">家づくり領域 — 紹介料の実態</h2>
+    </div>
+
+    <div class="white-card">
+      <h3>紹介料の相場</h3>
+      <table class="data-table">
+        <tr>
+          <th style="width:220px">紹介元</th>
+          <th>紹介料の目安</th>
+          <th style="width:180px">3,000万円契約の場合</th>
+        </tr>
+        <tr>
+          <td><strong>大手ハウスメーカー</strong></td>
+          <td>請負金額の3〜5%、または固定10〜30万円</td>
+          <td><strong>90〜150万円</strong></td>
+        </tr>
+        <tr>
+          <td><strong>中堅ハウスメーカー</strong></td>
+          <td>請負金額の3〜5%、または固定5〜20万円</td>
+          <td><strong>90〜150万円</strong></td>
+        </tr>
+        <tr>
+          <td><strong>工務店</strong></td>
+          <td>請負金額の3〜5%（商品券・オプション対応も多い）</td>
+          <td><strong>90〜150万円</strong></td>
+        </tr>
+        <tr>
+          <td><strong>リフォーム・リノベ業者</strong></td>
+          <td>成約金額の6〜20%（紹介サイト経由）</td>
+          <td>案件規模による</td>
+        </tr>
+      </table>
+      <div class="insight-box">
+        <strong>インサイト：</strong>3,000万円の住宅が1件成約するごとに90〜150万円の紹介料が発生する。年間10件で900万〜1,500万円の売上規模になる。大手HMは広告費として既存予算枠に組み込まれており、受け入れ体制がある。工務店は不慣れな場合が多く、提携交渉に時間がかかる可能性がある。
+      </div>
+    </div>
+
+    <div class="white-card">
+      <h3>実際に運営している事業者の実態</h3>
+      <table class="data-table">
+        <tr>
+          <th>事業者</th>
+          <th>収益モデル</th>
+          <th>特徴・留意点</th>
+        </tr>
+        <tr>
+          <td><strong>スーモカウンター（リクルート）</strong></td>
+          <td>成約額の約5%（住宅会社から）/ 消費者無料</td>
+          <td>「広告宣伝費・販売促進費」名目。登録条件に「建築費への上乗せ禁止」あり</td>
+        </tr>
+        <tr>
+          <td><strong>家づくり相談所（FC展開）</strong></td>
+          <td>成約額の3〜5% / 加盟金280万円</td>
+          <td>無店舗・オンライン完結型。直営店で年間利益5,000万超の事例あり</td>
+        </tr>
+        <tr>
+          <td><strong>HOME4U家づくりのとびら</strong></td>
+          <td>掲載料・手数料（非公開） / 消費者無料</td>
+          <td>NTTデータグループ運営</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="white-card">
+      <h3>法的ポイント（宅建業法）</h3>
+      <div class="insight-box">
+        <strong>2016年12月、経済産業省「グレーゾーン解消制度」</strong> にて、宅建業免許のない一般事業者が住宅会社から紹介料を継続的に受領することについて、<strong>一定条件下では宅建業法違反に該当しない</strong>との判断が示された。
+      </div>
+
+      <h3 style="margin-top:24px">合法となる3条件</h3>
+      <table class="data-table">
+        <tr><th>条件</th><th>内容</th></tr>
+        <tr><td>① 関与の範囲</td><td>顧客情報の提供と初回面談への同席に限定する</td></tr>
+        <tr><td>② 介入禁止</td><td><strong>物件説明・契約交渉・条件調整への関与を一切しない</strong></td></tr>
+        <tr><td>③ 受領タイミング</td><td>紹介料は契約成立時のみの受領に限る</td></tr>
+      </table>
+
+      <div class="danger-box" style="margin-top:16px">
+        <strong>違法リスクがある行為：</strong>物件・設備の説明を行う / 価格交渉に関与する / 媒介的な役割を担う。これらに踏み込むと宅建業法違反となる。
+      </div>
+      <div class="warn-box">
+        <strong>最大のリスク（法的ではなく信用リスク）：</strong>「中立」を標榜しながら紹介料が高い業者を優先して紹介すると、消費者への不実告知・利益相反（景品表示法・消費者契約法）が生じうる。ビジネスの根幹を揺るがす問題。
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 2. 相続領域：士業紹介料 ─── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2 class="section-title">相続領域 — 士業への紹介料の実態</h2>
+    </div>
+
+    <!-- サマリーテーブル -->
+    <div class="white-card">
+      <h3>士業別 紹介料の合法性サマリー</h3>
+      <table class="data-table">
+        <tr>
+          <th style="width:140px">士業</th>
+          <th style="width:130px">紹介料の合法性</th>
+          <th>根拠・リスク</th>
+        </tr>
+        <tr>
+          <td><strong>税理士</strong></td>
+          <td><span class="badge badge-warn">条件次第で合法</span></td>
+          <td>税理士ドットコム等の紹介プラットフォームは東証上場企業。ただし「信用失墜行為」と見る専門家もいる</td>
+        </tr>
+        <tr>
+          <td><strong>司法書士</strong></td>
+          <td><span class="badge badge-ng">明確に禁止</span></td>
+          <td>司法書士法第23条・倫理第13条で明文禁止。倫理違反・懲戒リスク</td>
+        </tr>
+        <tr>
+          <td><strong>弁護士</strong></td>
+          <td><span class="badge badge-ng">刑事罰対象</span></td>
+          <td>弁護士法第72条・77条。<strong>2年以下の懲役または300万円以下の罰金</strong>。受け取った山寿側も対象</td>
+        </tr>
+        <tr>
+          <td><strong>行政書士</strong></td>
+          <td><span class="badge badge-ng">明文で禁止</span></td>
+          <td>2024年4月施行の行政書士職務基本規則で明文禁止</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 税理士 詳細 -->
+    <div class="white-card">
+      <h3>税理士 — 詳細</h3>
+      <table class="data-table">
+        <tr>
+          <th colspan="2">相続税申告の税理士報酬相場（遺産総額の0.5〜1.0%）</th>
+        </tr>
+        <tr><td style="width:200px">遺産総額 5,000万円</td><td>25〜50万円</td></tr>
+        <tr><td>遺産総額 1億円</td><td>50〜100万円</td></tr>
+        <tr><td>遺産総額 3億円</td><td>150〜300万円</td></tr>
+        <tr><td>遺産総額 5億円</td><td>250〜500万円</td></tr>
+      </table>
+      <p style="font-size:13px; color:#666; margin-bottom:16px">※ 相続人2人目以降で基本報酬の10〜15%加算、土地・非上場株評価がある場合の加算あり</p>
+
+      <table class="data-table">
+        <tr><th>紹介料の相場</th><th>内容</th></tr>
+        <tr><td>紹介プラットフォーム経由</td><td>年間契約料の50〜70%程度（例：年間51万円の契約 → 紹介料約25万円）</td></tr>
+        <tr><td>税理士間の案件紹介</td><td>申告報酬の約10%程度が慣行</td></tr>
+      </table>
+      <div class="warn-box">
+        <strong>注意：</strong>「広告宣伝費」「業務委託費」という名目でも実態が紹介の対価であれば、税理士法第37条（信用失墜行為の禁止）に抵触する可能性を指摘する専門家がいる。顧問弁護士への事前確認を推奨。
+      </div>
+    </div>
+
+    <!-- 司法書士・弁護士 詳細 -->
+    <div class="white-card">
+      <h3>司法書士 — 詳細</h3>
+      <table class="data-table">
+        <tr><th colspan="2">相続登記の費用目安（1物件）</th></tr>
+        <tr><td style="width:220px">司法書士報酬</td><td>6〜9万円</td></tr>
+        <tr><td>登録免許税</td><td>不動産評価額の0.4%</td></tr>
+        <tr><td>合計目安</td><td>10〜30万円（不動産の評価額・件数による）</td></tr>
+      </table>
+      <div class="danger-box">
+        <strong>紹介料は明確に禁止。</strong>司法書士法第23条・施行規則第26条・倫理第13条で「依頼者の紹介を受けたことの対価を支払ってはならず、依頼者の紹介をしたことの対価を受け取ってはならない」と規定。懲戒リスクあり。
+      </div>
+    </div>
+
+    <div class="white-card">
+      <h3>弁護士 — 詳細</h3>
+      <div class="danger-box">
+        <strong>弁護士法第72条：</strong>弁護士でない者が報酬を得る目的で法律事件に関して「周旋（あっせん・紹介）」をすることを業とすることを禁止。違反した場合、<strong>2年以下の懲役または300万円以下の罰金</strong>（弁護士法第77条）。紹介料を受け取った山寿側も対象。
+      </div>
+      <p style="font-size:13px; color:#666; margin-top:12px">「広告掲載料」「コンサルティング料」等の名目を付けても、実質的に紹介の対価であれば違法と判断される。「一回的な紹介は違反しない」という解釈もあるが、<strong>事業として継続的に紹介料を受け取ることは明白な違反</strong>。</p>
+    </div>
+
+    <!-- 合法的な連携方法 -->
+    <div class="white-card">
+      <h3>合法的に士業と連携する方法</h3>
+      <table class="data-table">
+        <tr>
+          <th style="width:200px">方法</th>
+          <th>内容</th>
+          <th style="width:130px">リスク</th>
+        </tr>
+        <tr>
+          <td><strong>無償相互紹介</strong></td>
+          <td>対価なしで士業を紹介する</td>
+          <td><span class="badge badge-ok">✅ 安全</span></td>
+        </tr>
+        <tr>
+          <td><strong>顧客が直接契約</strong></td>
+          <td>山寿は窓口整理のみ担当し、実作業は士業が顧客と直接契約・請求</td>
+          <td><span class="badge badge-ok">✅ 安全</span></td>
+        </tr>
+        <tr>
+          <td><strong>合同セミナー</strong></td>
+          <td>士業と合同でセミナーを開催し、山寿が集客を担当</td>
+          <td><span class="badge badge-ok">✅ 安全</span></td>
+        </tr>
+        <tr>
+          <td><strong>業務委託（付帯業務）</strong></td>
+          <td>事前調査・資料整理等の付帯業務を担当し、報酬を得る</td>
+          <td><span class="badge badge-warn">⚠️ 業務の実態が必要</span></td>
+        </tr>
+        <tr>
+          <td><strong>広告掲載料（成果連動）</strong></td>
+          <td>士業のサイト等への掲載料を受け取る</td>
+          <td><span class="badge badge-ng">❌ グレー〜高リスク</span></td>
+        </tr>
+      </table>
+      <div class="insight-box">
+        <strong>山寿として最も安全な設計：</strong>「伴走相談料を顧客から受け取る」＋「士業は顧客と直接契約する」二層構造。山寿の収益は「紹介料」ではなく「伴走相談料」として位置づける。これにより法的リスクを完全回避でき、かつ「有料であることが中立性の証明」というメッセージも訴求できる。
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 3. その他ビジネスモデル ─── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2 class="section-title">紹介料以外のビジネスモデル（網羅）</h2>
+    </div>
+
+    <div class="white-card">
+      <h3>伴走相談料</h3>
+      <table class="data-table">
+        <tr>
+          <th style="width:220px">タイプ</th>
+          <th>相場</th>
+          <th style="width:200px">適した場面</th>
+        </tr>
+        <tr>
+          <td>時間制（スポット相談）</td>
+          <td>1〜2万円/時間<br><small style="color:#888">FPの住宅相談は5,000〜1万円/30分</small></td>
+          <td>初回・単発の相談</td>
+        </tr>
+        <tr>
+          <td>定額パッケージ（家づくりサポート一式）</td>
+          <td>30〜50万円</td>
+          <td>探索〜契約まで伴走</td>
+        </tr>
+        <tr>
+          <td>定額パッケージ（相続サポート一式）</td>
+          <td>20〜40万円</td>
+          <td>相続全体の整理・サポート</td>
+        </tr>
+        <tr>
+          <td>月額顧問（サブスクリプション）</td>
+          <td>1.5万〜数十万円/月</td>
+          <td>継続的な相談・モニタリング</td>
+        </tr>
+        <tr>
+          <td>相続コンサル（現状分析レポート）</td>
+          <td>30万円〜</td>
+          <td>相続対策の全体設計</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="white-card">
+      <h3>教育コンテンツ・セミナー</h3>
+      <table class="data-table">
+        <tr>
+          <th style="width:220px">タイプ</th>
+          <th>相場</th>
+          <th style="width:200px">特徴</th>
+        </tr>
+        <tr>
+          <td>note有料記事</td>
+          <td>500〜5,000円/本</td>
+          <td>低コストで始められる</td>
+        </tr>
+        <tr>
+          <td>note有料マガジン</td>
+          <td>500円〜/月</td>
+          <td>継続的なファン収益</td>
+        </tr>
+        <tr>
+          <td>PDF教材</td>
+          <td>1,000〜5,000円</td>
+          <td>LINE特典にも活用可能</td>
+        </tr>
+        <tr>
+          <td>オンライン動画講座</td>
+          <td>5,000〜3万円/コース</td>
+          <td>Udemy・Teachable等</td>
+        </tr>
+        <tr>
+          <td>無料集客セミナー</td>
+          <td>0円（集客・LINE誘導目的）</td>
+          <td>認知拡大・見込み客獲得</td>
+        </tr>
+        <tr>
+          <td>有料コンテンツセミナー</td>
+          <td>5,000〜5万円/回</td>
+          <td>専門性の高い内容で有料設定</td>
+        </tr>
+        <tr>
+          <td>B2Bセミナー（住宅会社・士業向け）</td>
+          <td>1〜10万円/回</td>
+          <td>法人顧客の開拓・コンサル化</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="white-card">
+      <h3>その他のモデル</h3>
+      <table class="data-table">
+        <tr>
+          <th style="width:200px">モデル</th>
+          <th>収益規模感</th>
+          <th style="width:120px">推奨時期</th>
+        </tr>
+        <tr>
+          <td>有料コミュニティ（オンラインサロン）</td>
+          <td>月額500〜5,000円 × 会員数</td>
+          <td>成長期以降</td>
+        </tr>
+        <tr>
+          <td>SaaS・診断ツール（B2B）</td>
+          <td>月額課金（士業事務所・住宅会社向け）</td>
+          <td>成熟期以降</td>
+        </tr>
+        <tr>
+          <td>アフィリエイト（住宅ローン・火災保険）</td>
+          <td>月数万〜十数万円（PV要）</td>
+          <td>成熟期</td>
+        </tr>
+        <tr>
+          <td>タイアップ・協賛</td>
+          <td>数十万円/件（媒体規模必要）</td>
+          <td>成熟期</td>
+        </tr>
+        <tr>
+          <td>書籍・電子書籍</td>
+          <td>直接収益は小。認知・権威性向上が主効果</td>
+          <td>成長期以降</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 類似事業者 -->
+    <div class="white-card">
+      <h3>類似事業者の実際の料金体系</h3>
+      <table class="data-table">
+        <tr>
+          <th>事業者</th>
+          <th>収益モデル</th>
+          <th>料金例</th>
+        </tr>
+        <tr>
+          <td>スーモカウンター</td>
+          <td>住宅会社からの広告費（紹介料）</td>
+          <td>成約額の5%前後、消費者無料</td>
+        </tr>
+        <tr>
+          <td>家づくり相談所（FC）</td>
+          <td>住宅会社からの成約手数料</td>
+          <td>成約額の3〜5%</td>
+        </tr>
+        <tr>
+          <td>HOME4U家づくりのとびら</td>
+          <td>掲載料・手数料（非公開）</td>
+          <td>消費者無料</td>
+        </tr>
+        <tr>
+          <td>遺産相続コンシェルジュ</td>
+          <td>相談料＋不動産仲介手数料</td>
+          <td>相談1.5万円、仲介3%+6万円</td>
+        </tr>
+        <tr>
+          <td>相続対策コンサル（PMA等）</td>
+          <td>相談・レポート料</td>
+          <td>分析レポート30万円〜、打合せ5万円/回</td>
+        </tr>
+        <tr>
+          <td>FP（住宅相談）</td>
+          <td>時間制相談料</td>
+          <td>5,000〜2万円/時間</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─── 4. 採用評価 ─── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2 class="section-title">山寿として採用しやすいモデル・難しいモデル</h2>
+    </div>
+
+    <div class="model-grid">
+      <div class="model-card ok">
+        <div class="model-tag">✅ 採用しやすい A</div>
+        <h4>住宅会社からの紹介料（家づくり）</h4>
+        <p>業務提携契約を明確化し、「顧客情報提供＋初回同席」の範囲に留め、成約時に3〜5%の手数料を受領。年間10件で900〜1,500万円の収益規模。</p>
+        <p class="note">「中立性」訴求と利益相反リスクの管理が最重要課題。開示・説明責任が必要。</p>
+      </div>
+      <div class="model-card ok">
+        <div class="model-tag">✅ 採用しやすい B</div>
+        <h4>伴走相談料（両領域）</h4>
+        <p>設立直後から着手できる最も安全で誠実なモデル。士業への紹介料規制を完全回避。「有料であることが中立性の証明」という訴求も可能。</p>
+        <p class="note">時間制1〜2万円/時間、定額30〜50万円（家づくり）、20〜40万円（相続）が現実的。</p>
+      </div>
+      <div class="model-card ok">
+        <div class="model-tag">✅ 採用しやすい C</div>
+        <h4>税理士紹介料（相続）</h4>
+        <p>条件次第で合法。ただし「紹介料をもらう」より「伴走料をもらい、税理士は顧客と直接契約」の二層構造の方が信頼設計として優れる。</p>
+        <p class="note">顧問弁護士への事前確認を強く推奨。透明性をもって実施すること。</p>
+      </div>
+      <div class="model-card ok">
+        <div class="model-tag">✅ 採用しやすい D</div>
+        <h4>セミナー・教育コンテンツ</h4>
+        <p>設立初期の認知拡大と見込み客獲得に最適。note有料マガジンやPDF販売は低コストで始められる。</p>
+        <p class="note">無料セミナー → 有料相談 → 伴走契約のファネル設計が有効。</p>
+      </div>
+      <div class="model-card ng">
+        <div class="model-tag">❌ 難しい E</div>
+        <h4>司法書士・弁護士・行政書士への紹介料</h4>
+        <p>明確な法的禁止・刑事罰リスクがある。「コンサルティング料」等の名目でも実態が紹介の対価なら違法。事業として設計してはならない。</p>
+        <p class="note">スタンス：「紹介は無償で行い、収益は相談料から得る」モデルに限定。</p>
+      </div>
+      <div class="model-card ng">
+        <div class="model-tag">❌ 難しい F/G</div>
+        <h4>SaaS・大規模メディア・アフィリエイト</h4>
+        <p>SaaSは技術的な初期投資コストが高い。アフィリエイトはPV・認知が前提。設立直後の主要収益源にはなりにくい。</p>
+        <p class="note">将来の成熟期（3年〜）に検討。設立期は種まきとして継続する程度。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 5. ロードマップ ─── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2 class="section-title">推奨ロードマップ</h2>
+    </div>
+
+    <div class="roadmap">
+      <div class="rm-card">
+        <div class="phase">Phase 1</div>
+        <div class="period">設立〜1年（現在）</div>
+        <h4>立ち上げ期</h4>
+        <ul>
+          <li>伴走相談料（時間制・定額）</li>
+          <li>無料〜有料セミナー</li>
+          <li>note有料コンテンツ（種まき）</li>
+        </ul>
+      </div>
+      <div class="rm-card">
+        <div class="phase">Phase 2</div>
+        <div class="period">1〜3年</div>
+        <h4>成長期</h4>
+        <ul>
+          <li>住宅会社との提携紹介料（3〜5%）</li>
+          <li>税理士紹介料（合法範囲内）</li>
+          <li>月額顧問（サブスクリプション）</li>
+          <li>有料コンテンツの充実</li>
+        </ul>
+      </div>
+      <div class="rm-card">
+        <div class="phase">Phase 3</div>
+        <div class="period">3年〜</div>
+        <h4>成熟期</h4>
+        <ul>
+          <li>会員制コミュニティ</li>
+          <li>B2Bセミナー・法人向けコンサル</li>
+          <li>タイアップ広告</li>
+          <li>SaaS・診断ツール</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="priority-box">
+      <h3>最優先で整備すべき体制（3点）</h3>
+      <ol>
+        <li><strong>顧問弁護士による法的スキームの確認</strong> — 宅建業法・弁護士法の適法性確認（住宅会社との提携前に必須）</li>
+        <li><strong>住宅会社・税理士との業務提携契約書の整備</strong> — 合法的な関与範囲を契約で明確化</li>
+        <li><strong>「相談料と紹介料の分離」を明示した料金・開示体制</strong> — 消費者への透明性が信頼の根拠になる</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ─── 6. 次のアクション ─── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <h2 class="section-title">次のアクション（CEO室向け）</h2>
+    </div>
+    <div class="white-card">
+      <table class="data-table">
+        <tr>
+          <th style="width:50px">#</th>
+          <th>アクション</th>
+          <th style="width:160px">優先度</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>このリサーチをベースに「立ち上げ期のサービスメニューと単価」を決定する（伴走相談料の設計）</td>
+          <td><span class="badge badge-ng">最優先</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>「住宅会社からの紹介料」と「伴走相談料」の併用モデルの設計と、消費者への開示・説明体制の設計</td>
+          <td><span class="badge badge-warn">高</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>顧問弁護士への相談タイミングを設定する（住宅会社との提携交渉を始める前）</td>
+          <td><span class="badge badge-warn">高</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>士業連携は「無償紹介＋二層構造（山寿は相談料・士業は直接契約）」として設計を固める</td>
+          <td><span class="badge badge-ok">通常</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<footer>内部資料 — 外部共有禁止 ／ 山寿株式会社 リサーチ部 ／ 2026-06-07</footer>
+</body>
+</html>
