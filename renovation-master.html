@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>リノベ業者DB | 山寿</title>
+<style>
+:root {
+  --bg: #0f1117; --surface: #1a1d27; --border: #2a2d3a;
+  --text: #e2e8f0; --muted: #64748b; --accent: #f472b6;
+  --green: #4ade80; --yellow: #facc15; --orange: #fb923c; --red: #f87171;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system,'Hiragino Sans','Yu Gothic',sans-serif; font-size: 11px; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+header { padding: 10px 16px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+header h1 { font-size: 14px; font-weight: 700; }
+#count { color: var(--muted); font-size: 11px; }
+.hint { color: var(--muted); font-size: 10px; margin-left: auto; }
+.notice { background: #1a1a2a; border: 1px solid #2a2a4a; color: #c4b5fd; padding: 6px 16px; font-size: 10px; flex-shrink: 0; }
+.filters { padding: 8px 16px; background: var(--surface); border-bottom: 2px solid var(--border); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; flex-shrink: 0; }
+.fg { display: flex; align-items: center; gap: 4px; }
+.fg label { color: var(--muted); font-size: 10px; white-space: nowrap; }
+input[type="text"] { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 4px 8px; border-radius: 4px; font-size: 11px; font-family: inherit; width: 180px; }
+select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 4px 6px; border-radius: 4px; font-size: 11px; font-family: inherit; }
+.reset-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-family: inherit; }
+.reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+.table-wrap { flex: 1; overflow: auto; }
+table { border-collapse: collapse; white-space: nowrap; min-width: 100%; }
+thead th { background: var(--surface); border: 1px solid var(--border); padding: 6px 10px; cursor: pointer; user-select: none; font-weight: 600; color: var(--muted); font-size: 10px; position: sticky; top: 0; z-index: 2; }
+thead th:hover { background: #252836; color: var(--text); }
+thead th.asc::after { content: ' ↑'; color: var(--accent); }
+thead th.desc::after { content: ' ↓'; color: var(--accent); }
+tbody tr:hover { background: rgba(244,114,182,0.06); }
+tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+td { border: 1px solid var(--border); padding: 5px 10px; vertical-align: top; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+.col-id { color: var(--muted); font-family: monospace; font-size: 10px; position: sticky; left: 0; background: var(--bg); z-index: 1; min-width: 54px; }
+.col-name { font-weight: 700; position: sticky; left: 54px; background: var(--bg); z-index: 1; border-right: 2px solid var(--border) !important; min-width: 160px; }
+thead th.col-id { left: 0; z-index: 3; }
+thead th.col-name { left: 54px; z-index: 3; border-right: 2px solid var(--border) !important; }
+tr:hover .col-id, tr:hover .col-name { background: #151824; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.prec-A { color: var(--green); font-weight: 700; }
+.prec-B { color: var(--yellow); }
+.prec-C { color: var(--orange); }
+.ok { color: var(--green); font-weight: 700; }
+.ng { color: var(--red); }
+.partial { color: var(--yellow); }
+.size-大 { color: #93c5fd; }
+.size-中 { color: var(--text); }
+.size-中小 { color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1>🔨 リノベ業者 DB</h1>
+  <span id="count">— 件表示</span>
+  <span class="hint">列ヘッダーでソート　|　左2列は固定　|　横スクロールで全列表示</span>
+</header>
+<div class="notice">⚠ フルリノベ・マンション/戸建対応・物件取得サポートの有無でフィルタリングできます　|　◎=対応強い / ○=対応可 / △=部分的 / ×=非対応</div>
+<div class="filters">
+  <div class="fg"><label>🔍 検索</label><input type="text" id="s-q" placeholder="社名・強み・特徴など…"></div>
+  <div class="fg"><label>フルリノベ</label>
+    <select id="s-full"><option value="">すべて</option><option>◎</option><option>○</option></select>
+  </div>
+  <div class="fg"><label>マンション</label>
+    <select id="s-mns"><option value="">すべて</option><option>◎</option><option>○</option></select>
+  </div>
+  <div class="fg"><label>戸建</label>
+    <select id="s-house"><option value="">すべて</option><option>◎</option><option>○</option></select>
+  </div>
+  <div class="fg"><label>物件取得サポ</label>
+    <select id="s-prop"><option value="">すべて</option><option>◎</option><option>○</option></select>
+  </div>
+  <div class="fg"><label>会社規模</label>
+    <select id="s-size"><option value="">すべて</option><option>大</option><option>中</option><option>中小</option></select>
+  </div>
+  <div class="fg"><label>精度</label>
+    <select id="s-prec"><option value="">すべて</option><option>A</option><option>B</option></select>
+  </div>
+  <button class="reset-btn" onclick="resetAll()">リセット</button>
+</div>
+<div class="table-wrap">
+  <table>
+    <thead><tr id="thead-row"></tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<script>
+const COLS = [
+  {k:"id",      l:"ID",          cls:"col-id"},
+  {k:"name",    l:"社名",        cls:"col-name"},
+  {k:"pref",    l:"都道府県"},
+  {k:"coverage",l:"対応範囲"},
+  {k:"size",    l:"会社規模"},
+  {k:"type",    l:"得意工事種別"},
+  {k:"full",    l:"フルリノベ"},
+  {k:"mns",     l:"マンション"},
+  {k:"house",   l:"戸建"},
+  {k:"prop",    l:"物件取得サポ"},
+  {k:"pcost",   l:"坪単価目安"},
+  {k:"cmin",    l:"工事費下限(万)"},
+  {k:"cmax",    l:"工事費上限(万)"},
+  {k:"cnote",   l:"工事費補足"},
+  {k:"str1",    l:"強み①"},
+  {k:"str2",    l:"強み②"},
+  {k:"wk1",     l:"弱み①"},
+  {k:"feature", l:"特徴"},
+  {k:"review",  l:"口コミ傾向"},
+  {k:"url",     l:"公式URL"},
+  {k:"prec",    l:"精度"},
+  {k:"upd",     l:"更新日"},
+  {k:"note",    l:"備考"},
+];
+
+const RAW = [
+  ["RV001","リノべる","東京・神奈川・千葉・埼玉・大阪等","全国主要都市","大","フルリノベーション","◎","◎","◎","◎","—","500","1500","中古物件規模・仕様により大幅変動","フルリノベの設計・施工・物件取得を一貫サポート","施工実績が多く事例が豊富","価格が高め","中古物件+フルリノベを一括で完結できる大手","施主の満足度高い口コミが多い","https://renoveru.jp/","B","2025-01","物件探しからリノベまで一貫が最大の強み"],
+  ["RV002","ゼロリノベ","東京・神奈川・千葉・埼玉","首都圏特化","中","フルリノベーション・部分リノベ","◎","◎","◎","○","—","400","1200","マンション中心","自社設計でデザイン性が高い","首都圏特化で対応が早い","戸建リノベは実績がマンションより少ない","首都圏特化の中古マンションリノベに強い","設計・デザイン評価が高い","https://zero-reno.com/","B","2025-01","マンション中古リノベが主力"],
+  ["RV003","SHUKEN Re","東京・神奈川","首都圏特化","中","フルリノベーション","◎","◎","○","○","—","500","1500","デザイン性重視仕様","設計士と直接打ち合わせできる体制","デザイン性が高い","価格が高め","東京・神奈川のデザイン系フルリノベに強い","設計士との対話を評価する口コミが多い","https://www.shuken.co.jp/","B","2025-01","デザイン重視層向け"],
+  ["RV004","スムサング","東京・神奈川・千葉・埼玉","首都圏","中","中古+リノベパッケージ","◎","◎","△","◎","—","500","1500","物件規模・仕様による","中古物件探しとリノベを組み合わせたパッケージ","首都圏での対応力","部分リノベ・戸建リノベは弱い","中古+リノベを一括提案する会社","物件取得連携を評価する口コミ","—","C","2025-01","要情報更新。中古マンション主力"],
+  ["RV005","カチタス","東京・神奈川・千葉・埼玉・全国","全国","大","中古買取+リノベ再販","△","◎","◎","△","—","—","—","買取再販のため価格固定","既にリノベ済みの物件を購入するスタイル","価格が明確で交渉不要","施主がリノベ内容をゼロから設計できない","中古住宅の買取・リノベ・再販を行う会社","コスパを評価する口コミが多い","https://www.kachitas.co.jp/","B","2025-01","フルオーダーではなく既製リノベ物件を購入するスタイル"],
+  ["RV006","ReBITA(リビタ)","東京・神奈川・千葉・埼玉","首都圏〜全国","中","フルリノベーション","◎","◎","○","○","—","500","1500","フルリノベの標準的な設定","首都圏でのフルリノベ実績","デザイン提案力","価格帯が高め","東京中心のフルリノベ会社","実績・事例が豊富な口コミあり","—","C","2025-01","要情報更新"],
+  ["RV007","ナサホーム","東京・神奈川・千葉・埼玉","首都圏〜全国","中大","フルリノベ・リフォーム","◎","◎","◎","△","—","300","1200","幅広い価格帯","フルリノベからリフォームまで幅広く対応","価格帯の幅が広くコスパ重視層にも対応","品質のバラつきあり","幅広い価格帯でリノベ・リフォームを展開","対応の幅の広さを評価する口コミ","https://www.nasahome.co.jp/","C","2025-01","要情報更新"],
+  ["RV008","東急リバブル(リノベ部門)","東京・神奈川・千葉・埼玉","首都圏特化","大","フルリノベ・部分リノベ","◎","◎","◎","◎","—","500","2000","グレードにより幅広い","東急不動産グループのブランド力","物件探しと一体のサービス","価格が高め","東急の不動産仲介とリノベを組み合わせたサービス","ブランド安心感を評価する口コミ","https://www.tokyu-livable.co.jp/renovation/","B","2025-01","東急グループの安心感が強み"],
+  ["RV009","三井のリフォーム","東京・神奈川・千葉・埼玉","首都圏〜全国","大","リフォーム・部分リノベ中心","△","◎","◎","×","—","—","—","工事内容による","三井不動産グループのブランド","信頼性・品質の安定感","フルリノベよりリフォームが主力","三井グループの信頼性が強み","ブランド安心感を評価する口コミ","https://www.mitsuifudosan-reform.com/","B","2025-01","フルリノベよりリフォームに強い"],
+  ["RV010","LOHAS studio(オンスタイル)","東京・神奈川・千葉・埼玉","首都圏","中","フルリノベ・部分リノベ","◎","◎","○","△","—","400","1200","仕様・規模による","自然素材・デザイン性の高いリノベに強い","首都圏での対応力","価格帯が中〜高め","自然素材系デザインリノベに強い首都圏会社","デザイン重視の施主に評判","—","C","2025-01","要情報更新"],
+  ["RV011","リノまま(地域工務店系リノベ)","東京・神奈川・千葉・埼玉","エリア限定","中小","部分リノベ・リフォーム","△","○","○","×","—","100","800","工事内容による","地域密着で細かい対応が可能","コスパが良い","フルリノベの実績が少ない場合あり","地域密着の小規模リノベ・リフォーム会社","地域内での評判が安定している場合が多い","—","C","2025-01","地域密着の小規模業者。個別調査が必要"],
+  ["RV012","スタイル工房","東京・神奈川・千葉・埼玉","首都圏","中","フルリノベ・部分リノベ","◎","◎","◎","○","—","400","1200","戸建・マンション両対応","戸建・マンション両方のリノベ実績","デザイン提案力","知名度がやや低い","戸建・マンション両対応の中堅リノベ会社","両方の施工事例が豊富な口コミあり","—","C","2025-01","要情報更新・確認"],
+];
+
+let data = RAW.map(r => Object.fromEntries(COLS.map((c,i)=>[c.k, r[i]||''])));
+let filtered = [...data];
+let sortKey = null, sortDir = 1;
+
+function buildHeader() {
+  const tr = document.getElementById('thead-row');
+  COLS.forEach(c => {
+    const th = document.createElement('th');
+    if (c.cls) th.className = c.cls;
+    th.textContent = c.l;
+    th.addEventListener('click', () => doSort(c.k));
+    tr.appendChild(th);
+  });
+}
+
+function doSort(key) {
+  if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = 1; }
+  filtered.sort((a,b) => {
+    const av = isNaN(a[key]) ? a[key] : +a[key];
+    const bv = isNaN(b[key]) ? b[key] : +b[key];
+    return (av < bv ? -1 : av > bv ? 1 : 0) * sortDir;
+  });
+  renderTable();
+  document.querySelectorAll('thead th').forEach(t => t.classList.remove('asc','desc'));
+  const idx = COLS.findIndex(c=>c.k===key);
+  document.querySelectorAll('thead th')[idx]?.classList.add(sortDir===1?'asc':'desc');
+}
+
+function fmtYN(val) {
+  const cls = {'◎':'ok','○':'ok','△':'partial','×':'ng'}[val];
+  return cls ? `<span class="${cls}">${val}</span>` : (val||'—');
+}
+
+function fmt(val, col) {
+  if (!val || val==='—' || val==='-') return '<span style="color:#374151">—</span>';
+  if (col==='url') return val.startsWith('http') ? `<a href="${val}" target="_blank" rel="noopener">開く ↗</a>` : val;
+  if (['full','mns','house','prop'].includes(col)) return fmtYN(val);
+  if (col==='prec') return `<span class="prec-${val}">${val}</span>`;
+  if (col==='size') return `<span class="size-${val}">${val}</span>`;
+  return val;
+}
+
+function renderTable() {
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = '';
+  filtered.forEach(row => {
+    const tr = document.createElement('tr');
+    COLS.forEach(c => {
+      const td = document.createElement('td');
+      if (c.cls) td.className = c.cls;
+      td.innerHTML = fmt(row[c.k], c.k);
+      td.title = row[c.k];
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  document.getElementById('count').textContent = `${RAW.length}社 中 ${filtered.length}件表示`;
+}
+
+function applyFilters() {
+  const q = document.getElementById('s-q').value.toLowerCase();
+  const full = document.getElementById('s-full').value;
+  const mns = document.getElementById('s-mns').value;
+  const house = document.getElementById('s-house').value;
+  const prop = document.getElementById('s-prop').value;
+  const size = document.getElementById('s-size').value;
+  const prec = document.getElementById('s-prec').value;
+
+  filtered = data.filter(r => {
+    if (q && !Object.values(r).join(' ').toLowerCase().includes(q)) return false;
+    if (full && r.full !== full) return false;
+    if (mns && r.mns !== mns) return false;
+    if (house && r.house !== house) return false;
+    if (prop && r.prop !== prop) return false;
+    if (size && r.size !== size) return false;
+    if (prec && r.prec !== prec) return false;
+    return true;
+  });
+  renderTable();
+}
+
+function resetAll() {
+  ['s-q','s-full','s-mns','s-house','s-prop','s-size','s-prec'].forEach(id => document.getElementById(id).value='');
+  filtered = [...data];
+  renderTable();
+}
+
+['s-q','s-full','s-mns','s-house','s-prop','s-size','s-prec'].forEach(id => {
+  document.getElementById(id).addEventListener('input', applyFilters);
+  document.getElementById(id).addEventListener('change', applyFilters);
+});
+
+buildHeader();
+renderTable();
+</script>
+</body>
+</html>

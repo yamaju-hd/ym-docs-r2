@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ハウスメーカーDB | 山寿</title>
+<style>
+:root {
+  --bg: #0f1117; --surface: #1a1d27; --border: #2a2d3a;
+  --text: #e2e8f0; --muted: #64748b; --accent: #60a5fa;
+  --green: #4ade80; --yellow: #facc15; --orange: #fb923c; --red: #f87171;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system,'Hiragino Sans','Yu Gothic',sans-serif; font-size: 11px; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+header { padding: 10px 16px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+header h1 { font-size: 14px; font-weight: 700; }
+#count { color: var(--muted); font-size: 11px; }
+.hint { color: var(--muted); font-size: 10px; margin-left: auto; }
+.filters { padding: 8px 16px; background: var(--surface); border-bottom: 2px solid var(--border); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; flex-shrink: 0; }
+.fg { display: flex; align-items: center; gap: 4px; }
+.fg label { color: var(--muted); font-size: 10px; white-space: nowrap; }
+input[type="text"] { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 4px 8px; border-radius: 4px; font-size: 11px; font-family: inherit; width: 180px; }
+select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 4px 6px; border-radius: 4px; font-size: 11px; font-family: inherit; }
+input[type="number"] { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 4px 6px; border-radius: 4px; font-size: 11px; font-family: inherit; width: 60px; }
+.reset-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-family: inherit; }
+.reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+.table-wrap { flex: 1; overflow: auto; }
+table { border-collapse: collapse; white-space: nowrap; min-width: 100%; }
+thead th { background: var(--surface); border: 1px solid var(--border); padding: 6px 10px; cursor: pointer; user-select: none; font-weight: 600; color: var(--muted); font-size: 10px; position: sticky; top: 0; z-index: 2; }
+thead th:hover { background: #252836; color: var(--text); }
+thead th.asc::after { content: ' ↑'; color: var(--accent); }
+thead th.desc::after { content: ' ↓'; color: var(--accent); }
+tbody tr:hover { background: rgba(96,165,250,0.06); }
+tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+td { border: 1px solid var(--border); padding: 5px 10px; vertical-align: top; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+.col-id { color: var(--muted); font-family: monospace; font-size: 10px; position: sticky; left: 0; background: var(--bg); z-index: 1; min-width: 54px; }
+.col-name { font-weight: 700; position: sticky; left: 54px; background: var(--bg); z-index: 1; border-right: 2px solid var(--border) !important; min-width: 120px; }
+thead th.col-id { left: 0; z-index: 3; }
+thead th.col-name { left: 54px; z-index: 3; border-right: 2px solid var(--border) !important; }
+tr:hover .col-id, tr:hover .col-name { background: #151824; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; }
+.badge-大手 { background: #172554; color: #93c5fd; }
+.badge-中堅 { background: #14532d; color: #86efac; }
+.badge-ローコスト { background: #431407; color: #fdba74; }
+.badge-FC展開 { background: #2e1065; color: #c4b5fd; }
+.badge-輸入住宅 { background: #500724; color: #fda4af; }
+.badge-パワービルダー { background: #422006; color: #fcd34d; }
+.cc { font-weight: 700; }
+.cc-◎ { color: var(--green); }
+.cc-○ { color: var(--yellow); }
+.cc-△ { color: var(--orange); }
+.cc-× { color: var(--red); }
+.prec-A { color: var(--green); }
+.prec-B { color: var(--yellow); }
+.prec-C { color: var(--orange); }
+</style>
+</head>
+<body>
+<header>
+  <h1>🏠 ハウスメーカー DB</h1>
+  <span id="count">— 件表示</span>
+  <span class="hint">列ヘッダーでソート　|　左2列は固定　|　横スクロールで全列表示</span>
+</header>
+<div class="filters">
+  <div class="fg"><label>🔍 検索</label><input type="text" id="s-q" placeholder="社名・強み・特徴など…"></div>
+  <div class="fg"><label>カテゴリ</label>
+    <select id="s-cat">
+      <option value="">すべて</option>
+      <option>大手</option><option>中堅</option><option>ローコスト</option>
+      <option>FC展開</option><option>輸入住宅</option><option>パワービルダー</option>
+    </select>
+  </div>
+  <div class="fg"><label>構造</label>
+    <select id="s-struct">
+      <option value="">すべて</option>
+      <option value="木造">木造系</option><option value="鉄骨">鉄骨系</option>
+      <option value="ユニット">ユニット</option>
+    </select>
+  </div>
+  <div class="fg"><label>断熱★以上</label>
+    <select id="s-heat">
+      <option value="">すべて</option>
+      <option value="5">★5</option><option value="4">★4以上</option><option value="3">★3以上</option>
+    </select>
+  </div>
+  <div class="fg"><label>坪単価下限〜</label><input type="number" id="s-pmin" placeholder="例:45"></div>
+  <div class="fg"><label>〜坪単価上限</label><input type="number" id="s-pmax" placeholder="例:80"></div>
+  <div class="fg"><label>設計自由度</label>
+    <select id="s-design"><option value="">すべて</option><option>高</option><option>中</option><option>低</option></select>
+  </div>
+  <div class="fg"><label>首都圏</label>
+    <select id="s-metro"><option value="">すべて</option><option>◎</option><option>○</option><option>△</option></select>
+  </div>
+  <div class="fg"><label>ZEH</label>
+    <select id="s-zeh"><option value="">すべて</option><option>◎</option><option>○</option><option>△</option></select>
+  </div>
+  <button class="reset-btn" onclick="resetAll()">リセット</button>
+</div>
+<div class="table-wrap">
+  <table>
+    <thead><tr id="thead-row"></tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<script>
+const COLS = [
+  {k:"id",      l:"ID",        cls:"col-id"},
+  {k:"name",    l:"社名",      cls:"col-name"},
+  {k:"brand",   l:"別名・ブランド"},
+  {k:"group",   l:"グループ・親会社"},
+  {k:"cat",     l:"カテゴリ"},
+  {k:"struct",  l:"構造種別"},
+  {k:"method",  l:"主力工法"},
+  {k:"pmin",    l:"坪単価下限(万)"},
+  {k:"pmax",    l:"坪単価上限(万)"},
+  {k:"pnote",   l:"坪単価補足"},
+  {k:"heat",    l:"断熱★"},
+  {k:"quake",   l:"耐震等級"},
+  {k:"damper",  l:"制震・免震"},
+  {k:"hvac",    l:"全館空調"},
+  {k:"wall",    l:"外壁主力"},
+  {k:"guar1",   l:"保証躯体(年)"},
+  {k:"guar2",   l:"保証防水(年)"},
+  {k:"design",  l:"設計自由度"},
+  {k:"zeh",     l:"ZEH対応"},
+  {k:"metro",   l:"首都圏展開"},
+  {k:"str1",    l:"強み①"},
+  {k:"str2",    l:"強み②"},
+  {k:"str3",    l:"強み③"},
+  {k:"wk1",     l:"弱み①"},
+  {k:"wk2",     l:"弱み②"},
+  {k:"target",  l:"向いてる人"},
+  {k:"caution", l:"注意点"},
+  {k:"url",     l:"公式URL"},
+  {k:"prec",    l:"精度"},
+  {k:"upd",     l:"更新日"},
+];
+
+const RAW = [
+  ["HM001","積水ハウス","シャーウッド/軽量鉄骨/重量鉄骨","積水ハウスグループ","大手","木造・鉄骨","鉄骨ラーメン+木造(シャーウッド)","85","140","仕様・商品によって大幅変動","4","等級3以上","オイレスダンパー等あり","快適エアリー(オプション)","ダインコンクリート・ベルバーン等","30","25","高","◎","◎","業界最大手の実績・ブランド力","設計自由度が高く担当の提案力が高い","アフターサービスが充実","価格が業界最高水準クラス","担当者の質で品質差が出やすい","品質・ブランド・長期保証を重視し予算余裕がある層","初期見積もりと最終金額の乖離に注意。オプション追加で大幅増","https://www.sekisuihouse.co.jp/","B","2025-01"],
+  ["HM002","ダイワハウス","xevo Σ/xevo E等","大和ハウス工業","大手","鉄骨","鉄骨ラーメン構造","80","130","3〜4階建て・商業利用で高額化","3","等級3以上","なし(制震オプションあり)","エコジョーズ等(全館空調オプション)","ダイナミックフレーム外壁等","30","20","中","◎","◎","施工スピードが早い","商業・賃貸住宅ノウハウが豊富","全国対応力が高い","設計がやや画一的","価格が高め","建築スピード重視・安定した実績を求める層","グループ会社への誘導営業に注意","https://www.daiwahouse.co.jp/","B","2025-01"],
+  ["HM003","住友林業","BF構法の家","住友林業グループ","大手","木造","ビッグフレーム(BF)構法","80","140","木質素材へのこだわりで増額しやすい","4","等級3","なし(ダンパー系オプション)","マルチバランス換気(全館空調オプション)","木質系・吹付タイル等","30","20","高","◎","◎","木の素材感・質感が最高クラス","設計力・デザイン提案力が高い","林業グループとしての素材調達力","価格が高い(大手中でも上位)","木質素材の維持管理コストが発生","木の家・デザイン重視・予算余裕のある層","木材価格変動影響あり。標準仕様でも高額化","https://www.sfc.co.jp/","B","2025-01"],
+  ["HM004","へーベルハウス","旭化成ホームズ","旭化成グループ","大手","鉄骨","ALC(へーベル板)+重量鉄骨ラーメン","85","135","都市型・3階建てで高額化","3","等級3以上","なし","なし(標準)","ALC外壁(へーベル板)","60","25","中","◎","◎","60年ロングライフ設計が明確","都市部・防火地域での設計実績が豊富","ALC外壁の耐火・耐久性が高い","断熱性能は最高クラスではない","デザインがシンプルすぎる場合あり","都市部・防火地域・長期所有予定の層","60年保証の内容(有償メンテ前提)を詳細確認必須","https://www.asahi-kasei.co.jp/hebel/","B","2025-01"],
+  ["HM005","パナソニックホームズ","旧パナホーム","パナソニックグループ","大手","鉄骨","鉄骨ラーメン構造","80","130","設備充実度により変動","3","等級3以上","なし","エアロハス(全館空調あり)","外壁タイル標準に近い","35","20","中","◎","○","Panasonic設備・スマートハウス提案力","外壁タイルが標準に近い","省エネ・ZEH対応が充実","東海以西に展示場多く首都圏はやや弱い","価格が高め","スマートホーム・設備一体化を重視する層","首都圏の展示場・営業拠点が少ない点を確認","https://homes.panasonic.com/","B","2025-01"],
+  ["HM006","トヨタホーム","シンセ等","トヨタグループ","大手","鉄骨","鉄骨ユニット工法","75","120","ユニット制約考慮。設備充実で上振れ","3","等級3以上","なし","スマート・エアーズ(全館空調)","外壁タイル・塗り壁","35","25","中","◎","○","トヨタ品質・生産管理体制","保証・アフターが充実","全館空調が選択可","東海地盤で首都圏はやや弱い","ユニット工法で間取り・形状の制約あり","品質・保証・トヨタブランドを重視する層","ユニット工法のため複雑形状・狭小地は苦手","https://www.toyotahome.co.jp/","B","2025-01"],
+  ["HM007","セキスイハイム","ハイム・グランツーユー等","積水化学工業","大手","鉄骨+木造","鉄骨ユニット+木造ユニット工法","70","120","工場生産で品質安定","3","等級3以上","なし","快適空調システム(オプション)","外壁タイル標準","20","20","低","◎","◎","工場生産で施工品質が安定","太陽光・蓄電池の提案力が高い","メンテナンス体制が充実","設計・間取りの自由度が業界最低クラス","外観デザインが画一的","定型品質重視・太陽光活用・自由設計不要な層","間取り・デザインこだわりある場合は不満が出る","https://www.sekisuiheim.com/","B","2025-01"],
+  ["HM008","ミサワホーム","蔵のある家・MJ Wood等","三井不動産グループ","大手","木造","木質パネル工法","70","110","蔵プランで割高になる傾向","3","等級3以上","なし","なし","木質系・窯業系サイディング","20","20","中","◎","◎","蔵(大容量収納)の設計提案が独自","木質パネルで品質が安定","インテリアコーディネートが充実","木質パネル工法で間取り制約あり","他社との比較で特色が見えにくい","収納にこだわる・整理整頓が好きな層","木質パネルの制約(窓位置等)を事前理解","https://www.misawa.co.jp/","B","2025-01"],
+  ["HM009","三井ホーム","スマートブレインパネル等","三井不動産グループ","大手","木造","2×6木造枠組工法","80","130","デザイン重視でオプション増","4","等級3","なし","スマートブレインパネル(全館空調オプション)","窯業系・木質外壁","20","20","高","◎","◎","2×6で高断熱高気密を実現","デザイン力・インテリア提案力が高い","三井不動産グループのブランド力","価格が高め","アフター評価がまだら","断熱性能とデザイン性の両立を求める層","担当者・施工工場によって品質差あり","https://www.mitsuihome.co.jp/","B","2025-01"],
+  ["HM010","住友不動産","J・アーバン・ウィルスマート等","住友不動産グループ","大手","木造","木造軸組工法","60","100","大手の中ではコスパ良め","3","等級3","なし","なし","タイル・窯業系サイディング","30","15","中","○","◎","大手ブランドながらコスパが比較的良い","都市部・狭小地の設計実績","タイル外壁が選択可","営業の押し売りが強いとの口コミ多い","アフター評価がまだら","大手ブランドを求めながらコストも抑えたい層","契約を急かされやすい。冷静な判断を","https://www.sumitomo-rd.co.jp/housing/","B","2025-01"],
+  ["HM011","一条工務店","i-smart・i-cube・グラン・セゾン","一条工務店グループ","中堅","木造","独自スーパー断熱工法(2×6ベース)","55","80","全館床暖房込みの価格設定","5","等級3以上","なし","全館床暖房が標準(RAYエアコン付き)","ハイドロテクトタイル(外壁タイル標準)","10","10","低","◎","◎","断熱・気密性能が業界最高水準","全館床暖房が標準で光熱費削減","タイル外壁が標準でメンテコスト低","外観・内装デザインが画一的","標準仕様外の変更コストが高い","断熱・省エネ・光熱費削減を最重視する層","デザイン自由度は期待しないこと。フィリピン工場生産の認識も","https://www.ichijo.co.jp/","B","2025-01"],
+  ["HM012","桧家住宅","Z空調の家","桧家グループ(ヒノキヤグループ)","中堅","木造","木造軸組工法","55","80","Z空調込みの参考価格","3","等級3","なし","Z空調(全館空調)が標準","吹付外壁","10","10","中","○","◎","Z空調(全館空調)が標準でコスパ良い","アクアフォーム断熱で気密性確保","全館空調コスパが業界最良クラス","仕様の選択肢が狭い","担当者で品質差が出やすい","全館空調の快適性をコスパよく求める層","Z空調の電気代・ランニングコストを確認","https://hinokiya.jp/","B","2025-01"],
+  ["HM013","クレバリーホーム","タイル外壁の家","C&Sカンパニー","FC展開","木造","木造軸組工法","55","80","タイル外壁込みの設定","3","等級3","なし","なし","タイル外壁が標準","10","10","中","○","◎","タイル外壁が標準でメンテコスト低","フランチャイズで地域密着対応","全国展開で展示場が多い","FC加盟店で品質・対応力に大きな差","本部のアフター責任が不明確","外壁メンテコストを重視するコスパ重視層","FC加盟店の評判を個別に確認","https://www.cleverlyhome.com/","B","2025-01"],
+  ["HM014","アキュラホーム","スーパーフル装備等","AQ Group","中堅","木造","木造軸組工法","50","75","自由設計でオプション変動","3","等級3","なし","なし","窯業系サイディング","10","10","高","○","◎","コスパが中堅〜大手より良い","自由設計で対応力が高い","関東での施工実績が豊富","ブランド力が大手に比べ低い","関東中心で地方は非対応","コスパと自由設計を両立したい関東層","関東以外での対応が難しい","https://www.aqura.co.jp/","B","2025-01"],
+  ["HM015","ウィザースホーム","2×6の家","新昭和グループ","中堅","木造","2×6木造枠組工法","55","80","断熱仕様の充実度で変動","4","等級3以上","なし","なし","タイル・サイディング","10","10","中","◎","○","2×6で高断熱・高気密を実現","タイル外壁オプションが充実","千葉・関東での施工実績が豊富","関東限定で全国展開なし","知名度が低い","断熱性能とコスパを重視する関東在住の層","対応エリアが関東限定","https://www.wishers-home.com/","B","2025-01"],
+  ["HM016","ユニバーサルホーム","地熱床暖房の家","ユニバーサルホームFC本部","FC展開","木造","木造軸組工法","50","70","地熱システム込みの参考価格","3","等級3","なし","地熱床暖房(標準)","サイディング","10","10","低","○","◎","地熱を活用した床暖房が特徴","フランチャイズで全国対応可","床暖房を比較的手頃に導入できる","FC加盟店の品質差が大きい","設計自由度が低い","ローコストで床暖房を入れたい層","地熱効果は立地・地盤条件による差あり","https://www.universalhome.co.jp/","B","2025-01"],
+  ["HM017","タマホーム","大安心の家等","タマホーム株式会社","ローコスト","木造","木造軸組工法","30","55","オプション次第で大幅上昇。実際40〜60万が多い","2","等級3","なし","なし","窯業系サイディング","10","10","中","○","◎","業界屈指のローコスト","全国展開で対応力が高い","認知度・広告力が高く情報が多い","標準仕様がシンプルでオプションが増えやすい","アフターサービスの評価がまだら","とにかく建築費用を抑えたい層","見積から最終金額が大きく上がる傾向。詳細見積必須","https://www.tamahome.jp/","B","2025-01"],
+  ["HM018","ヤマダホームズ","旧エスバイエル","ヤマダホールディングス","中堅","木造","木造軸組工法+2×4","40","65","家電連携オプションで増額あり","3","等級3","なし","なし","窯業系サイディング","10","10","中","○","◎","ヤマダ電機との連携で家電一括提案","認知度が高く情報が多い","コスパはまあまあ","元エスバイエルで施工品質評価まだら","家電抱き合わせ営業が強い","家電とセットで揃えたいコスパ重視層","エスバイエル時代からのネットワーク継承のため担当者確認重要","https://www.yamadahomes.jp/","B","2025-01"],
+  ["HM019","アイフルホーム","LIXIL系FC","LIXIL住宅研究所","FC展開","木造","木造軸組工法","40","65","LIXIL設備が標準仕様","3","等級3","なし","なし","サイディング","10","10","中","○","◎","LIXIL設備が標準で充実","フランチャイズで全国対応","LIXILブランド信頼性を活用","FC加盟店の品質差が大きい","本部と加盟店の責任分担が不明確","LIXILブランド設備を標準で欲しいローコスト層","FC加盟店の評判を個別確認必須","https://www.eyefulhome.jp/","B","2025-01"],
+  ["HM020","秀光ビルド","明朗会計住宅","秀光ビルド株式会社","ローコスト","木造","木造軸組工法","30","50","明朗会計で追加費用なし原則","2","等級3","なし","なし","サイディング","10","10","低","△","○","明朗会計・追加費用なし原則","業界最安値クラス","全国展開拡大中","仕様が非常にシンプル","アフター体制が発展途上","最低限のコストで建てたいシンプル志向層","関西発で関東エリアの対応力・アフター実績は発展途上","https://www.shukobuild.com/","B","2025-01"],
+  ["HM021","富士住建","完全フル装備の家","富士住建株式会社","中堅","木造","木造軸組工法","45","70","フル装備込みの価格設定","3","等級3","なし","なし","タイル・サイディング","10","10","中","○","○","完全フル装備が標準(食洗機・浴室暖房等)","関東エリアでのコスパが高い","標準仕様の充実度が際立つ","関東限定(埼玉・千葉・神奈川・東京等)","対応エリア外は完全非対応","標準仕様の充実度を求める関東在住層","対応エリア外は完全不可。展示場への訪問を推奨","https://www.fujijuken.co.jp/","B","2025-01"],
+  ["HM022","アイ工務店","Ailive等","アイ工務店株式会社","中堅","木造","木造軸組工法","50","75","断熱仕様強化でオプション増","4","等級3以上","なし","なし","タイル・サイディング","10","10","中","◎","◎","近年急成長でコスパが良い","断熱性能が中堅トップクラス","設計力が高い","歴史が浅くアフター長期実績が未確認","急成長による施工品質維持に懸念","コスパと断熱性能を重視する層","若い会社のためアフター長期実績は未知数","https://www.ai-koumuten.co.jp/","B","2025-01"],
+  ["HM023","オープンハウス・アーキテクト","都市型注文住宅","オープンハウスグループ","中堅","木造","木造軸組工法","60","90","都市型・狭小地でコスト増","3","等級3","なし","なし","サイディング・タイル","10","10","中","○","◎","都市部・狭小地の設計実績が豊富","グループとして土地仕入れ力が高い","首都圏対応が強い","大量受注による施工品質のばらつき","アフター体制への不安","都市部の狭小地・変形地で家を建てたい層","グループ土地販売との抱き合わせ営業に注意","https://www.open-house.co.jp/arch/","B","2025-01"],
+  ["HM024","スウェーデンハウス","木製サッシ三層ガラス","スウェーデンハウス株式会社","輸入住宅","木造","スウェーデン式木造","80","120","輸入資材のため為替影響あり","5","等級3以上","なし","なし","木質外壁(レッドシダー等)","20","20","高","◎","◎","断熱・気密性能が業界最高水準クラス","北欧デザインの独自性が高い","長期耐久性の実績がある","価格が高い","北欧デザインが合わない人には不向き","断熱性能と北欧デザインにこだわる層","木製サッシのメンテナンス費用を長期で試算","https://www.sweden-house.co.jp/","B","2025-01"],
+  ["HM025","住宅情報館","K2ソーラー等","住宅情報館株式会社","FC展開","木造","木造軸組工法","45","70","FC加盟店で価格差あり","3","等級3","なし","なし","サイディング","10","10","中","○","○","フランチャイズで地域密着","コスパはまあまあ","太陽光提案が得意","FC加盟店で品質差あり","ブランド力・知名度が低い","地域密着でコスパを求める層","FC加盟店の個別評価を確認","https://www.jyuukyojoho.co.jp/","C","2025-01"],
+  ["HM026","ポラス","中央住宅・ポラスグループ","ポラスグループ","中堅","木造","木造軸組工法","55","80","関東エリアでの実績価格","3","等級3","なし","なし","サイディング・タイル","10","10","高","○","○","関東地域大手(埼玉・千葉・東京・神奈川)","土地情報・エリア知識が豊富","設計の自由度が比較的高い","関東限定で全国展開なし","全国ブランドではない","関東エリアで地域密着感を求める層","関東以外は対応不可","https://www.polus.co.jp/","B","2025-01"],
+  ["HM027","GLホーム","タイル外壁の高品質住宅","GL HOME株式会社","中堅","木造","木造軸組工法","55","80","タイル外壁込みの設定","3","等級3","なし","なし","タイル外壁","10","10","中","○","◎","タイル外壁が標準でメンテコスト低","コスパまあまあ","首都圏での対応力","知名度が低い","展示場が少ない","タイル外壁を標準で求めるコスパ重視層","展示場が少ないためWEB・資料請求から始める","https://gl-home.co.jp/","C","2025-01"],
+  ["HM028","アルネットホーム","サイエンス住宅等","アルネットホーム株式会社","中堅","木造","木造軸組工法","50","75","関東エリア標準","3","等級3","なし","なし","サイディング・タイル","10","10","中","○","○","関東地域での施工実績","コスパまあまあ","千葉・埼玉での知名度","関東限定","知名度が低い","関東での実績と適正価格を求める層","対応エリアが関東限定","https://www.arnet-home.co.jp/","C","2025-01"],
+  ["HM029","アーネストワン","飯田グループ系","飯田グループホールディングス","パワービルダー","木造","木造軸組工法","30","50","分譲・注文ともに低価格","2","等級3","なし","なし","サイディング","10","10","低","△","◎","業界最安値クラス","分譲住宅の供給力が高い","とにかくコストが一番安い","注文住宅のカスタマイズ性が極めて低い","品質が最低限","とにかく安く建てたい・建売感覚の層","注文住宅の自由度はほぼない。建売感覚で考えること","https://www.arnest1.co.jp/","B","2025-01"],
+  ["HM030","東栄住宅","ブルーミングガーデン等","東栄住宅株式会社","中堅","木造","木造軸組工法","50","75","分譲メインで注文は一部","3","等級3","なし","なし","サイディング","10","10","中","○","◎","首都圏分譲での強い実績","注文住宅も対応可","土地情報が充実","分譲メインで注文住宅の設計力が限定的","設計の幅が狭い","首都圏で土地込みのパッケージを検討する層","注文住宅の設計力は分譲ビルダーとしての限界を理解","https://www.token.co.jp/","B","2025-01"],
+  ["HM031","サイエンスホーム","真壁工法・ひのき格子","サイエンスホーム株式会社","FC展開","木造","真壁工法(ひのき+木格子)","55","75","和風デザイン込みの参考価格","3","等級3","なし","なし","木格子・板張り外壁","10","10","低","○","◎","和風・木の家デザインが独自","ひのき土台が標準","FC展開で全国対応可","FC加盟店で品質差あり","設計自由度が限られる","和風・木格子デザインにこだわる層","FC加盟店の評判と施工事例を必ず確認","https://www.sciencehome.jp/","B","2025-01"],
+  ["HM032","パパまるハウス","Z空調なしのヒノキヤ系","ヒノキヤグループ","ローコスト","木造","木造軸組工法","30","48","超ローコストの参考価格","2","等級3","なし","なし","サイディング","10","10","低","△","◎","ヒノキヤグループのローコストブランド","とにかく安い","全国展開","仕様が非常にシンプル","設計自由度が低い","最低限コストで建てたいシンプル志向層","デザインや仕様へのこだわりは諦める前提で","https://www.papamaru.co.jp/","B","2025-01"],
+  ["HM033","木下工務店","注文住宅","木下グループ","中堅","木造","木造軸組工法","55","80","グループ連携でサービス込みの場合","3","等級3","なし","なし","サイディング・タイル","10","10","中","○","◎","首都圏での実績・知名度","注文住宅の対応力","グループ展開でサービス充実","グループ全体ビジネスがメインで工務店として目立たない","グループ不動産との連携推奨が強い","首都圏で地域密着を求める層","木下グループの不動産事業との抱き合わせ営業に注意","https://www.kinoshita-koumuten.co.jp/","C","2025-01"],
+  ["HM034","ヤマト住建","高性能・ZEH住宅","ヤマト住建株式会社","中堅","木造","木造軸組工法+2×4混合","50","75","断熱仕様で変動","4","等級3以上","なし","なし","タイル・サイディング","10","10","中","◎","○","高性能住宅(UA値0.4以下)をコスパ良く実現","太陽光・ZEH提案が強い","断熱性能の性価比が良い","知名度が低い","展示場が少ない","断熱・省エネをコスパよく求める層","対応エリアを事前確認。展示場が少ない","https://www.yamatojk.co.jp/","B","2025-01"],
+  ["HM035","土屋ホーム","北海道の断熱技術","土屋ホームグループ","中堅","木造","木造軸組工法(外張り断熱)","60","90","北海道基準の断熱仕様","5","等級3以上","なし","なし","外張り断熱+サイディング","20","10","中","◎","△","北海道基準の断熱・気密性能がトップクラス","寒冷地住宅の実績が豊富","長期耐久性に定評","北海道・東北中心で首都圏対応は弱い","首都圏の展示場が少ない","高断熱・高気密にこだわる層","首都圏での対応エリア・展示場を事前確認","https://www.tsuchiyahome.jp/","B","2025-01"]
+];
+
+let data = RAW.map(r => Object.fromEntries(COLS.map((c,i)=>[c.k, r[i]||''])));
+let filtered = [...data];
+let sortKey = null, sortDir = 1;
+
+function buildHeader() {
+  const tr = document.getElementById('thead-row');
+  COLS.forEach(c => {
+    const th = document.createElement('th');
+    if (c.cls) th.className = c.cls;
+    th.textContent = c.l;
+    th.addEventListener('click', () => doSort(c.k));
+    tr.appendChild(th);
+  });
+}
+
+function doSort(key) {
+  if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = 1; }
+  filtered.sort((a,b) => {
+    const av = isNaN(a[key]) ? a[key] : +a[key];
+    const bv = isNaN(b[key]) ? b[key] : +b[key];
+    return (av < bv ? -1 : av > bv ? 1 : 0) * sortDir;
+  });
+  renderTable();
+  document.querySelectorAll('thead th').forEach(t => t.classList.remove('asc','desc'));
+  const idx = COLS.findIndex(c=>c.k===key);
+  document.querySelectorAll('thead th')[idx]?.classList.add(sortDir===1?'asc':'desc');
+}
+
+function stars(n) {
+  return '<span style="color:#fbbf24">' + '★'.repeat(+n) + '</span><span style="color:#374151">' + '☆'.repeat(5-(+n)) + '</span>';
+}
+
+function fmt(val, col) {
+  if (!val || val==='-') return '<span style="color:#374151">—</span>';
+  if (col==='url') return `<a href="${val}" target="_blank" rel="noopener">開く ↗</a>`;
+  if (col==='cat') return `<span class="badge badge-${val}">${val}</span>`;
+  if (col==='heat') return stars(val);
+  if (col==='zeh' || col==='metro') return `<span class="cc cc-${val}">${val}</span>`;
+  if (col==='prec') return `<span class="prec-${val}">${val}</span>`;
+  return val;
+}
+
+function renderTable() {
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = '';
+  filtered.forEach(row => {
+    const tr = document.createElement('tr');
+    COLS.forEach(c => {
+      const td = document.createElement('td');
+      if (c.cls) td.className = c.cls;
+      td.innerHTML = fmt(row[c.k], c.k);
+      td.title = row[c.k];
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  document.getElementById('count').textContent = `35社 中 ${filtered.length}件表示`;
+}
+
+function applyFilters() {
+  const q = document.getElementById('s-q').value.toLowerCase();
+  const cat = document.getElementById('s-cat').value;
+  const struct = document.getElementById('s-struct').value;
+  const heat = document.getElementById('s-heat').value;
+  const pmin = document.getElementById('s-pmin').value;
+  const pmax = document.getElementById('s-pmax').value;
+  const design = document.getElementById('s-design').value;
+  const metro = document.getElementById('s-metro').value;
+  const zeh = document.getElementById('s-zeh').value;
+
+  filtered = data.filter(r => {
+    if (q && !Object.values(r).join(' ').toLowerCase().includes(q)) return false;
+    if (cat && r.cat !== cat) return false;
+    if (struct && !r.struct.includes(struct)) return false;
+    if (heat && +r.heat < +heat) return false;
+    if (pmin && +r.pmin < +pmin) return false;
+    if (pmax && +r.pmin > +pmax) return false;
+    if (design && r.design !== design) return false;
+    if (metro && r.metro !== metro) return false;
+    if (zeh && r.zeh !== zeh) return false;
+    return true;
+  });
+  renderTable();
+}
+
+function resetAll() {
+  ['s-q','s-cat','s-struct','s-heat','s-pmin','s-pmax','s-design','s-metro','s-zeh'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = '';
+  });
+  filtered = [...data];
+  renderTable();
+}
+
+['s-q','s-cat','s-struct','s-heat','s-pmin','s-pmax','s-design','s-metro','s-zeh'].forEach(id => {
+  document.getElementById(id).addEventListener('input', applyFilters);
+  document.getElementById(id).addEventListener('change', applyFilters);
+});
+
+buildHeader();
+renderTable();
+</script>
+</body>
+</html>

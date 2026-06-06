@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工務店DB | 山寿</title>
+<style>
+:root {
+  --bg: #0f1117; --surface: #1a1d27; --border: #2a2d3a;
+  --text: #e2e8f0; --muted: #64748b; --accent: #34d399;
+  --green: #4ade80; --yellow: #facc15; --orange: #fb923c; --red: #f87171;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system,'Hiragino Sans','Yu Gothic',sans-serif; font-size: 11px; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+header { padding: 10px 16px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+header h1 { font-size: 14px; font-weight: 700; }
+#count { color: var(--muted); font-size: 11px; }
+.hint { color: var(--muted); font-size: 10px; margin-left: auto; }
+.notice { background: #1a2a1a; border: 1px solid #2a4a2a; color: #86efac; padding: 6px 16px; font-size: 10px; flex-shrink: 0; }
+.filters { padding: 8px 16px; background: var(--surface); border-bottom: 2px solid var(--border); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; flex-shrink: 0; }
+.fg { display: flex; align-items: center; gap: 4px; }
+.fg label { color: var(--muted); font-size: 10px; white-space: nowrap; }
+input[type="text"] { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 4px 8px; border-radius: 4px; font-size: 11px; font-family: inherit; width: 180px; }
+select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 4px 6px; border-radius: 4px; font-size: 11px; font-family: inherit; }
+input[type="number"] { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 4px 6px; border-radius: 4px; font-size: 11px; font-family: inherit; width: 60px; }
+.reset-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-family: inherit; }
+.reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+.table-wrap { flex: 1; overflow: auto; }
+table { border-collapse: collapse; white-space: nowrap; min-width: 100%; }
+thead th { background: var(--surface); border: 1px solid var(--border); padding: 6px 10px; cursor: pointer; user-select: none; font-weight: 600; color: var(--muted); font-size: 10px; position: sticky; top: 0; z-index: 2; }
+thead th:hover { background: #252836; color: var(--text); }
+thead th.asc::after { content: ' ↑'; color: var(--accent); }
+thead th.desc::after { content: ' ↓'; color: var(--accent); }
+tbody tr:hover { background: rgba(52,211,153,0.06); }
+tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+td { border: 1px solid var(--border); padding: 5px 10px; vertical-align: top; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+.col-id { color: var(--muted); font-family: monospace; font-size: 10px; position: sticky; left: 0; background: var(--bg); z-index: 1; min-width: 54px; }
+.col-name { font-weight: 700; position: sticky; left: 54px; background: var(--bg); z-index: 1; border-right: 2px solid var(--border) !important; min-width: 150px; }
+thead th.col-id { left: 0; z-index: 3; }
+thead th.col-name { left: 54px; z-index: 3; border-right: 2px solid var(--border) !important; }
+tr:hover .col-id, tr:hover .col-name { background: #151824; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.prec-A { color: var(--green); font-weight: 700; }
+.prec-B { color: var(--yellow); }
+.prec-C { color: var(--orange); }
+.tag { display: inline-block; padding: 1px 5px; border-radius: 3px; font-size: 10px; background: #1a2a3a; color: #93c5fd; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🏗 工務店 DB</h1>
+  <span id="count">— 件表示</span>
+  <span class="hint">列ヘッダーでソート　|　左2列は固定　|　横スクロールで全列表示</span>
+</header>
+<div class="notice">⚠ データ精度: A=高信頼 / B=目安(要確認) / C=情報少ない・要現地調査 ｜ 工務店は現地調査・口コミ確認が必須です</div>
+<div class="filters">
+  <div class="fg"><label>🔍 検索</label><input type="text" id="s-q" placeholder="社名・強み・エリアなど…"></div>
+  <div class="fg"><label>都道府県</label>
+    <select id="s-pref">
+      <option value="">すべて</option>
+      <option>東京</option><option>埼玉</option><option>千葉</option><option>神奈川</option>
+    </select>
+  </div>
+  <div class="fg"><label>設計自由度</label>
+    <select id="s-design"><option value="">すべて</option><option>高</option><option>中</option><option>低</option><option>★(最高)</option></select>
+  </div>
+  <div class="fg"><label>断熱★以上</label>
+    <select id="s-heat"><option value="">すべて</option><option value="5">★5</option><option value="4">★4以上</option><option value="3">★3以上</option></select>
+  </div>
+  <div class="fg"><label>坪単価〜</label><input type="number" id="s-pmax" placeholder="例:70"></div>
+  <div class="fg"><label>データ精度</label>
+    <select id="s-prec"><option value="">すべて</option><option>A</option><option>B</option></select>
+  </div>
+  <button class="reset-btn" onclick="resetAll()">リセット</button>
+</div>
+<div class="table-wrap">
+  <table>
+    <thead><tr id="thead-row"></tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<script>
+const COLS = [
+  {k:"id",      l:"ID",           cls:"col-id"},
+  {k:"name",    l:"社名",         cls:"col-name"},
+  {k:"pref",    l:"都道府県"},
+  {k:"area",    l:"主力エリア"},
+  {k:"coverage",l:"施工エリア"},
+  {k:"size",    l:"会社規模"},
+  {k:"struct",  l:"構造種別"},
+  {k:"method",  l:"主力工法"},
+  {k:"pmin",    l:"坪単価下限(万)"},
+  {k:"pmax",    l:"坪単価上限(万)"},
+  {k:"pnote",   l:"坪単価補足"},
+  {k:"heat",    l:"断熱★"},
+  {k:"quake",   l:"耐震等級"},
+  {k:"design",  l:"設計自由度"},
+  {k:"specialty",l:"得意分野"},
+  {k:"award",   l:"受賞・認定"},
+  {k:"est",     l:"創業年"},
+  {k:"annual",  l:"年間施工棟数"},
+  {k:"str1",    l:"強み①"},
+  {k:"str2",    l:"強み②"},
+  {k:"wk1",     l:"弱み①"},
+  {k:"feature", l:"特徴"},
+  {k:"review",  l:"口コミ傾向"},
+  {k:"url",     l:"公式URL"},
+  {k:"prec",    l:"精度"},
+  {k:"upd",     l:"更新日"},
+  {k:"note",    l:"備考"},
+];
+
+const RAW = [
+  ["KM001","ポラス(中央住宅)","埼玉・千葉・東京・神奈川","さいたま市・越谷市","関東4都県中心","大(グループ売上2000億超)","木造","木造軸組工法","55","80","注文住宅は坪60〜","3","等級3","高","土地情報・地域密着・注文住宅","長期優良住宅実績あり","1967年","年間2000棟超(グループ全体)","関東エリアの地主・土地情報が豊富","注文住宅の設計自由度がFC・大手より高め","地域ブランドで全国知名度は低い","分譲・建売・注文すべて展開するグループ","エリア内では信頼性高い口コミ多い","https://www.polus.co.jp/","B","2025-01","グループで不動産・分譲も展開"],
+  ["KM002","富士住建","埼玉・千葉・神奈川・東京","さいたま市","関東(埼玉・千葉・神奈川・東京・茨城・群馬・栃木)","中(上場企業)","木造","木造軸組工法","45","70","完全フル装備込みの価格","3","等級3","中","フル装備住宅・コスパ重視","長期優良住宅実績あり","1975年","年間約400棟","標準仕様が業界最高水準（食洗機・浴室暖房・電動シャッター等）","コスパが高く同額で他社より仕様が良い","対応エリアが関東に限定","完全フル装備を売りにした独自路線","対応エリア内では高評価が多い","https://www.fujijuken.co.jp/","B","2025-01","エリア外は完全非対応。要事前確認"],
+  ["KM003","アキュラホーム","東京・埼玉・神奈川・千葉","東京都多摩地区中心","関東中心(一部東海も)","中","木造","木造軸組工法","50","75","自由設計オプションで変動","3","等級3","高","自由設計・コスパ・関東","—","1987年","年間約800棟","コスパと自由設計の両立","関東での実績と知名度","大手ほどのブランド力はない","コストを抑えながら自由設計を実現する中堅","関東在住者の口コミが多い","https://www.aqura.co.jp/","B","2025-01",""],
+  ["KM004","相陽建設","神奈川","相模原市・厚木市・横浜市","神奈川県中心","中小","木造","木造軸組工法","55","80","注文住宅の標準的設定","3","等級3","高","神奈川・自然素材・地域密着","—","—","—","神奈川地域での信頼性","自然素材への対応力","エリアが限定的","神奈川で自然素材系の注文住宅に強い","地域密着で評判が安定","https://www.soyo-k.co.jp/","C","2025-01","要現地確認・口コミ少ない"],
+  ["KM005","細田工務店","埼玉・東京","さいたま市","埼玉・東京中心","中","木造","木造軸組工法","55","80","設計重視で上振れあり","3","等級3","高","設計力・デザイン性","—","1962年","—","設計力と施工品質のバランス","埼玉・東京での実績","知名度が低い","設計にこだわれる地場工務店","設計力を評価する口コミが目立つ","https://hosoda-koumuten.co.jp/","C","2025-01","要現地確認"],
+  ["KM006","ウィザースホーム","千葉・東京・神奈川・埼玉","千葉市","関東4都県","中","木造","2×6木造枠組工法","55","80","断熱仕様の充実度で変動","4","等級3以上","中","高断熱・高気密・コスパ","長期優良住宅実績あり","—","—","2×6高断熱をコスパよく実現","千葉・関東での施工実績","知名度がHMより低い","断熱性能にこだわる地場ビルダー","断熱性能評価が高い口コミ多い","https://www.wishers-home.com/","B","2025-01","新昭和グループ。HMとしても分類可"],
+  ["KM007","フリーダムアーキテクツ","東京・全国","東京都","全国(設計事務所型)","中","木造・RC・混合","設計事務所型フルオーダー","80","150","設計事務所型で幅広い","4","等級3以上","★(最高)","デザイン性重視・フルオーダー・高品質","—","2000年","—","デザイン自由度が最高クラス","施工品質の高さ","価格が高め・工期が長い","設計事務所と施工会社の統合型","デザイン・品質を重視する施主の評価が高い","https://freedom.co.jp/","B","2025-01","設計事務所型。自由度最高だが費用も高い"],
+  ["KM008","相羽建設","東京・埼玉","東村山市・所沢市","東京多摩・埼玉","中小","木造","木造軸組工法(自然素材)","60","85","自然素材仕様込みの価格","4","等級3以上","高","自然素材・木の家・地域密着","長期優良住宅実績あり","1969年","年間約30棟","自然素材・無垢材の使い方が丁寧","地域密着で施主との関係性重視","棟数が少なく予約が取りにくい場合あり","東京多摩地区の地場工務店・自然素材に強み","施主からの評価が非常に高い","https://www.aiba-e.com/","B","2025-01","棟数少なく予約難。早め接触推奨"],
+  ["KM009","NACハウスプロデュース","東京・首都圏","東京都","首都圏","中","木造","木造軸組工法","55","80","企画・プロデュース型","3","等級3","高","プロデュース型・設計事務所連携","—","—","—","設計事務所連携で高い設計力","プロデュース型で選択肢が広い","知名度が低い","設計事務所と連携する住宅プロデュース会社","設計重視層に評判","—","C","2025-01","要現地調査。情報限定的"],
+  ["KM010","高砂建設","神奈川","横浜市","神奈川中心","中","木造","木造軸組工法","55","80","地域標準的な設定","3","等級3","高","神奈川・横浜・地域密着","—","1952年","—","神奈川・横浜での長年の実績","地域密着で施主対応が丁寧","エリアが限定的","神奈川・横浜地区の老舗地場工務店","地域内の口コミが安定","https://www.takasago-const.co.jp/","C","2025-01","要現地確認"],
+  ["KM011","ヤマト住建","千葉・埼玉・東京・神奈川","千葉市","関東・中部・近畿","中(上場企業)","木造","木造軸組工法+2×4","50","75","高断熱仕様で変動","4","等級3以上","中","高断熱・ZEH・コスパ","ZEHビルダー登録","—","—","高性能住宅をコスパよく実現","ZEH対応の実績","知名度が低い","断熱・省エネ性能に特化した中堅ビルダー","断熱重視の施主の口コミが高い","https://www.yamatojk.co.jp/","B","2025-01","HMとしても分類可能"],
+  ["KM012","三陽工務店","埼玉","さいたま市","埼玉中心","中小","木造","木造軸組工法","50","75","地域標準的な設定","3","等級3","高","埼玉・地域密着","—","—","—","埼玉地域での実績","地域密着の対応力","エリアが限定的","埼玉の地場工務店","—","—","C","2025-01","情報限定的。要現地調査"],
+];
+
+let data = RAW.map(r => Object.fromEntries(COLS.map((c,i)=>[c.k, r[i]||''])));
+let filtered = [...data];
+let sortKey = null, sortDir = 1;
+
+function buildHeader() {
+  const tr = document.getElementById('thead-row');
+  COLS.forEach(c => {
+    const th = document.createElement('th');
+    if (c.cls) th.className = c.cls;
+    th.textContent = c.l;
+    th.addEventListener('click', () => doSort(c.k));
+    tr.appendChild(th);
+  });
+}
+
+function doSort(key) {
+  if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = 1; }
+  filtered.sort((a,b) => {
+    const av = isNaN(a[key]) ? a[key] : +a[key];
+    const bv = isNaN(b[key]) ? b[key] : +b[key];
+    return (av < bv ? -1 : av > bv ? 1 : 0) * sortDir;
+  });
+  renderTable();
+  document.querySelectorAll('thead th').forEach(t => t.classList.remove('asc','desc'));
+  const idx = COLS.findIndex(c=>c.k===key);
+  document.querySelectorAll('thead th')[idx]?.classList.add(sortDir===1?'asc':'desc');
+}
+
+function stars(n) {
+  if (!n || isNaN(n)) return n || '—';
+  return '<span style="color:#fbbf24">' + '★'.repeat(+n) + '</span><span style="color:#374151">' + '☆'.repeat(5-(+n)) + '</span>';
+}
+
+function fmt(val, col) {
+  if (!val || val==='—' || val==='-') return '<span style="color:#374151">—</span>';
+  if (col==='url') return val.startsWith('http') ? `<a href="${val}" target="_blank" rel="noopener">開く ↗</a>` : val;
+  if (col==='heat') return stars(val);
+  if (col==='prec') return `<span class="prec-${val}">${val}</span>`;
+  return val;
+}
+
+function renderTable() {
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = '';
+  filtered.forEach(row => {
+    const tr = document.createElement('tr');
+    COLS.forEach(c => {
+      const td = document.createElement('td');
+      if (c.cls) td.className = c.cls;
+      td.innerHTML = fmt(row[c.k], c.k);
+      td.title = row[c.k];
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  document.getElementById('count').textContent = `${RAW.length}社 中 ${filtered.length}件表示`;
+}
+
+function applyFilters() {
+  const q = document.getElementById('s-q').value.toLowerCase();
+  const pref = document.getElementById('s-pref').value;
+  const design = document.getElementById('s-design').value;
+  const heat = document.getElementById('s-heat').value;
+  const pmax = document.getElementById('s-pmax').value;
+  const prec = document.getElementById('s-prec').value;
+
+  filtered = data.filter(r => {
+    if (q && !Object.values(r).join(' ').toLowerCase().includes(q)) return false;
+    if (pref && !r.pref.includes(pref)) return false;
+    if (design && r.design !== design) return false;
+    if (heat && (isNaN(r.heat) || +r.heat < +heat)) return false;
+    if (pmax && +r.pmin > +pmax) return false;
+    if (prec && r.prec !== prec) return false;
+    return true;
+  });
+  renderTable();
+}
+
+function resetAll() {
+  ['s-q','s-pref','s-design','s-heat','s-pmax','s-prec'].forEach(id => document.getElementById(id).value='');
+  filtered = [...data];
+  renderTable();
+}
+
+['s-q','s-pref','s-design','s-heat','s-pmax','s-prec'].forEach(id => {
+  document.getElementById(id).addEventListener('input', applyFilters);
+  document.getElementById(id).addEventListener('change', applyFilters);
+});
+
+buildHeader();
+renderTable();
+</script>
+</body>
+</html>
