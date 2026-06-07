@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>家づくり後悔調査レポート｜YAMAJU Research</title>
+<style>
+  :root {
+    --navy: #0C1C34;
+    --navy-mid: #1a2f52;
+    --navy-light: #2d4a7a;
+    --orange: #D4845A;
+    --orange-light: #F2A97E;
+    --orange-pale: #fdf0e8;
+    --cream: #faf8f5;
+    --gray: #6b7280;
+    --gray-light: #f3f4f6;
+    --red: #dc2626;
+    --red-pale: #fef2f2;
+    --yellow: #d97706;
+    --yellow-pale: #fffbeb;
+    --green: #059669;
+    --green-pale: #ecfdf5;
+    --blue: #3B6FCF;
+    --blue-pale: #E8F0FF;
+    --text: #1f2937;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .site-header {
+    background: var(--navy);
+    color: white;
+    padding: 40px 24px 32px;
+    text-align: center;
+  }
+  .site-header .label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--orange-light);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .site-header h1 {
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .site-header .meta {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+  }
+
+  .nav-pills {
+    background: var(--navy-mid);
+    padding: 12px 24px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-pill {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.8);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .nav-pill:hover {
+    background: var(--orange);
+    color: white;
+    border-color: var(--orange);
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* Summary stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .stat-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.1;
+  }
+  .stat-num.orange { color: var(--orange); }
+  .stat-label {
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* Ranking table */
+  .ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border: 1px solid #e5e7eb;
+    margin-bottom: 40px;
+  }
+  .ranking-table th {
+    background: var(--navy);
+    color: white;
+    padding: 12px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+  }
+  .ranking-table td {
+    padding: 12px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: top;
+  }
+  .ranking-table tr:last-child td { border-bottom: none; }
+  .ranking-table tr:hover td { background: #fafafa; }
+  .rank-num {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--navy);
+    text-align: center;
+  }
+  .rank-num.top3 { color: var(--orange); }
+
+  /* Category section */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 48px 0 20px;
+  }
+  .section-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--navy);
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .section-header .sub {
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 2px;
+  }
+
+  /* Detail cards */
+  .detail-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .detail-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.04em;
+  }
+  .badge-red   { background: var(--red-pale); color: var(--red); }
+  .badge-yellow{ background: var(--yellow-pale); color: var(--yellow); }
+  .badge-green { background: var(--green-pale); color: var(--green); }
+  .badge-blue  { background: var(--blue-pale); color: var(--blue); }
+
+  .failure-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .failure-list li {
+    display: flex;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .failure-list li::before {
+    content: "×";
+    color: var(--red);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .quote-box {
+    background: var(--orange-pale);
+    border-left: 3px solid var(--orange);
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    font-size: 12px;
+    color: #7a4a2a;
+    margin-top: 12px;
+  }
+
+  .cause-box {
+    background: var(--gray-light);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 12px;
+  }
+  .cause-box strong { color: var(--text); }
+
+  /* Insight banner */
+  .insight-banner {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    color: white;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin: 48px 0 24px;
+  }
+  .insight-banner .label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--orange-light);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .insight-banner h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .insight-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .insight-list li {
+    display: flex;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.9);
+  }
+  .insight-list li::before {
+    content: "→";
+    color: var(--orange-light);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* Source table */
+  .source-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 16px;
+  }
+  .source-table th {
+    background: var(--gray-light);
+    padding: 8px 12px;
+    text-align: left;
+    color: var(--gray);
+    font-weight: 600;
+  }
+  .source-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #f3f4f6;
+    color: var(--text);
+  }
+  .source-table tr:last-child td { border-bottom: none; }
+
+  /* Gap box */
+  .gap-box {
+    background: var(--yellow-pale);
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 12px;
+    color: #92400e;
+    margin-top: 8px;
+  }
+  .gap-box::before { content: "⚠ 未調査: "; font-weight: 700; }
+
+  footer {
+    margin-top: 48px;
+    font-size: 12px;
+    color: #bbb;
+    text-align: center;
+    padding-bottom: 40px;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--gray);
+    text-decoration: none;
+    margin-bottom: 32px;
+  }
+  .back-link:hover { color: var(--navy); }
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <div class="label">User Research · Market Intel</div>
+  <h1>家づくりで後悔したポイント</h1>
+  <p class="meta">3調査・延べ30万人以上のデータ統合｜2026-06-08 作成</p>
+</div>
+
+<nav class="nav-pills">
+  <a class="nav-pill" href="#overview">概要</a>
+  <a class="nav-pill" href="#ranking">総合ランキング</a>
+  <a class="nav-pill" href="#madori">間取り・動線・収納</a>
+  <a class="nav-pill" href="#setsubi">設備・コンセント</a>
+  <a class="nav-pill" href="#yosan">予算・業者選び</a>
+  <a class="nav-pill" href="#insight">山寿への示唆</a>
+  <a class="nav-pill" href="index.html">← Hub</a>
+</nav>
+
+<div class="container">
+
+  <a class="back-link" href="index.html">← Research Hub に戻る</a>
+
+  <!-- =========================================================
+       SECTION: 概要
+  ========================================================== -->
+  <div id="overview">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num orange">85.5%</div>
+        <div class="stat-label">家を建てた人が何らかの<br>失敗・後悔を経験<br><span style="font-size:11px;color:#bbb">AZWAY 393人調査 2023年</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">243<span style="font-size:18px;font-weight:500">万円</span></div>
+        <div class="stat-label">予算オーバーの平均額<br><span style="font-size:11px;color:#bbb">SUUMO調査</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num orange">23.5%</div>
+        <div class="stat-label">コンセント位置を<br>後悔した割合（SUUMO調査<br>400人、2025年8月）</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">10<span style="font-size:18px;font-weight:500">項目</span></div>
+        <div class="stat-label">主要後悔カテゴリ<br>3調査統合ランキング</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       SECTION: 総合ランキング
+  ========================================================== -->
+  <div id="ranking">
+    <div class="section-header">
+      <div class="section-icon">🏆</div>
+      <div>
+        <h2>総合後悔ランキング</h2>
+        <div class="sub">SUUMO（400人）・AZWAY（393人）・THE ROOM TOUR（30万人）の3調査統合</div>
+      </div>
+    </div>
+
+    <table class="ranking-table">
+      <thead>
+        <tr>
+          <th style="width:50px">順位</th>
+          <th>後悔カテゴリ</th>
+          <th>代表データ</th>
+          <th>根本原因</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rank-num top3">1</td>
+          <td><strong>間取り・動線</strong></td>
+          <td>AZWAY 1位（73人）<br>THE ROOM TOUR 1位</td>
+          <td>生活動線を3Dで想像できなかった。将来変化を考慮しなかった</td>
+        </tr>
+        <tr>
+          <td class="rank-num top3">2</td>
+          <td><strong>収納不足</strong></td>
+          <td>AZWAY 2位（54人）<br>SUUMO 2位（15.5%）</td>
+          <td>現状の持ち物しか想定しなかった。子どもの成長後に破綻</td>
+        </tr>
+        <tr>
+          <td class="rank-num top3">3</td>
+          <td><strong>コンセント位置・数</strong></td>
+          <td>SUUMO 1位（23.5%）<br>THE ROOM TOUR 9位</td>
+          <td>建築時点の家電しか想定せず、家具配置も考慮しなかった</td>
+        </tr>
+        <tr>
+          <td class="rank-num">4</td>
+          <td><strong>窓の位置・サイズ</strong></td>
+          <td>THE ROOM TOUR 3位<br>SUUMO 7位</td>
+          <td>採光・通風・プライバシーの複合検討が不十分</td>
+        </tr>
+        <tr>
+          <td class="rank-num">5</td>
+          <td><strong>予算オーバー</strong></td>
+          <td>THE ROOM TOUR 4位<br>平均+243万円</td>
+          <td>付帯工事費・諸費用・外構を見積もりに含めていなかった</td>
+        </tr>
+        <tr>
+          <td class="rank-num">6</td>
+          <td><strong>外構の後回し</strong></td>
+          <td>THE ROOM TOUR 5位</td>
+          <td>建物予算を使い切り「後でやろう」が年単位で放置される</td>
+        </tr>
+        <tr>
+          <td class="rank-num">7</td>
+          <td><strong>立地・環境</strong></td>
+          <td>AZWAY 3位（36人）</td>
+          <td>交通量・騒音・日照を事前確認せず感覚で選んだ</td>
+        </tr>
+        <tr>
+          <td class="rank-num">8</td>
+          <td><strong>部屋・LDKの広さ</strong></td>
+          <td>SUUMO 3位（11.5%）</td>
+          <td>家具を置いた後の通路幅を図面で確認しなかった</td>
+        </tr>
+        <tr>
+          <td class="rank-num">9</td>
+          <td><strong>担当業者・営業の質</strong></td>
+          <td>THE ROOM TOUR 10位</td>
+          <td>1社だけで決定。担当者の質を判断する基準を持っていなかった</td>
+        </tr>
+        <tr>
+          <td class="rank-num">10</td>
+          <td><strong>住宅設備の選択</strong></td>
+          <td>AZWAY 同率6位</td>
+          <td>営業任せで採用/非採用を決め、後から後悔</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- =========================================================
+       SECTION: 間取り・動線・収納
+  ========================================================== -->
+  <div id="madori">
+    <div class="section-header">
+      <div class="section-icon">🏠</div>
+      <div>
+        <h2>間取り・動線・収納</h2>
+        <div class="sub">最大の後悔カテゴリ。住み始めてから初めて気づくパターンが多い</div>
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <h3>間取りの失敗 <span class="badge badge-red">AZWAY 1位 · 73人</span></h3>
+      <ul class="failure-list">
+        <li>玄関が狭すぎた — 靴・ベビーカー・外遊び道具が溢れ来客時に困る</li>
+        <li>LDKが狭かった — ソファを置いたら通路が通れなくなった（愛知・30代女性）</li>
+        <li>吹き抜け・大窓による寒暖差 — 冷暖房効率が想定以上に悪い</li>
+        <li>騒音問題 — 子ども部屋が寝室に隣接、就寝時に音が筒抜け</li>
+        <li>南道路の視線 — 道路からの目線が気になりカーテンを常に閉めることに</li>
+      </ul>
+      <div class="cause-box">
+        <strong>根本原因：</strong>完成した間取り図を「2D」で確認したが、生活動線を3Dで想像できなかった。業者任せにして自分の要望を図面に落とし込む前に確定した。
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <h3>動線の失敗 <span class="badge badge-yellow">毎日のストレスに直結</span></h3>
+      <ul class="failure-list">
+        <li>洗濯動線が長い — 洗濯機（1F）→干し場（2F）→収納（各部屋）が分散</li>
+        <li>キッチン〜ダイニングが遠い — 毎食の配膳・片付けに余分な動きが生じる</li>
+        <li>帰宅後に水まわりへ直行できない — 手洗い動線が確保されていない</li>
+        <li>一方通行の廊下 — 回遊動線を採用せず、家事効率が著しく低下</li>
+      </ul>
+      <div class="quote-box">「回遊動線にすればよかった」（千葉・20代女性、SUUMO調査）</div>
+    </div>
+
+    <div class="detail-card">
+      <h3>収納の失敗 <span class="badge badge-red">AZWAY 2位 · 54人 / SUUMO 15.5%</span></h3>
+      <ul class="failure-list">
+        <li>総量不足 — 子どもが生まれ物が急増。「これから子どもが増えると足りなくなる」（大阪・20代女性）</li>
+        <li>使いにくい位置 — 収納はあるが奥まっていて日常的に取り出しにくい</li>
+        <li>ウォークインが動線外 — 寝室奥のWICが実際の動線と合わずデッドスペース化</li>
+        <li>季節物・アウトドア用品の置き場なし — 扇風機・スキー・キャンプ道具が行き場を失う</li>
+        <li>玄関収納不足 — 靴・ベビーカー・自転車用品が溢れる</li>
+      </ul>
+      <div class="cause-box">
+        <strong>設計目安：</strong>床面積の10〜15%を収納に確保。「今の持ち物」ではなく「5年後の持ち物量」を基準に計画する。パントリー・シューズクローク・ファミリークローゼットの採否は優先度が高い。
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       SECTION: 設備・コンセント・窓
+  ========================================================== -->
+  <div id="setsubi">
+    <div class="section-header">
+      <div class="section-icon">🔌</div>
+      <div>
+        <h2>設備・コンセント・窓</h2>
+        <div class="sub">コンセントはSUUMO調査で単一項目1位（23.5%）。最も定量化しやすい後悔</div>
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <h3>コンセントの失敗 <span class="badge badge-red">SUUMO 1位 · 23.5%</span></h3>
+      <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:12px">
+        <thead>
+          <tr style="background:var(--gray-light)">
+            <th style="padding:8px 12px;text-align:left;font-weight:600;color:var(--gray)">失敗パターン</th>
+            <th style="padding:8px 12px;text-align:left;font-weight:600;color:var(--gray)">具体的な困り事</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px">位置が悪い</td>
+            <td style="padding:8px 12px">家具（ソファ・ベッド・収納）で隠れてしまった</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px">数が少ない</td>
+            <td style="padding:8px 12px">キッチンで家電を同時使用すると不足。「キッチン・洗面所に増やせばよかった」（愛知・20代女性）</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px">洗面所・脱衣所不足</td>
+            <td style="padding:8px 12px">ドライヤー・電動歯ブラシ・ヘアアイロンが競合</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px">屋外コンセントなし</td>
+            <td style="padding:8px 12px">電動自転車充電・防犯カメラ・季節装飾で後付けが困難</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px">玄関コンセントなし</td>
+            <td style="padding:8px 12px">スマートホーム化・電気錠で後から追加が難しい</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="cause-box">
+        <strong>根本原因：</strong>「建築時点の持ち物・家電」だけを想定。子どもの成長・新しい趣味・防災備蓄・家電増加を見越さなかった。
+      </div>
+      <div class="quote-box">コンセントで後悔する人は"生活を想像せずに家を設計した人"。建築時の持ち物しか想定していない傾向がある。</div>
+    </div>
+
+    <div class="detail-card">
+      <h3>窓の失敗 <span class="badge badge-yellow">THE ROOM TOUR 3位 / SUUMO 7位</span></h3>
+      <ul class="failure-list">
+        <li>採光不足 — 北向き・小さな窓で部屋が暗い（日中も照明が必要）</li>
+        <li>通風が悪い — 窓が対角線上にないため風が抜けない</li>
+        <li>大きな南窓で夏の暑さが想定以上 — 断熱性の検討不足</li>
+        <li>プライバシー問題 — 隣家・道路からの視線でカーテンを常時閉める</li>
+        <li>高い位置の窓が掃除できない — FIX窓の採用で換気もできない</li>
+      </ul>
+      <div class="gap-box">窓の後悔に関する単体大規模調査データは未確認。THE ROOM TOUR・SUUMOの複合評価</div>
+    </div>
+
+    <div class="detail-card">
+      <h3>住宅設備の選択 <span class="badge badge-blue">AZWAY 同率6位</span></h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:8px">✓ 採用しておけばよかった</div>
+          <ul style="list-style:none;font-size:13px;line-height:1.8">
+            <li>床暖房（ヒートショック防止）</li>
+            <li>食洗機の大型化</li>
+            <li>浴室乾燥機</li>
+            <li>宅配ボックス</li>
+            <li>スタディコーナー</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:8px">× 採用したが使わなかった</div>
+          <ul style="list-style:none;font-size:13px;line-height:1.8">
+            <li>ディスポーザー</li>
+            <li>高機能システムキッチン<br>（使いこなせない機能多数）</li>
+          </ul>
+        </div>
+      </div>
+      <div class="cause-box">
+        <strong>キッチン特有の後悔：</strong>カウンター高さ（標準85cm vs ショート80cm）の体格不一致、アイランドキッチンの油はね拡散、対面式で手元が見える生活感。
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       SECTION: 予算・業者選び
+  ========================================================== -->
+  <div id="yosan">
+    <div class="section-header">
+      <div class="section-icon">💰</div>
+      <div>
+        <h2>予算・資金計画・業者選び</h2>
+        <div class="sub">山寿のビジネスモデルに最も直結するカテゴリ</div>
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <h3>予算オーバー <span class="badge badge-red">平均 +243万円（SUUMO調査）</span></h3>
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr style="background:var(--gray-light)">
+            <th style="padding:8px 12px;text-align:left;font-weight:600;color:var(--gray)">原因</th>
+            <th style="padding:8px 12px;text-align:left;font-weight:600;color:var(--gray)">詳細</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px;font-weight:600">付帯工事費の想定不足</td>
+            <td style="padding:8px 12px">地盤調査・地盤改良・解体・仮設費などが本体工事外</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px;font-weight:600">諸費用の見落とし</td>
+            <td style="padding:8px 12px">登記費用・ローン手数料・不動産取得税・引越し費用</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px;font-weight:600">オプション追加の雪崩</td>
+            <td style="padding:8px 12px">打ち合わせで「あれもこれも」が積み重なる</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px;font-weight:600">外構の後回し</td>
+            <td style="padding:8px 12px">予算枯渇で外構未完成のまま入居。後から高くつく</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px;font-weight:600">物価上昇（2022年〜）</td>
+            <td style="padding:8px 12px">建材・人件費の上昇で見積時より実費が増加</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:12px;padding:12px;background:var(--red-pale);border-radius:8px;font-size:12px;color:var(--red)">
+        <strong>注意：</strong>500万円以上オーバーした事例も存在。外構費用は建物本体の10〜15%を資金計画に最初から組み込むことが必要。
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <h3>資金計画の失敗パターン</h3>
+      <ul class="failure-list">
+        <li>返済額を収入の3割超に設定 — 教育費・生活費が逼迫し生活が苦しくなる</li>
+        <li>変動金利を過信 — 低金利時代に固定/変動を比較せず選択</li>
+        <li>将来収入の楽観視 — 昇給を前提に組んだローンが実態に合わなかった</li>
+        <li>頭金ゼロで総支払額が増大 — 初期費用を抑えすぎた結果</li>
+      </ul>
+    </div>
+
+    <div class="detail-card">
+      <h3>業者選びの失敗 <span class="badge badge-yellow">THE ROOM TOUR 10位</span></h3>
+      <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:12px">
+        <thead>
+          <tr style="background:var(--gray-light)">
+            <th style="padding:8px 12px;text-align:left;font-weight:600;color:var(--gray)">失敗パターン</th>
+            <th style="padding:8px 12px;text-align:left;font-weight:600;color:var(--gray)">詳細</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px;font-weight:600">1社だけで決めた</td>
+            <td style="padding:8px 12px">他社比較なしに進め、相場感も判断基準も持てなかった</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px;font-weight:600">価格だけで判断</td>
+            <td style="padding:8px 12px">安さで選んだ工務店が提案力・管理力で問題を起こした</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px;font-weight:600">担当者の質を見抜けなかった</td>
+            <td style="padding:8px 12px">説明が曖昧・レスポンスが遅い・提案が画一的</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px;font-weight:600">完成物件を見なかった</td>
+            <td style="padding:8px 12px">写真だけで判断し実際の品質・仕上げと乖離</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px;font-weight:600">アフター保証を確認しなかった</td>
+            <td style="padding:8px 12px">入居後の不具合に対応が遅い・責任回避される</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="gap-box">「山寿のような第三者コンサルを使えば防げた」と考える人の割合は未調査。潜在需要の定量化が課題。</div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       SECTION: 山寿への示唆
+  ========================================================== -->
+  <div id="insight">
+    <div class="insight-banner">
+      <div class="label">Business Insight · Strategic Implication</div>
+      <h2>山寿への示唆</h2>
+      <ul class="insight-list">
+        <li>「1社だけで決めた後悔」→ 山寿の複数業者比較サポートへの直接ニーズ。顧客が言語化していない最大ペインポイント。</li>
+        <li>「担当者の良し悪しが分からなかった」→ 第三者の専門的な目線（山寿）の価値提案と直結する。</li>
+        <li>「予算計画を業者任せにした」→ 中立な総額ベース資金計画アドバイスのニーズ。付帯工事費・外構・諸費用の正確な見積もり支援。</li>
+        <li>後悔ランキング上位テーマをそのままコンテンツネタに変換可能。「コンセント後悔しないチェックリスト」「間取りで失敗する人の共通パターン」など。</li>
+        <li>ペルソナA（田中健太 33歳・探索期）が建築前に最も知りたい情報 = このリスト。入口コンテンツとして最も需要が高いテーマ群。</li>
+      </ul>
+    </div>
+
+    <div class="detail-card">
+      <h3>コンテンツ化の優先候補</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr style="background:var(--gray-light)">
+            <th style="padding:8px 12px;text-align:left;font-weight:600;color:var(--gray)">コンテンツ案</th>
+            <th style="padding:8px 12px;text-align:left;font-weight:600;color:var(--gray)">対応する後悔</th>
+            <th style="padding:8px 12px;text-align:left;font-weight:600;color:var(--gray)">形式</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px">コンセント完全チェックシート（部屋別）</td>
+            <td style="padding:8px 12px">コンセント位置・数</td>
+            <td style="padding:8px 12px">チェックリスト</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px">間取りで後悔する人の共通パターン5選</td>
+            <td style="padding:8px 12px">間取り・動線</td>
+            <td style="padding:8px 12px">解説記事</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px">ハウスメーカーvs工務店 選ぶ基準10選</td>
+            <td style="padding:8px 12px">業者選び</td>
+            <td style="padding:8px 12px">比較記事</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f3f4f6">
+            <td style="padding:8px 12px">住宅ローン 失敗する人の共通点</td>
+            <td style="padding:8px 12px">資金計画</td>
+            <td style="padding:8px 12px">解説記事</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px">外構費用を本体に含めない会社の見分け方</td>
+            <td style="padding:8px 12px">予算オーバー・外構</td>
+            <td style="padding:8px 12px">注意喚起記事</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       SECTION: 調査ソース
+  ========================================================== -->
+  <div class="section-header" style="margin-top:48px">
+    <div class="section-icon">📊</div>
+    <div>
+      <h2>調査ソース</h2>
+      <div class="sub">本レポートで参照した調査の概要</div>
+    </div>
+  </div>
+
+  <div class="detail-card">
+    <table class="source-table">
+      <thead>
+        <tr>
+          <th>調査名</th>
+          <th>実施主体</th>
+          <th>対象</th>
+          <th>n数</th>
+          <th>実施時期</th>
+          <th>信頼度</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>注文住宅の後悔ポイント調査</td>
+          <td>リクルート（SUUMOカウンター）</td>
+          <td>3年以内に注文住宅を建てた25〜44歳</td>
+          <td>400人</td>
+          <td>2025年8月</td>
+          <td><span class="badge badge-green">High</span></td>
+        </tr>
+        <tr>
+          <td>家づくりで失敗したと思ったことランキング</td>
+          <td>AZWAY（プレスリリース）</td>
+          <td>20〜60代の家を建てた男女（女183人・男210人）</td>
+          <td>393人</td>
+          <td>2023年4〜5月</td>
+          <td><span class="badge badge-blue">Medium-High</span></td>
+        </tr>
+        <tr>
+          <td>注文住宅の後悔ランキング</td>
+          <td>THE ROOM TOUR</td>
+          <td>注文住宅建築経験者（累計）</td>
+          <td>約30万人</td>
+          <td>継続的</td>
+          <td><span class="badge badge-yellow">Medium</span></td>
+        </tr>
+        <tr>
+          <td>予算オーバー平均額</td>
+          <td>SUUMO（調査詳細不明）</td>
+          <td>注文住宅建築者</td>
+          <td>非公表</td>
+          <td>不明</td>
+          <td><span class="badge badge-yellow">Medium</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>内部資料 — 外部共有禁止｜山寿株式会社 Research Hub · 2026-06-08</footer>
+</div>
+
+</body>
+</html>
